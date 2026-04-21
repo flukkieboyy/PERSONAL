@@ -11,9 +11,10 @@
     user-select: none;
 }
 
+/* เพิ่ม Chakra Petch เป็นฟอนต์สำรองสำหรับภาษาไทยทั่วทั้งเว็บ */
 body {
     background-color: var(--shadow-black); color: var(--text-white);
-    font-family: 'Press Start 2P', cursive; overflow: hidden;
+    font-family: 'Press Start 2P', 'Chakra Petch', cursive; overflow: hidden;
 }
 
 #bg-video {
@@ -54,8 +55,9 @@ body {
     font-size: clamp(1.5rem, 5vw, 4rem); letter-spacing: 2px;
 }
 
+/* เปลี่ยนฟอนต์ไทยจาก Kanit เป็น Chakra Petch และปรับความหนาให้เข้าธีม System */
 .thai-greet {
-    font-family: 'Kanit', sans-serif; font-weight: 300;
+    font-family: 'Press Start 2P', 'Chakra Petch', sans-serif; font-weight: 600;
     font-size: clamp(1rem, 3vw, 1.5rem); transition: opacity 0.5s ease-in-out;
 }
 
@@ -74,7 +76,9 @@ body {
 }
 
 .player-display { background-color: #000; border: inset 2px var(--crimson-purple); padding: 10px; }
-.small-pixel-text { font-size: 0.6rem; line-height: 1.5; }
+
+/* บังคับใช้ Chakra Petch กับข้อความเล็กๆ เช่น ชื่อเพลงภาษาไทย */
+.small-pixel-text { font-family: 'Press Start 2P', 'Chakra Petch', sans-serif; font-size: 0.6rem; line-height: 1.5; }
 @media (min-width: 768px) { .small-pixel-text { font-size: 0.7rem; } }
 
 .pixel-btn-icon {
@@ -100,6 +104,7 @@ body {
     color: var(--text-white); padding: 10px 20px; font-size: 0.7rem;
     box-shadow: 4px 4px 0px #000; z-index: 9999;
     animation: slideDown 0.3s ease-out;
+    font-family: 'Press Start 2P', 'Chakra Petch', sans-serif;
 }
 @keyframes slideDown { from { top: -50px; opacity: 0; } to { top: 20px; opacity: 1; } }
 
@@ -126,4 +131,92 @@ body {
     100% {
         transform: translateX(-100%);
     }
+}
+
+/* --- UI อัปเกรด เครื่องเล่นเพลง --- */
+.pixel-select {
+    background-color: #000;
+    color: var(--text-white);
+    border: 2px inset var(--crimson-purple);
+    padding: 5px;
+    font-family: inherit;
+    font-size: 0.65rem;
+    outline: none;
+}
+.pixel-select:focus { border-color: var(--crimson-light); }
+
+.pixel-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: var(--shadow-black);
+    border: 1px solid var(--crimson-purple);
+    outline: none;
+}
+.pixel-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 16px;
+    background: var(--crimson-light);
+    cursor: pointer;
+    border: 1px solid #fff;
+}
+
+/* --- Custom Dropdown สไตล์ Cyberpunk --- */
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.text-crimson { color: var(--crimson-light); }
+
+.pixel-dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--shadow-black);
+    border: 2px solid var(--crimson-purple);
+    border-top: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 99;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.8);
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    padding: 8px;
+    font-size: 0.65rem;
+    color: var(--text-white);
+    border-bottom: 1px solid rgba(138, 3, 79, 0.3);
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: 'Press Start 2P', 'Chakra Petch', sans-serif;
+}
+
+.dropdown-item:hover {
+    background-color: var(--crimson-purple);
+    color: var(--text-white);
+    padding-left: 12px; /* เอฟเฟกต์เลื่อนขีดข้อความเวลาเอาเมาส์ชี้ */
+}
+
+.dropdown-item:last-child { border-bottom: none; }
+
+/* แต่ง Scrollbar ของ Dropdown */
+.pixel-dropdown-list::-webkit-scrollbar { width: 4px; }
+.pixel-dropdown-list::-webkit-scrollbar-track { background: #000; }
+.pixel-dropdown-list::-webkit-scrollbar-thumb { background: var(--crimson-light); }
+
+/* เพิ่มความเด่นให้ Toast เวลาเป็น Error */
+.pixel-toast {
+    /* ...โค้ดเดิมของคุณ... */
+    min-width: 300px;
+    text-align: center;
+    border: 2px solid #fff;
+    z-index: 10000;
+    pointer-events: none; /* ไม่ให้ขวางเมาส์ */
 }
