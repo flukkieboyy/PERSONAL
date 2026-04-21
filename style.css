@@ -1,0 +1,129 @@
+:root {
+    --shadow-black: #0a0a0a;
+    --crimson-purple: #8A034F;
+    --crimson-light: #C71585; 
+    --text-white: #ffffff;
+}
+
+* {
+    margin: 0; padding: 0; box-sizing: border-box;
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="8" height="8" fill="white" stroke="black" stroke-width="1"/></svg>'), auto !important;
+    user-select: none;
+}
+
+body {
+    background-color: var(--shadow-black); color: var(--text-white);
+    font-family: 'Press Start 2P', cursive; overflow: hidden;
+}
+
+#bg-video {
+    position: absolute; top: 50%; left: 50%;
+    min-width: 100%; min-height: 100%;
+    z-index: -2; transform: translateX(-50%) translateY(-50%); object-fit: cover;
+}
+
+#video-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+    background-size: 4px 4px; background-color: rgba(10, 10, 10, 0.8);
+}
+
+.terminal-box {
+    background-color: rgba(10, 10, 10, 0.9); border: 2px solid var(--crimson-purple);
+    box-shadow: 0 0 15px var(--crimson-purple); width: 90%; max-width: 600px; line-height: 2; font-size: 0.8rem;
+}
+
+@media (min-width: 768px) { .terminal-box { font-size: 1rem; } }
+
+.sys-title { color: var(--crimson-light); font-size: 1.2rem; text-shadow: 2px 2px var(--shadow-black); }
+.glitch-text { color: var(--text-white); }
+.blink { animation: blinker 1s linear infinite; }
+@keyframes blinker { 50% { opacity: 0; } }
+
+.pixel-btn {
+    background-color: transparent; color: var(--crimson-light);
+    border: 2px solid var(--crimson-purple); padding: 10px 20px;
+    font-family: inherit; font-size: 0.9rem; transition: 0.3s;
+}
+.pixel-btn:hover {
+    background-color: var(--crimson-purple); color: var(--text-white); box-shadow: 0 0 10px var(--crimson-light);
+}
+
+.pixel-name {
+    color: var(--text-white); text-shadow: 4px 4px var(--crimson-purple);
+    font-size: clamp(1.5rem, 5vw, 4rem); letter-spacing: 2px;
+}
+
+.thai-greet {
+    font-family: 'Kanit', sans-serif; font-weight: 300;
+    font-size: clamp(1rem, 3vw, 1.5rem); transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in-delayed {
+    opacity: 0;
+    animation: fadeIn 2s forwards;
+    animation-delay: 2.5s;
+}
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* --- Player & Socials --- */
+.pixel-player {
+    background-color: rgba(10, 10, 10, 0.9); border: 2px solid var(--crimson-purple);
+    box-shadow: 4px 4px 0px var(--crimson-purple), 0px 0px 15px rgba(138, 3, 79, 0.5);
+    width: 90%; max-width: 350px;
+}
+
+.player-display { background-color: #000; border: inset 2px var(--crimson-purple); padding: 10px; }
+.small-pixel-text { font-size: 0.6rem; line-height: 1.5; }
+@media (min-width: 768px) { .small-pixel-text { font-size: 0.7rem; } }
+
+.pixel-btn-icon {
+    background: var(--shadow-black); color: var(--text-white);
+    border: 2px solid var(--crimson-purple); width: 40px; height: 40px;
+    display: flex; justify-content: center; align-items: center; transition: 0.2s; box-shadow: 2px 2px 0px var(--crimson-light);
+}
+.pixel-btn-icon:hover {
+    background: var(--crimson-purple); transform: translateY(2px); box-shadow: 0px 0px 0px var(--crimson-light);
+    color: var(--text-white);
+}
+.pixel-btn-icon:active { transform: translateY(4px); box-shadow: none; }
+
+/* --- Clock & Toast --- */
+.pixel-clock {
+    text-shadow: 2px 2px var(--shadow-black), 0 0 5px var(--crimson-purple);
+    letter-spacing: 1px;
+}
+
+.pixel-toast {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    background-color: var(--crimson-purple); border: 2px solid var(--text-white);
+    color: var(--text-white); padding: 10px 20px; font-size: 0.7rem;
+    box-shadow: 4px 4px 0px #000; z-index: 9999;
+    animation: slideDown 0.3s ease-out;
+}
+@keyframes slideDown { from { top: -50px; opacity: 0; } to { top: 20px; opacity: 1; } }
+
+/* --- ระบบเลื่อนชื่อเพลงแบบ Smooth --- */
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden; /* ซ่อนข้อความที่ยาวเกินขอบ */
+    white-space: nowrap; /* ห้ามให้ข้อความตัดขึ้นบรรทัดใหม่ */
+    box-sizing: border-box;
+    position: relative;
+}
+
+.marquee-text {
+    display: inline-block;
+    padding-left: 100%; /* ให้ข้อความไปเริ่มที่ขอบขวาสุด */
+    animation: smoothScroll 15s linear infinite; /* 15s คือความเร็ว ยิ่งน้อยยิ่งวิ่งเร็ว */
+}
+
+/* อนิเมชันเลื่อนแบบลื่นไหล */
+@keyframes smoothScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
