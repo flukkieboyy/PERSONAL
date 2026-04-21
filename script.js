@@ -95,7 +95,7 @@ function loadYouTubeIframeAPI() {
 function onYouTubeIframeAPIReady() {
     // ดึงค่าเริ่มต้นจาก Dropdown (ถ้ามี)
     const playlistDropdown = document.getElementById('playlist-selector');
-    const defaultList = playlistDropdown ? playlistDropdown.value : 'PLba6pJZhQQhXRblDh1XDGre-ieixuG2rk';
+    const defaultList = playlistDropdown ? playlistDropdown.value : 'PL8HWkXHyCIuhVW-4-OGDhAusZAuPvQvtQ';
 
     player = new YT.Player('yt-player', {
         height: '0', width: '0',
