@@ -220,3 +220,83 @@ body {
     z-index: 10000;
     pointer-events: none; /* ไม่ให้ขวางเมาส์ */
 }
+
+/* ========================================== */
+/* สไตล์ Hamburger Menu & Sidebar */
+/* ========================================== */
+.sys-menu-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    color: #00ffcc; /* สีเขียวไซเบอร์ */
+    font-size: 28px;
+    cursor: pointer;
+    text-shadow: 0 0 10px #00ffcc;
+    transition: transform 0.3s, text-shadow 0.3s;
+}
+
+.sys-menu-btn:hover {
+    color: #fff;
+    transform: scale(1.1);
+    text-shadow: 0 0 20px #fff, 0 0 30px #00ffcc;
+}
+
+.sys-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(10, 10, 10, 0.95);
+    border-right: 2px solid #00ffcc;
+    box-shadow: 5px 0 20px rgba(0, 255, 204, 0.2);
+    z-index: 1001;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(5px);
+}
+
+.sys-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #00ffcc;
+    font-size: 1.2rem;
+    border-bottom: 1px dashed #00ffcc;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+#close-sidebar {
+    cursor: pointer;
+    color: #ff4d4d;
+    transition: 0.2s;
+}
+
+#close-sidebar:hover {
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.sys-menu-item {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: rgba(0, 255, 204, 0.05);
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+}
+
+.sys-menu-item:hover {
+    border-color: #00ffcc;
+    background: rgba(0, 255, 204, 0.2);
+    text-shadow: 0 0 5px #00ffcc;
+    padding-left: 25px; /* เอฟเฟกต์เลื่อนตัวหนังสือตอนเอาเมาส์ชี้ */
+    color: #fff;
+}

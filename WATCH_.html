@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FLUKKIEBOYY | IPTV_CORE (PRO-EDITION)</title>
+    <link rel="short icon" href="https://www.pngall.com/wp-content/uploads/15/Pixelated-Heart-PNG-Picture.png" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // 1. เช็คสิทธิ์ Token
+        if (sessionStorage.getItem("iptv_auth_token") !== "access_granted_1688") {
+            // ปิดไว้ตอนกำลังทดสอบระบบ ถ้าจะล็อกเว็บค่อยเปิดใช้งาน
+            window.location.replace("index.html");
+        }
+
+        // 2. ระบบตรวจจับมือถือ (Kick-out 5 วิ แต่ยกเว้น iPad/Tablet)
+        document.addEventListener("DOMContentLoaded", () => {
+            const ua = navigator.userAgent;
+            const isMobilePhone = /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Opera M(obi|ini)/.test(ua);
+            const isTablet = /(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua);
+            const isIpadOS = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+
+            if (isMobilePhone && !isTablet && !isIpadOS) {
+                document.body.style.filter = "blur(10px) grayscale(100%)";
+                document.body.style.pointerEvents = "none";
+                
+                Swal.fire({
+                    title: 'MOBILE DEVICE DETECTED',
+                    html: 'ระบบไม่อนุญาตให้ใช้งานบนสมาร์ทโฟน<br>รองรับเฉพาะ <b>PC, TV หรือ iPad</b> เท่านั้น<br><br>กำลังส่งคุณออกใน <b>5</b> วินาที...',
+                    icon: 'warning',
+                    timer: 5000,
+                    timerProgressBar: true,
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    background: '#111',
+                    color: '#fff',
+                    willClose: () => {
+                        window.location.replace("about:blank"); // เตะออก
+                    }
+                });
+            }
+        });
+
+        // 3. ป้องกันคลิกขวา
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // 4. ป้องกันคีย์ลัด (F12, Inspect, View Source)
+        document.addEventListener('keydown', (e) => {
+            if (e.keyCode === 123 || 
+               (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
+               (e.ctrlKey && e.keyCode === 85)) { 
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // 5. Anti-Debugger Loop (ปิดตัวดัก/ชะลอการเจาะ)
+        setInterval(() => {
+            (function() { return false; }['constructor']('debugger')());
+        }, 1000);
+    </script>
+
+    <style>
+        .iptv-container { display: flex; flex-direction: column; height: 100vh; padding: 20px; background: rgba(10, 10, 10, 0.95); }
+        @media (min-width: 992px) { .iptv-container { flex-direction: row; gap: 20px; } }
+        
+        .player-section { flex: 2; display: flex; flex-direction: column; overflow-y: auto; padding-right: 10px;}
+        .player-section::-webkit-scrollbar { display: none; } 
+        
+        .list-section { flex: 1; display: flex; flex-direction: column; border: 2px solid var(--crimson-purple); background: #000; box-shadow: 0 0 15px rgba(138, 3, 79, 0.3); }
+        
+        /* เปลี่ยน Style Video Container สำหรับ Video.js */
+        .video-container { width: 100%; background: #000; border: 2px solid var(--crimson-purple); box-shadow: 0 0 20px rgba(138, 3, 79, 0.5); position: relative; aspect-ratio: 16/9; }
+        .video-js { width: 100%; height: 100%; }
+        .vjs-big-play-button { border-color: var(--crimson-purple) !important; background-color: rgba(138, 3, 79, 0.7) !important; }
+
+        .tabs-header { display: flex; border-bottom: 2px solid var(--crimson-purple); }
+        .tab-btn { flex: 1; padding: 10px; background: #111; color: gray; border: none; font-family: 'Press Start 2P', cursive; font-size: 0.7rem; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--crimson-purple); color: #fff; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+
+        .category-header { background: rgba(138, 3, 79, 0.2); border-bottom: 1px solid var(--crimson-purple); padding: 10px; cursor: pointer; font-family: 'Press Start 2P', 'Chakra Petch', sans-serif; font-size: 0.8rem; color: var(--crimson-light); display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+        .category-header:hover { background: rgba(138, 3, 79, 0.5); color: #fff; }
+
+        .channel-list { list-style: none; padding: 0; margin: 0; max-height: 250px; overflow-y: auto; background: #0a0a0a; }
+        .channel-item { padding: 8px 15px; border-bottom: 1px dashed #333; cursor: pointer; font-family: 'Chakra Petch', sans-serif; font-size: 0.9rem; transition: 0.2s; color: #ccc; }
+        .channel-item:hover, .channel-item.active { color: #fff; padding-left: 20px; background: rgba(138, 3, 79, 0.3); border-left: 3px solid var(--crimson-light); }
+        
+        .channel-list::-webkit-scrollbar { width: 4px; }
+        .channel-list::-webkit-scrollbar-track { background: #000; }
+        .channel-list::-webkit-scrollbar-thumb { background: var(--crimson-light); }
+
+        .sys-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        @keyframes blink-alert { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .blink-alert { animation: blink-alert 1s infinite; }
+
+        .epg-table { width: 100%; border-collapse: collapse; font-family: 'Chakra Petch', sans-serif; font-size: 0.85rem; }
+        .epg-table th { background: rgba(138, 3, 79, 0.4); color: #fff; padding: 8px; border: 1px solid #ff007f; text-align: left; }
+        .epg-table td { padding: 8px; border: 1px solid #444; border-bottom: 1px dashed #666; vertical-align: top; }
+        .epg-desc { font-size: 0.75rem; color: #aaa; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .server-badge { background: #111; color: #666; border: 1px dashed #666; padding: 5px 10px; font-family: 'Chakra Petch'; font-size: 0.75rem; display: inline-block; margin-right: 5px;}
+        .server-badge.testing { color: #ffcc00; border-color: #ffcc00; background: rgba(255, 204, 0, 0.1); }
+        .server-badge.online { color: #00ffcc; border-color: #00ffcc; background: rgba(0, 255, 204, 0.1); box-shadow: 0 0 10px rgba(0, 255, 204, 0.3); }
+        .server-badge.offline { color: #ff004c; border-color: #ff004c; text-decoration: line-through; opacity: 0.5; }
+
+        /* SweetAlert Customization */
+        .swal2-popup { border: 2px solid #ff007f !important; font-family: 'Chakra Petch', sans-serif !important; }
+        .swal2-title { font-family: 'Press Start 2P', cursive !important; font-size: 1.1rem !important; color: #ff007f !important; }
+    </style>
+</head>
+<body>
+
+    <div style="position: fixed; top:0; left:0; width: 100%; height: 100%; background: radial-gradient(circle, #2a0018 0%, #000000 100%); z-index: -2;"></div>
+    <div id="video-overlay" style="z-index: -1;"></div>
+
+    <div class="iptv-container fade-in-delayed" style="animation-delay: 0.5s;">
+        
+        <div class="player-section">
+            <div class="sys-top-bar">
+                <a href="index.html" onclick="sessionStorage.removeItem('iptv_auth_token')" class="pixel-btn text-decoration-none"><i class="fas fa-arrow-left"></i> RETURN</a>
+                <h3 class="sys-title mb-0">> IPTV_CORE</h3>
+            </div>
+
+            <div class="video-container mb-3">
+                <video 
+                    id="iptv-player" 
+                    class="video-js vjs-default-skin vjs-big-play-centered w-100 h-100" 
+                    controls 
+                    preload="auto"
+                    crossorigin="anonymous"
+                    data-setup='{"fluid": true}'>
+                </video>
+                <div id="stream-status" class="position-absolute top-0 start-0 m-2 px-2" style="background: rgba(0,0,0,0.8); border: 1px solid var(--crimson-light); font-size: 0.7rem;">
+                    [ STATUS: IDLE ]
+                </div>
+            </div>
+
+            <div class="terminal-box p-3 w-100 mb-3">
+                <span class="text-crimson small-pixel-text">NOW PLAYING CHANNEL:</span>
+                <h4 id="now-playing-title" class="text-white mt-1 mb-0" style="font-family: 'Chakra Petch', sans-serif;">Awaiting Selection...</h4>
+                
+                <div id="server-status-box" class="d-none mt-3 p-2" style="background: rgba(0, 255, 204, 0.05); border: 1px dashed #00ffcc;">
+                    <span id="routing-message" class="text-warning small-pixel-text d-block mb-2 blink-alert">> SYSTEM_AUTO_ROUTING: SEARCHING BEST SERVER...</span>
+                    <div id="server-badges-container" class="d-flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+
+            <div class="terminal-box p-3 w-100 mb-3" style="border-color: #00ffcc;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-info small-pixel-text"><i class="fas fa-list-alt"></i> EPG_GUIDE (PROGRAM SCHEDULE)</span>
+                    <div class="text-end">
+                        <span id="sys-date" class="d-block text-white" style="font-size: 0.7rem;">YYYY/MM/DD</span>
+                        <span id="sys-clock" class="text-warning fw-bold" style="font-size: 1rem; font-family: 'Chakra Petch';">00:00:00</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="epg-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">TIME</th>
+                                <th style="width: 30%;">PROGRAM</th>
+                                <th style="width: 50%;">DESCRIPTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="epg-tbody">
+                            <tr><td colspan="3" class="text-center text-muted py-3">SELECT A CHANNEL TO LOAD DATA...<br><small>(Loading EPG XML might take a few seconds)</small></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-section">
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab('jp')">🇯🇵 JAPAN</button>
+            </div>
+
+            <div id="tab-th" class="tab-content d-none" style="flex: 1; overflow-y: auto;">
+                
+            </div>
+
+            <div id="tab-jp" class="tab-content" style="flex: 1; overflow-y: auto;">
+                <div class="category-header" onclick="toggleCategory('jp-digital')">
+                    <span>📺 DIGITAL TV / BS</span> <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="channel-list" id="jp-digital"></ul>
+
+                <div class="category-header" onclick="toggleCategory('jp-news')">
+                    <span>📰 NEWS</span> <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="channel-list d-none" id="jp-news"></ul>
+
+                <div class="category-header" onclick="toggleCategory('jp-sports')">
+                    <span>🏈 SPORTS</span> <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="channel-list d-none" id="jp-sports"></ul>
+
+                <div class="category-header" onclick="toggleCategory('jp-movies')">
+                    <span>🎬 MOVIES / SERIES</span> <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="channel-list d-none" id="jp-movies"></ul>
+
+                <div class="category-header" onclick="toggleCategory('jp-anime')">
+                    <span>🐻 ANIME / CARTOON</span> <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="channel-list d-none" id="jp-anime"></ul>
+                
+                <div class="category-header" onclick="toggleCategory('jp-variety')">
+                    <span>🎭 VARIETY / CS TV</span> <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="channel-list d-none" id="jp-variety"></ul>
+
+                <div class="category-header text-danger" id="nsfw-header" style="border-top: 2px solid red;">
+                    <span>🔞 NSFW (ENCRYPTED)</span> <i class="fas fa-lock"></i>
+                </div>
+                <ul class="channel-list d-none" id="jp-nsfw"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // นาฬิกา
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('sys-date').innerText = now.toLocaleDateString('en-GB');
+            document.getElementById('sys-clock').innerText = now.toLocaleTimeString('en-GB', { hour12: false });
+        }, 1000);
+
+        // =================================--------------------
+        // 🌟 DATABASE ครบทุกช่อง ไม่ตัดทิ้ง
+        // =================================--------------------
+        const thChannelsDB = [
+            
+        ];
+
+        const jpChannelsDB = [
+            // --- JP DIGITAL ---
+            { id: "nhk_g_tokyo", title: "NHK G (Tokyo)", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/NHK_G/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/NHK_G/index.m3u8"}, {n:"Prime HD", u:"http://cdns.jp-primehome.com:8000/zhongying/live/playlist.m3u8?cid=hdgd01"} ]},
+            { id: "nhk_e_tokyo", title: "NHK E", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/NHK_E/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/NHK_E/index.m3u8"} ]},
+            { id: "ntv", title: "Nippon TV (NTV)", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/Nippon_TV/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/Nippon_TV/index.m3u8"} ]},
+            { id: "tbs", title: "TBS", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/TBS/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/TBS/index.m3u8"} ]},
+            { id: "tv_asahi", title: "TV Asahi", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/TV_Asahi/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/TV_Asahi/index.m3u8"} ]},
+            { id: "tv_tokyo", title: "TV Tokyo", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/TV_Tokyo/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/TV_Tokyo/index.m3u8"} ]},
+            { id: "tokyo_mx1", title: "TOKYO MX1", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/Tokyo_MX1/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/Tokyo_MX1/index.m3u8"} ]},
+            { id: "fuji_tv", title: "Fuji TV", cat: "jp-digital", servers: [ {n: "Prime HD", u:"http://cdns.jp-primehome.com:8000/zhongying/live/playlist.m3u8?cid=hdgd05"} ]},
+            { id: "mbs", title: "MBS (Kansai)", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/mbs/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/mbs/index.m3u8"} ]},
+            { id: "abc", title: "ABC", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/abc/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/abc/index.m3u8"} ]},
+            { id: "kansai_tv", title: "Kansai TV", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/kansaitv/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/kansaitv/index.m3u8"} ]},
+            { id: "ytv", title: "Yomiuri TV", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/ytv/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/ytv/index.m3u8"} ]},
+            { id: "tv_osaka", title: "TV Osaka", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/tvo/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/tvo/index.m3u8"} ]},
+            { id: "sun_tv", title: "SUN TV", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/suntv/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/suntv/index.m3u8"} ]},
+            { id: "kbs", title: "KBS", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/kbs/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/kbs/index.m3u8"} ]},
+            { id: "nhk_bs", title: "NHK BS", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/NHK_BS/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/NHK_BS/index.m3u8"} ]},
+            { id: "bs_ntv", title: "BS NTV", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/bsntv/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/bsntv/index.m3u8"} ]},
+            { id: "bs_asahi", title: "BS Asahi", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/bsasahi/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/bsasahi/index.m3u8"} ]},
+            { id: "bs_tbs", title: "BS TBS", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/bstbs/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/bstbs/index.m3u8"} ]},
+            { id: "bs_tv_tokyo", title: "BS TV Tokyo", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/bstvtokyo/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/bstvtokyo/index.m3u8"} ]},
+            { id: "bs_fuji", title: "BS Fuji", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/bsfuji/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/bsfuji/index.m3u8"} ]},
+            { id: "bs11", title: "BS11", cat: "jp-digital", servers: [ {n: "NL", u:"https://nl.utako.moe/BS11/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/BS11/index.m3u8"} ]},
+
+            // --- JP SPORTS ---
+            { id: "js1", title: "JSport 1", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/js1/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/js1/index.m3u8"} ]},
+            { id: "js2", title: "JSport 2", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/js2/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/js2/index.m3u8"} ]},
+            { id: "js3", title: "JSport 3", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/js3/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/js3/index.m3u8"} ]},
+            { id: "js4", title: "JSport 4", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/js4/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/js4/index.m3u8"} ]},
+            { id: "gaora", title: "Gaora Sports", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/gaora/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/gaora/index.m3u8"} ]},
+            { id: "sky_a", title: "Sky A", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/skya/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/skya/index.m3u8"} ]},
+            { id: "golf_network", title: "Golf Network", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/golf_network/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/golf_network/index.m3u8"} ]},
+            { id: "green_channel", title: "Green Channel", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/green/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/green/index.m3u8"} ]},
+            { id: "ntv_g_tasu", title: "Nittele G+", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/ntvgplus/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/ntvgplus/index.m3u8"} ]},
+            { id: "fighting_tv_samurai", title: "Fighting TV Samurai", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/fighting_tv/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/fighting_tv/index.m3u8"} ]},
+            { id: "sports_live_plus", title: "Sport Live Plus", cat: "jp-sports", servers: [ {n: "NL", u:"https://nl.utako.moe/sport_live_plus/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/sport_live_plus/index.m3u8"} ]},
+
+            // --- JP MOVIES / SERIES ---
+            { id: "wowow_prime", title: "WOWOW Prime", cat: "jp-movies", servers: [ {n: "NL", u:"https://nl.utako.moe/wprime/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/wprime/index.m3u8"} ]},
+            { id: "wowow_cinema", title: "WOWOW Cinema", cat: "jp-movies", servers: [ {n: "NL", u:"https://nl.utako.moe/wcinema/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/wcinema/index.m3u8"} ]},
+            { id: "wowow_live", title: "WOWOW Live", cat: "jp-movies", servers: [ {n: "NL", u:"https://nl.utako.moe/wlive/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/wlive/index.m3u8"} ]},
+            { id: "bs10_star_channel", title: "BS 10 Star Channel", cat: "jp-movies", servers: [ {n: "NL", u:"https://nl.utako.moe/bs10_star/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/bs10_star/index.m3u8"} ]},
+            { id: "nihon_eiga", title: "Nihon Eiga Senmon", cat: "jp-movies", servers: [ {n: "NL", u:"https://nl.utako.moe/nihoneiga/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/nihoneiga/index.m3u8"} ]},
+            { id: "the_cinema", title: "The Cinema", cat: "jp-movies", servers: [ {n: "NL", u:"https://nl.utako.moe/the_cinema/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/the_cinema/index.m3u8"} ]},
+            { id: "neco", title: "Neco Channel", cat: "jp-movies", servers: [ {n: "NL", u:"https://nl.utako.moe/neco/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/neco/index.m3u8"} ]},
+
+            // --- JP ANIME / CARTOON ---
+            { id: "animax", title: "Animax", cat: "jp-anime", servers: [ {n: "NL", u:"https://nl.utako.moe/Animax/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/Animax/index.m3u8"} ]},
+            { id: "at_x", title: "AT-X", cat: "jp-anime", servers: [ {n: "NL", u:"https://nl.utako.moe/AT-X/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/AT-X/index.m3u8"} ]},
+            { id: "kids_station", title: "Kids Station", cat: "jp-anime", servers: [ {n: "NL", u:"https://nl.utako.moe/kids_station/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/kids_station/index.m3u8"} ]},
+            { id: "cartoon_network_jp", title: "Cartoon Network", cat: "jp-anime", servers: [ {n: "NL", u:"https://nl.utako.moe/cartoon_network/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/cartoon_network/index.m3u8"} ]},
+
+            // --- JP VARIETY / CS ---
+            { id: "space_shower_tv", title: "Space Shower TV", cat: "jp-variety", servers: [ {n: "NL", u:"https://nl.utako.moe/spaceshower/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/spaceshower/index.m3u8"} ]},
+            { id: "mtv_jp", title: "MTV", cat: "jp-variety", servers: [ {n: "NL", u:"https://nl.utako.moe/mtv/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/mtv/index.m3u8"} ]},
+            { id: "music_on_tv", title: "Music ON TV", cat: "jp-variety", servers: [ {n: "NL", u:"https://nl.utako.moe/musicon/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/musicon/index.m3u8"} ]},
+            { id: "mondo_tv", title: "Mondo TV", cat: "jp-variety", servers: [ {n: "NL", u:"https://nl.utako.moe/mondo/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/mondo/index.m3u8"} ]},
+
+            // --- JP NSFW ---
+            { id: "pigoo", title: "Pigoo (NSFW)", cat: "jp-nsfw", servers: [ {n: "NL", u:"https://nl.utako.moe/pigoo/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/pigoo/index.m3u8"} ]},
+            { id: "v_paradise", title: "V Paradise (NSFW)", cat: "jp-nsfw", servers: [ {n: "NL", u:"https://nl.utako.moe/v_paradise/index.m3u8"}, {n:"UK", u:"https://uk.utako.moe/v_paradise/index.m3u8"} ]}
+        ];
+
+        // 🌟 สร้างรายการช่องลง UI
+        function initChannelList() {
+            thChannelsDB.forEach((channel) => {
+                const ul = document.getElementById(channel.cat);
+                if(ul) {
+                    const li = document.createElement('li');
+                    li.className = 'channel-item';
+                    li.innerText = channel.title;
+                    li.addEventListener('click', () => {
+                        document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
+                        li.classList.add('active');
+                        startSmartRouting(channel);
+                    });
+                    ul.appendChild(li);
+                }
+            });
+
+            jpChannelsDB.forEach((channel) => {
+                const ul = document.getElementById(channel.cat);
+                if(ul) {
+                    const li = document.createElement('li');
+                    li.className = 'channel-item';
+                    if(channel.cat === 'jp-nsfw') li.classList.add('text-danger');
+                    li.innerText = channel.title;
+                    li.addEventListener('click', () => {
+                        document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
+                        li.classList.add('active');
+                        startSmartRouting(channel);
+                    });
+                    ul.appendChild(li);
+                }
+            });
+        }
+
+        // =================================--------------------
+        // 🌟 ระบบดึงข้อมูล EPG (ไม่มีการเปลี่ยนแปลงโครงสร้าง)
+        // =================================--------------------
+        let epgXMLData = null;
+
+        async function fetchEPG() {
+            try {
+                const proxyUrl = "https://api.allorigins.win/raw?url=";
+                const targetUrl = encodeURIComponent("https://animenosekai.github.io/japanterebi-xmltv/guide.xml");
+                
+                document.getElementById('epg-tbody').innerHTML = `<tr><td colspan="3" class="text-center text-warning blink-alert">FETCHING EPG DATA...</td></tr>`;
+
+                const res = await fetch(proxyUrl + targetUrl);
+                const text = await res.text();
+                
+                const parser = new DOMParser();
+                epgXMLData = parser.parseFromString(text, "text/xml");
+                
+                document.getElementById('epg-tbody').innerHTML = `<tr><td colspan="3" class="text-center text-info">EPG LOADED. SELECT A CHANNEL.</td></tr>`;
+            } catch (err) {
+                document.getElementById('epg-tbody').innerHTML = `<tr><td colspan="3" class="text-center text-danger">ERROR: FAILED TO FETCH EPG</td></tr>`;
+            }
+        }
+        
+        function parseXMLDate(xmlDateStr) {
+            if(!xmlDateStr) return new Date();
+            const y = xmlDateStr.substring(0,4);
+            const m = xmlDateStr.substring(4,6) - 1;
+            const d = xmlDateStr.substring(6,8);
+            const h = xmlDateStr.substring(8,10);
+            const min = xmlDateStr.substring(10,12);
+            return new Date(y, m, d, h, min, 0); 
+        }
+
+        function updateEPGTable(tvgId) {
+            if(!tvgId) return;
+            const tbody = document.getElementById('epg-tbody');
+            
+            if(!epgXMLData) {
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center text-warning">STILL LOADING EPG DATA...</td></tr>`;
+                return;
+            }
+
+            const now = new Date();
+            const programs = Array.from(epgXMLData.querySelectorAll(`programme[channel="${tvgId}"]`));
+
+            if(programs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">NO SCHEDULE FOUND FOR THIS CHANNEL</td></tr>`;
+                return;
+            }
+
+            let currentProg = null;
+            let nextProg = null;
+
+            for (let i = 0; i < programs.length; i++) {
+                const start = parseXMLDate(programs[i].getAttribute('start'));
+                const stop = parseXMLDate(programs[i].getAttribute('stop'));
+
+                if (now >= start && now < stop) {
+                    currentProg = programs[i];
+                    nextProg = programs[i+1];
+                    break;
+                } else if (start > now && !currentProg) {
+                    nextProg = programs[i];
+                    break;
+                }
+            }
+
+            tbody.innerHTML = ''; 
+            if(currentProg) tbody.innerHTML += createEPGRow(currentProg, "<span class='text-danger blink-alert'>▶ NOW</span>");
+            if(nextProg) tbody.innerHTML += createEPGRow(nextProg, "<span class='text-info'>NEXT</span>");
+            if(!currentProg && !nextProg) {
+                 tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">NO UPCOMING PROGRAMS FOUND</td></tr>`;
+            }
+        }
+
+        function createEPGRow(progNode, badgeHTML) {
+            const start = parseXMLDate(progNode.getAttribute('start'));
+            const stop = parseXMLDate(progNode.getAttribute('stop'));
+            const titleNode = progNode.querySelector('title');
+            const descNode = progNode.querySelector('desc');
+            const title = titleNode ? titleNode.textContent : 'Unknown Program';
+            const desc = descNode ? descNode.textContent : '-';
+
+            const timeStr = `${start.getHours().toString().padStart(2,'0')}:${start.getMinutes().toString().padStart(2,'0')} - ${stop.getHours().toString().padStart(2,'0')}:${stop.getMinutes().toString().padStart(2,'0')}`;
+
+            return `
+                <tr>
+                    <td class="text-center">${badgeHTML}<br><span class="text-white">${timeStr}</span></td>
+                    <td class="text-white fw-bold">${title}</td>
+                    <td><div class="epg-desc">${desc}</div></td>
+                </tr>
+            `;
+        }
+
+        // =================================--------------------
+        // 🌟 ระบบ Video.js Player อัจฉริยะ (AUTO ROUTING)
+        // =================================--------------------
+        let player;
+
+        function startSmartRouting(channel) {
+            if(channel.id) updateEPGTable(channel.id);
+            
+            const box = document.getElementById('server-status-box');
+            const msg = document.getElementById('routing-message');
+            const badgesContainer = document.getElementById('server-badges-container');
+            const statusEl = document.getElementById('stream-status');
+            const titleEl = document.getElementById('now-playing-title');
+            
+            box.classList.remove('d-none');
+            msg.className = "text-warning small-pixel-text d-block mb-2 blink-alert";
+            msg.innerText = "> SYSTEM_AUTO_ROUTING: SEARCHING BEST SERVER...";
+            
+            // SweetAlert2 แจ้งเตือนการเลือกช่อง
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: `กำลังโหลดช่อง: ${channel.title}`,
+                showConfirmButton: false,
+                timer: 2000,
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+
+            badgesContainer.innerHTML = "";
+            channel.servers.forEach((srv, idx) => {
+                const badge = document.createElement("div");
+                badge.className = "server-badge";
+                badge.id = `badge-srv-${idx}`;
+                badge.innerHTML = `<i class="fas fa-server"></i> ${srv.n}`;
+                badgesContainer.appendChild(badge);
+            });
+
+            function tryServer(index) {
+                if(index >= channel.servers.length) {
+                    msg.className = "text-danger small-pixel-text d-block mb-2 blink-alert";
+                    msg.innerText = "> FATAL_ERROR: ALL SERVERS ARE OFFLINE!";
+                    statusEl.innerText = "[ ERROR: SIGNAL LOST ]";
+                    statusEl.style.color = "red";
+                    titleEl.innerText = `${channel.title} [OFFLINE]`;
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Stream Offline',
+                        text: 'ไม่สามารถโหลดสตรีมช่องนี้ได้ เซิร์ฟเวอร์ทั้งหมดขัดข้อง',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        background: '#1a1a2e',
+                        color: '#ff004c'
+                    });
+                    return;
+                }
+
+                const srv = channel.servers[index];
+                const currentBadge = document.getElementById(`badge-srv-${index}`);
+                
+                currentBadge.className = "server-badge testing blink-alert";
+                titleEl.innerText = `${channel.title} [Testing: ${srv.n}...]`;
+                statusEl.innerText = `[ STATUS: ROUTING TO ${srv.n.toUpperCase()}... ]`;
+                statusEl.style.color = "yellow";
+
+                player.src({
+                    src: srv.u,
+                    type: (srv.u.includes('.m3u8') ? 'application/x-mpegURL' : 'video/mp4')
+                });
+                
+                player.ready(function() {
+                    player.play().then(() => {
+                        currentBadge.className = "server-badge online";
+                        msg.className = "text-success small-pixel-text d-block mb-2";
+                        msg.innerText = "> SYSTEM_AUTO_ROUTING: CONNECTION ESTABLISHED!";
+                        titleEl.innerText = `${channel.title} [${srv.n}]`;
+                        statusEl.innerText = "[ STATUS: ONLINE ]";
+                        statusEl.style.color = "#00ffcc";
+                    }).catch(() => {
+                        // จะถูกจัดการโดย Event error ด้านล่าง
+                    });
+                });
+
+                // ตรวจจับ Error เพื่อสลับเซิร์ฟเวอร์
+                player.off('error');
+                player.on('error', function() {
+                    currentBadge.className = "server-badge offline";
+                    console.warn(`Server [${srv.n}] failed. Routing to next...`);
+                    tryServer(index + 1);
+                });
+            }
+            tryServer(0);
+        }
+
+        // =================================--------------------
+        // UI Tabs & รหัสผ่าน (SweetAlert2)
+        // =================================--------------------
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('d-none'));
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).classList.remove('d-none');
+        }
+
+        function toggleCategory(id) {
+            const list = document.getElementById(id);
+            if(list) {
+                list.classList.toggle('d-none');
+                const icon = list.previousElementSibling.querySelector('i');
+                icon.className = list.classList.contains('d-none') ? "fas fa-chevron-down" : "fas fa-chevron-up";
+            }
+        }
+
+        const nsfwHeader = document.getElementById("nsfw-header");
+        const nsfwList = document.getElementById("jp-nsfw");
+        let isNsfwUnlocked = false;
+
+        nsfwHeader.addEventListener("click", () => {
+            if (!isNsfwUnlocked) {
+                Swal.fire({
+                    title: 'AGE RESTRICTION (18+)',
+                    text: 'กรุณาใส่รหัสผ่านเพื่อเข้าถึงเนื้อหา',
+                    input: 'password',
+                    inputAttributes: { autocapitalize: 'off' },
+                    showCancelButton: true,
+                    confirmButtonText: 'UNLOCK',
+                    cancelButtonText: 'CANCEL',
+                    confirmButtonColor: '#ff004c',
+                    cancelButtonColor: '#333',
+                    background: '#1a1a2e',
+                    color: '#fff'
+                }).then((result) => {
+                    if (result.value === "6969") {
+                        isNsfwUnlocked = true;
+                        nsfwList.classList.remove("d-none");
+                        nsfwHeader.querySelector('i').className = "fas fa-unlock text-success";
+                        nsfwHeader.style.color = "#00ffcc";
+                        nsfwHeader.style.borderTopColor = "#00ffcc";
+                        
+                        Swal.fire({
+                            icon: 'success', 
+                            title: 'ACCESS GRANTED', 
+                            background: '#1a1a2e', 
+                            color: '#00ffcc', 
+                            showConfirmButton: false, 
+                            timer: 1500
+                        });
+                    } else if (result.value) {
+                        Swal.fire({
+                            icon: 'error', 
+                            title: 'ACCESS DENIED', 
+                            text: 'รหัสผ่านไม่ถูกต้อง', 
+                            background: '#1a1a2e', 
+                            color: '#ff004c',
+                            confirmButtonColor: '#ff004c'
+                        });
+                    }
+                });
+            } else {
+                nsfwList.classList.toggle('d-none');
+            }
+        });
+
+        // =================================--------------------
+        // ทำงานเมื่อเว็บโหลดเสร็จ
+        // =================================--------------------
+        window.onload = () => {
+            // ตั้งค่า Video.js พร้อมรองรับ VHS สำหรับ M3U8
+            player = videojs('iptv-player', {
+                html5: { vhs: { overrideNative: !videojs.browser.IS_IOS && !videojs.browser.IS_SAFARI } }
+            });
+            initChannelList(); 
+            fetchEPG(); 
+        };
+
+    </script>
+</body>
+</html>

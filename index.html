@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FLUKKIEBOYY | SYSTEM</title>
     <link rel="short icon" href="https://www.pngall.com/wp-content/uploads/15/Pixelated-Heart-PNG-Picture.png" />
+    
+    <meta property="og:title" content="FLUKKIEBOYY | SYSTEM">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="ระบบจำลอง 1688_CORE | ยินดีต้อนรับคนแปลกหน้าเข้าสู่ระบบ">
+    <meta name="theme-color" content="#e0007b">
+    <meta property="og:image" content="https://www.pngall.com/wp-content/uploads/15/Pixelated-Heart-PNG-Picture.png"> <meta property="og:url" content="https://your-website.com/"> <meta name="twitter:card" content="summary_large_image">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
@@ -13,6 +19,32 @@
 </head>
 <body>
 
+    <div id="system-menu-btn" class="sys-menu-btn d-none"> <i class="fas fa-bars"></i>
+    </div>
+
+    <div id="system-sidebar" class="sys-sidebar d-none">
+        <div class="sys-sidebar-header">
+            <span>[ SYSTEM_MENU ]</span>
+            <i class="fas fa-times" id="close-sidebar"></i>
+        </div>
+        <div class="sys-menu-item" id="menu-portfolio" style="cursor: pointer;">
+                <i class="fas fa-folder-open"></i> ARCHIVE_WORKS 
+                <i class="fas fa-chevron-down" id="archive-chevron" style="float: right; margin-top: 4px;"></i>
+            </div>
+            
+            <div id="archive-submenu" class="d-none" style="padding-left: 15px; border-left: 2px dashed #00ffcc; margin-left: 15px; margin-bottom: 15px;">
+                <a href="https://mayumi.vercel.app/" target="_blank" class="sys-menu-item" style="font-size: 0.75rem; padding: 10px; margin-bottom: 8px;">
+                    <i class="fas fa-link text-crimson"></i> mayumi demo tape
+                </a>
+                <a href="https://norris-sasha.vercel.app/" target="_blank" class="sys-menu-item" style="font-size: 0.75rem; padding: 10px; margin-bottom: 0;">
+                    <i class="fas fa-link text-crimson"></i> norris.sasha's archive
+                </a>
+            </div>
+            <div class="sys-menu-item" id="menu-iptv">
+                <i class="fas fa-tv"></i> IPTV_ACCESS <i class="fas fa-lock" style="color: #ff4d4d; float: right; margin-top: 4px;"></i>
+            </div>
+        </div>
+    </div>
     <video autoplay loop muted playsinline id="bg-video" class="d-none">
         <source src="https://file.garden/aech34tN8glaOMqR/0421.mp4" type="video/mp4">
     </video>
@@ -110,21 +142,32 @@
     <div id="donate-modal" class="d-none position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(0,0,0,0.85); z-index: 10000; backdrop-filter: blur(5px);">
         <div class="terminal-box p-4 position-relative" style="max-width: 400px; width: 90%;">
             <button id="close-donate" class="position-absolute top-0 end-0 m-2 pixel-btn" style="padding: 5px 10px;">X</button>
-            
             <h3 class="sys-title text-center mb-3">SYSTEM_DONATE</h3>
-            
             <div class="text-center mb-3">
                 <img src="https://promptpay.io/0940187401.png" alt="QR Code" class="img-fluid border border-danger mb-2" style="max-height: 200px; background: white; padding: 5px;">
                 <p class="small-pixel-text text-white">SCAN TO SUPPORT</p>
             </div>
-            
             <div class="mb-4">
                 <label class="small-pixel-text text-crimson d-block mb-2">UPLOAD SLIP:</label>
                 <input type="file" id="slip-file" class="pixel-select w-100" accept="image/*">
             </div>
-            
             <button id="submit-donate" class="pixel-btn w-100">SUBMIT_SLIP</button>
         </div>
-    </div> <script src="script.js"></script>
+    </div>
+
+    <div id="iptv-modal" class="d-none position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(0,0,0,0.85); z-index: 10000; backdrop-filter: blur(5px);">
+        <div class="terminal-box p-4 position-relative" style="max-width: 400px; width: 90%;">
+            <button id="close-iptv-modal" class="position-absolute top-0 end-0 m-2 pixel-btn" style="padding: 5px 10px;">X</button>
+            <h3 class="sys-title text-center mb-3">SECURITY_CHECK</h3>
+            <div class="text-center">
+                <p style="color: #ff4d4d; margin-bottom: 15px;">> ENCRYPTED_CONNECTION</p>
+                <p class="small-pixel-text text-white mb-2">ENTER ACCESS CODE:</p>
+                <input type="password" id="iptv-password" class="pixel-select w-100 mb-3" placeholder="****" style="text-align: center; letter-spacing: 5px; font-family: 'Press Start 2P', cursive; font-size: 14px;">
+                <button id="verify-iptv-btn" class="pixel-btn w-100">VERIFY CODE</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
 </body>
 </html>

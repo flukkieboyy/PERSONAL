@@ -95,7 +95,7 @@ function loadYouTubeIframeAPI() {
 function onYouTubeIframeAPIReady() {
     // ดึงค่าเริ่มต้นจาก Dropdown (ถ้ามี)
     const playlistDropdown = document.getElementById('playlist-selector');
-    const defaultList = playlistDropdown ? playlistDropdown.value : 'PL8HWkXHyCIuhVW-4-OGDhAusZAuPvQvtQ';
+    const defaultList = playlistDropdown ? playlistDropdown.value : 'PLba6pJZhQQhXRblDh1XDGre-ieixuG2rk';
 
     player = new YT.Player('yt-player', {
         height: '0', width: '0',
@@ -299,6 +299,10 @@ document.getElementById("enter-btn").addEventListener("click", () => {
     document.getElementById("main-screen").classList.remove("d-none");
     document.getElementById("main-screen").classList.add("d-flex");
     
+    // 🌟 โชว์ปุ่มแฮมเบอร์เกอร์เมื่อเข้าสู่หน้าหลัก
+    const systemMenuBtn = document.getElementById("system-menu-btn");
+    if(systemMenuBtn) systemMenuBtn.classList.remove("d-none");
+
     const bgVideo = document.getElementById("bg-video");
     const bgOverlay = document.getElementById("video-overlay");
     if(bgVideo) bgVideo.classList.remove("d-none");
@@ -402,7 +406,7 @@ document.getElementById("discord-btn").addEventListener("click", () => {
     }).catch(err => {
         console.error("Failed to copy text: ", err);
     });
-}); // 🔴 ตรงนี้ครับที่ขาดหายไป! ปิดฟังก์ชัน Discord ปุ่มนี้ก่อน 🔴
+});
 
 // ==========================================
 // 8. ระบบ DONATE & DISCORD WEBHOOK 
@@ -436,9 +440,7 @@ document.addEventListener("click", function(e) {
     }
 });
 
-/// ==========================================
 // ส่วนของปุ่ม SUBMIT (เวอร์ชันวิเคราะห์สลิปแนวตั้ง + จำลองระบบ)
-// ==========================================
 const submitDonate = document.getElementById("submit-donate");
 const slipFile = document.getElementById("slip-file");
 
@@ -500,4 +502,109 @@ if(submitDonate) {
         reader.readAsDataURL(file);
     });
 }
-// สังเกตว่าผมเอาวงเล็บเกิน }); ตรงท้ายสุดออกให้แล้วนะครับ
+
+// ==========================================
+// 9. ระบบ HAMBURGER MENU & IPTV SECURITY
+// ==========================================
+const menuBtn = document.getElementById("system-menu-btn");
+const sidebar = document.getElementById("system-sidebar");
+const closeSidebarBtn = document.getElementById("close-sidebar");
+
+const menuIptvBtn = document.getElementById("menu-iptv");
+const iptvModal = document.getElementById("iptv-modal");
+const closeIptvModalBtn = document.getElementById("close-iptv-modal");
+const verifyIptvBtn = document.getElementById("verify-iptv-btn");
+const iptvPassInput = document.getElementById("iptv-password");
+
+// ==========================================
+// ระบบ Submenu ของ ARCHIVE_WORKS
+// ==========================================
+const menuPortfolioBtn = document.getElementById("menu-portfolio");
+const archiveSubmenu = document.getElementById("archive-submenu");
+const archiveChevron = document.getElementById("archive-chevron");
+
+if(menuPortfolioBtn && archiveSubmenu) {
+    menuPortfolioBtn.addEventListener("click", () => {
+        // สลับโชว์/ซ่อน เมนูย่อย
+        archiveSubmenu.classList.toggle("d-none");
+        
+        // สลับไอคอนลูกศร ขึ้น/ลง
+        if(archiveChevron) {
+            archiveChevron.classList.toggle("fa-chevron-down");
+            archiveChevron.classList.toggle("fa-chevron-up");
+        }
+        
+        // เสียงเวลากดโฟลเดอร์
+        try { if(typeof playBeep === "function") playBeep(850, 0.05, 0.1); } catch(err){}
+    });
+}
+
+// 1. เปิด/ปิด เมนู Sidebar
+if(menuBtn) {
+    menuBtn.addEventListener("click", () => {
+        sidebar.classList.remove("d-none");
+        try { if(typeof playBeep === "function") playBeep(800, 0.1, 0.1); } catch(err){}
+    });
+}
+if(closeSidebarBtn) {
+    closeSidebarBtn.addEventListener("click", () => {
+        sidebar.classList.add("d-none");
+        try { if(typeof playBeep === "function") playBeep(600, 0.1, 0.1); } catch(err){}
+    });
+}
+
+// 2. กดปุ่ม IPTV เพื่อเปิดหน้าต่างใส่รหัส
+if(menuIptvBtn) {
+    menuIptvBtn.addEventListener("click", () => {
+        iptvModal.classList.remove("d-none");
+        sidebar.classList.add("d-none"); // พับเก็บเมนูหลักไปเลย
+        iptvPassInput.value = ""; // เคลียร์ช่องใส่รหัส
+        iptvPassInput.focus();
+        try { if(typeof playBeep === "function") playBeep(900, 0.1, 0.1); } catch(err){}
+    });
+}
+
+// 3. ปิดหน้าต่างใส่รหัส IPTV
+if(closeIptvModalBtn) {
+    closeIptvModalBtn.addEventListener("click", () => {
+        iptvModal.classList.add("d-none");
+        try { if(typeof playBeep === "function") playBeep(500, 0.1, 0.1); } catch(err){}
+    });
+}
+
+// 4. ระบบตรวจรหัสผ่าน IPTV (Security Check)
+// 4. ระบบตรวจรหัสผ่าน IPTV (Security Check)
+if(verifyIptvBtn) {
+    verifyIptvBtn.addEventListener("click", () => {
+        // 🔒 รหัสผ่านของคุณ (ตอนนี้ตั้งไว้เป็น 1688)
+        const secretCode = "1688"; 
+        
+        if (iptvPassInput.value === secretCode) {
+            
+            // 🌟 ท่าไม้ตาย: แอบฝังกุญแจชั่วคราว (Token) ไว้ใน Session ของเบราว์เซอร์
+            sessionStorage.setItem("iptv_auth_token", "access_granted_1688");
+
+            try { if(typeof playBeep === "function") playBeep(1500, 0.2, 0.2); } catch(err){}
+            showSystemToast("ACCESS GRANTED. REDIRECTING...");
+            
+            // รอ 1 วินาทีแล้วเด้งไปหน้าใหม่
+            setTimeout(() => {
+                window.location.href = "WATCH_.html"; 
+            }, 1000);
+        } else {
+            // ถ้ารหัสผิด
+            try { if(typeof playBeep === "function") playBeep(300, 0.4, 0.2); } catch(err){}
+            showSystemToast("ERROR: INVALID ACCESS CODE", true);
+            iptvPassInput.value = ""; // เคลียร์ช่องให้กรอกใหม่
+        }
+    });
+
+    // เพิ่มความสะดวก: กดปุ่ม Enter ในช่องรหัสผ่านได้เลย
+    if(iptvPassInput) {
+        iptvPassInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                verifyIptvBtn.click();
+            }
+        });
+    }
+}
