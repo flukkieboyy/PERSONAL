@@ -1,14 +1,51 @@
 // ==========================================
-// 1. ระบบป้องกัน DevTools
+// 1. ระบบป้องกัน DevTools (Advanced Security)
 // ==========================================
-document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+// 1.1 บล็อกการคลิกขวาแบบสมบูรณ์
+document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+});
+
+// 1.2 บล็อกปุ่มลัดทุกชนิด (ครอบคลุมทั้ง Windows และ Mac)
 document.addEventListener("keydown", (e) => {
-    if (e.key === "F12" || 
-        (e.ctrlKey && e.shiftKey && ["I", "J", "C", "i", "j", "c"].includes(e.key)) ||
-        (e.ctrlKey && ["U", "u"].includes(e.key))) {
+    if (
+        e.key === "F12" || 
+        (e.ctrlKey && e.shiftKey && ["I", "J", "C", "i", "j", "c"].includes(e.key)) || // Windows DevTools
+        (e.ctrlKey && ["U", "u"].includes(e.key)) || // Windows View Source
+        (e.metaKey && e.altKey && ["I", "J", "C", "i", "j", "c"].includes(e.key)) || // Mac DevTools
+        (e.metaKey && ["U", "u"].includes(e.key)) // Mac View Source
+    ) {
         e.preventDefault();
+        // (ตัวเลือกเสริม) ใส่เสียงแจ้งเตือนตอนมีคนพยายามกดปุ่ม
+        try { if(typeof playBeep === "function") playBeep(200, 0.3, 0.5); } catch(err){}
     }
 });
+
+// 1.3 ยิงข้อความขู่ลงใน Console (ถ้าเขาฝืนเปิดเข้ามาได้)
+setTimeout(() => {
+    console.clear();
+    console.log("%c🛑 ACCESS DENIED!", "color: #ff004c; font-size: 50px; font-weight: bold; text-shadow: 2px 2px 0px #000; font-family: sans-serif;");
+    console.log("%cSECURITY PROTOCOL INITIATED. YOUR ATTEMPT HAS BEEN LOGGED.", "color: #00ffcc; font-size: 16px; font-family: monospace;");
+}, 1000);
+
+// 1.4 ท่าไม้ตาย: Debugger Trap (กับดักทำให้จอค้าง)
+// *คำเตือน: เวลาคุณ (เจ้าของเว็บ) จะแก้โค้ดเอง ให้เอา // มาคอมเมนต์บรรทัด setInterval นี้ไว้ชั่วคราวนะครับ ไม่งั้นคุณก็จะแก้ไม่ได้เหมือนกัน!
+
+setInterval(function() {
+    const before = new Date().getTime();
+    
+    // คำสั่งนี้จะไปหยุดการทำงานของเบราว์เซอร์ ถ้า DevTools ถูกเปิดอยู่
+    debugger; 
+    
+    const after = new Date().getTime();
+    if (after - before > 100) {
+        // ถ้าเวลาต่างกันมาก แปลว่าเว็บติด Debugger = มีคนเปิด DevTools
+        // สั่งเคลียร์หน้าจอทิ้งทันที และเตะออกไปหน้าเว็บเปล่า
+        document.body.innerHTML = "<div style='background: black; color: red; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: monospace; font-size: 24px;'>SECURITY BREACH DETECTED. SYSTEM LOCKED.</div>";
+        window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ"); 
+    }
+}, 1000);
 
 // ==========================================
 // 2. ตัวแปรระบบ & เสียง Hacking
@@ -607,4 +644,32 @@ if(verifyIptvBtn) {
             }
         });
     }
+}
+
+// คำสั่งควบคุมการเปิด-ปิดโฟลเดอร์ QTCherry (พร้อมเสียง)
+const qtCherryBtn = document.getElementById('qt-cherry-folder-btn');
+const qtCherryContent = document.getElementById('qt-cherry-content');
+
+if (qtCherryBtn) {
+    qtCherryBtn.addEventListener('click', (e) => {
+        // ป้องกันไม่ให้การคลิกไปกระทบกับเมนูหลัก
+        e.stopPropagation(); 
+        
+        // 🎵 เล่นเสียงตอนกด (ใช้ฟังก์ชัน playBeep ที่คุณมีอยู่แล้ว)
+        // ตั้งความถี่ที่ 800Hz ให้เสียงดูป๊อปอัพขึ้นมาหน่อย
+        try { 
+            if(typeof playBeep === "function") playBeep(800, 0.05, 0.1); 
+        } catch(err){}
+        
+        // สลับการแสดงผล
+        qtCherryContent.classList.toggle('d-none');
+        
+        // เปลี่ยนไอคอน folder ตอนเปิด/ปิด
+        const icon = qtCherryBtn.querySelector('i');
+        if (qtCherryContent.classList.contains('d-none')) {
+            icon.className = 'fas fa-folder';
+        } else {
+            icon.className = 'fas fa-folder-open';
+        }
+    });
 }
