@@ -43,7 +43,7 @@ setInterval(function() {
         // ถ้าเวลาต่างกันมาก แปลว่าเว็บติด Debugger = มีคนเปิด DevTools
         // สั่งเคลียร์หน้าจอทิ้งทันที และเตะออกไปหน้าเว็บเปล่า
         document.body.innerHTML = "<div style='background: black; color: red; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: monospace; font-size: 24px;'>SECURITY BREACH DETECTED. SYSTEM LOCKED.</div>";
-        window.location.replace("https://www.youtube.com/watch?v=dQw4w9WgXcQ"); 
+        window.location.replace("https://file.garden/aech34tN8glaOMqR/get-rekt-lil-bitch/RICK"); 
     }
 }, 1000);
 
