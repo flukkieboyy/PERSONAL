@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Definition Protected Stream</title>
+    
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    
+    <style>
+        /* ห้ามเลือกตัวอักษรเพื่อกันคนก๊อปปี้ลิงก์ */
+        body { 
+            margin: 0; 
+            background-color: #000; 
+            overflow: hidden; 
+            font-family: sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-js {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* --- เทคนิคปรับภาพให้คมชัด (Sharpening) --- */
+        .video-js video {
+            image-rendering: -webkit-optimize-contrast; /* สำหรับ Chrome/Safari */
+            image-rendering: crisp-edges;
+            /* เพิ่ม Contrast และ Saturation เล็กน้อยเพื่อให้มิติภาพชัดขึ้น */
+            filter: contrast(1.08) saturate(1.1) brightness(1.02);
+        }
+
+        /* โลโก้ที่ฝังอยู่ใน Video.js */
+        .vjs-custom-logo {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            z-index: 1000; 
+            pointer-events: none;
+        }
+
+        .vjs-custom-logo img {
+            width: 120px;
+            height: auto;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.8));
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;"> <div class="video-container">
+    <video
+        id="stream-player"
+        class="video-js vjs-big-play-centered"
+        controls
+        preload="auto"
+        autoplay
+        muted
+        playsinline>
+        <source src="https://dried-declared.eatmorebanana.org:9305/v5/8rY15r-aA3lW_vnFZDpZMg/1777821836/f73a43e8162bf86ce161da371e572b42/OKNqFSCjnqeTElub7j1mWw/1777832516/live/lx-origin/th-monomax02_720/chunks.m3u8" type="application/x-mpegURL">
+    </video>
+</div>
+
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+<script>
+    // --- 1. ระบบความปลอดภัย (ป้องกัน F12 / DevTools) ---
+    document.onkeydown = function(e) {
+        // ปิด F12
+        if(e.keyCode == 123) return false;
+        // ปิด Ctrl+Shift+I, J, C
+        if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) return false;
+        // ปิด Ctrl+U (ดู source)
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+    };
+
+    // ดักจับการเปิด Console
+    setInterval(function() {
+        var before = new Date().getTime();
+        debugger; // ถ้าเปิด DevTools โปรแกรมจะติดลูปที่นี่
+        var after = new Date().getTime();
+        if (after - before > 100) { 
+            window.location.reload(); // ถ้ามีการดีบัค ให้รีเฟรชหน้า
+        }
+    }, 1000);
+
+    // --- 2. ตั้งค่าตัวเล่นวิดีโอ ---
+    var player = videojs('stream-player', {
+        autoplay: 'any',
+        fluid: false,
+        html5: {
+            vhs: {
+                enableLowInitialPlaylist: false,
+                fastQualityChangeHtml5: true,
+                overrideNative: true
+            }
+        },
+        controlBar: {
+            children: [
+                'playToggle',
+                'volumePanel',
+                'currentTimeDisplay',
+                'timeDivider',
+                'durationDisplay',
+                'progressControl',
+                'liveDisplay',
+                'fullscreenToggle',
+            ]
+        }
+    });
+
+    player.ready(function() {
+        // สร้างและฝังโลโก้
+        var logoContainer = document.createElement('div');
+        logoContainer.className = 'vjs-custom-logo';
+        logoContainer.innerHTML = '<img src="https://file.garden/aech34tN8glaOMqR/logostream/New%20Project%20(2).png" alt="Logo">';
+        player.el().appendChild(logoContainer);
+
+        this.play();
+        
+        this.on('loadedmetadata', function() {
+            const liveThreshold = player.duration() - 20;
+            if (player.currentTime() < liveThreshold) {
+                player.currentTime(liveThreshold);
+            }
+        });
+    });
+
+    // ป้องกันภาพค้างเวลาสลับหน้าจอ
+    document.addEventListener("visibilitychange", function() {
+        if (!document.hidden) {
+            player.play();
+        }
+    });
+</script>
+
+</body>
+</html>
