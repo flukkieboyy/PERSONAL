@@ -25,6 +25,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background-color: #000;
         }
 
         .video-js {
@@ -54,9 +55,34 @@
             height: auto;
             filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.8));
         }
+
+        /* --- หน้าจอ OFFLINE สำหรับโหมด Text --- */
+        .offline-screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            z-index: 2000;
+            display: none; /* ซ่อนไว้เป็นค่าเริ่มต้น */
+            text-align: center;
+            text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
+        }
     </style>
 </head>
-<body oncontextmenu="return false;"> <div class="video-container">
+<body oncontextmenu="return false;"> 
+    
+<div class="video-container">
+    <div id="offline-ui" class="offline-screen">
+        <div>🔴 OFFLINE</div>
+        <div style="font-size: 1.2rem; margin-top: 10px; font-weight: normal; color: #ccc;">ขออภัย ไม่สามารถโหลดสัญญาณภาพได้ในขณะนี้</div>
+    </div>
+
     <video
         id="stream-player"
         class="video-js vjs-big-play-centered"
@@ -72,23 +98,29 @@
 <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 
 <script>
+    // ==========================================
+    // ⚙️ ส่วนตั้งค่าตอนสตรีมเล่นไม่ได้ (Offline Fallback)
+    // ==========================================
+    const FALLBACK_MODE = "text"; // เลือก: "text" (เพื่อโชว์ตัวหนังสือ) หรือ "video" (เพื่อเล่นคลิปสำรอง)
+    
+    // ตั้งค่าลิงก์คลิปวิดีโอสำรอง (ทำงานเมื่อเลือก "video")
+    const FALLBACK_VIDEO_URL = "https://www.w3schools.com/html/mov_bbb.mp4"; // เปลี่ยนเป็นลิงก์ MP4 หรือ M3U8 สำรองของคุณ
+    const FALLBACK_VIDEO_TYPE = "video/mp4"; // ประเภทไฟล์ เช่น "video/mp4" หรือ "application/x-mpegURL"
+    // ==========================================
+
     // --- 1. ระบบความปลอดภัย (ป้องกัน F12 / DevTools) ---
     document.onkeydown = function(e) {
-        // ปิด F12
         if(e.keyCode == 123) return false;
-        // ปิด Ctrl+Shift+I, J, C
         if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) return false;
-        // ปิด Ctrl+U (ดู source)
         if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
     };
 
-    // ดักจับการเปิด Console
     setInterval(function() {
         var before = new Date().getTime();
-        debugger; // ถ้าเปิด DevTools โปรแกรมจะติดลูปที่นี่
+        debugger; 
         var after = new Date().getTime();
         if (after - before > 100) { 
-            window.location.reload(); // ถ้ามีการดีบัค ให้รีเฟรชหน้า
+            window.location.reload(); 
         }
     }, 1000);
 
@@ -124,7 +156,9 @@
         logoContainer.innerHTML = '<img src="https://file.garden/aech34tN8glaOMqR/logostream/New%20Project%20(2).png" alt="Logo">';
         player.el().appendChild(logoContainer);
 
-        this.play();
+        this.play().catch(function(error) {
+            console.log("Autoplay ถูกบล็อกหรือมีปัญหา:", error);
+        });
         
         this.on('loadedmetadata', function() {
             const liveThreshold = player.duration() - 20;
@@ -134,9 +168,28 @@
         });
     });
 
+    // --- 3. ระบบจับ Error (เมื่อลิงก์หลักเสีย) ---
+    player.on('error', function() {
+        console.log("⚠️ ลิงก์หลักเสีย หรือไม่สามารถเล่นได้ ทำการโหลดระบบสำรอง...");
+        
+        if (FALLBACK_MODE === "video") {
+            // โหมด: เล่นคลิปสำรอง
+            player.error(null); // ล้างแจ้งเตือน error เดิมออกก่อน
+            player.src({
+                src: FALLBACK_VIDEO_URL,
+                type: FALLBACK_VIDEO_TYPE
+            });
+            player.play();
+        } else {
+            // โหมด: แสดงตัวหนังสือ OFFLINE
+            player.el().style.display = 'none'; // ซ่อนกล่องวิดีโอทิ้งไป
+            document.getElementById('offline-ui').style.display = 'flex'; // แสดงหน้าจอตัวหนังสือแทน
+        }
+    });
+
     // ป้องกันภาพค้างเวลาสลับหน้าจอ
     document.addEventListener("visibilitychange", function() {
-        if (!document.hidden) {
+        if (!document.hidden && !player.error()) {
             player.play();
         }
     });
