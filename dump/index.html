@@ -8,6 +8,7 @@
     <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
     
     <style>
+        /* ห้ามเลือกตัวอักษรเพื่อกันคนก๊อปปี้ลิงก์ */
         body { 
             margin: 0; 
             background-color: #000; 
@@ -32,12 +33,15 @@
             height: 100% !important;
         }
 
+        /* --- เทคนิคปรับภาพให้คมชัด (Sharpening) --- */
         .video-js video {
-            image-rendering: -webkit-optimize-contrast;
+            image-rendering: -webkit-optimize-contrast; /* สำหรับ Chrome/Safari */
             image-rendering: crisp-edges;
+            /* เพิ่ม Contrast และ Saturation เล็กน้อยเพื่อให้มิติภาพชัดขึ้น */
             filter: contrast(1.08) saturate(1.1) brightness(1.02);
         }
 
+        /* โลโก้ที่ฝังอยู่ใน Video.js */
         .vjs-custom-logo {
             position: absolute;
             top: 25px;
@@ -52,6 +56,7 @@
             filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.8));
         }
 
+        /* --- หน้าจอ OFFLINE สำหรับโหมด Text --- */
         .offline-screen {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -64,13 +69,13 @@
             font-size: 2.5rem;
             font-weight: bold;
             z-index: 2000;
-            display: none; 
+            display: none; /* ซ่อนไว้เป็นค่าเริ่มต้น */
             text-align: center;
             text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
         }
     </style>
 </head>
-<body> 
+<body oncontextmenu="return false;"> 
     
 <div class="video-container">
     <div id="offline-ui" class="offline-screen">
@@ -86,6 +91,7 @@
         autoplay
         muted
         playsinline>
+        <source src="https://dried-declared.eatmorebanana.org:9305/v5/8rY15r-aA3lW_vnFZDpZMg/1777821836/f73a43e8162bf86ce161da371e572b42/OKNqFSCjnqeTElub7j1mWw/1777832516/live/lx-origin/th-monomax02_720/chunks.m3u8" type="application/x-mpegURL">
     </video>
 </div>
 
@@ -93,84 +99,65 @@
 
 <script>
     // ==========================================
-    // 🤬 โหมดกวนประสาทคนแฮ็ก (Anti-Snoop)
+    // ⚙️ ส่วนตั้งค่าตอนสตรีมเล่นไม่ได้ (Offline Fallback)
     // ==========================================
-    const TROLL_MESSAGE = "ขออภัยแต่ไม่อนุญาติให้เสือกครับ หาเอาเองจุ๊บๆ";
+    const FALLBACK_MODE = "text"; // เลือก: "text" (เพื่อโชว์ตัวหนังสือ) หรือ "video" (เพื่อเล่นคลิปสำรอง)
+    
+    // ตั้งค่าลิงก์คลิปวิดีโอสำรอง (ทำงานเมื่อเลือก "video")
+    const FALLBACK_VIDEO_URL = "https://www.w3schools.com/html/mov_bbb.mp4"; // เปลี่ยนเป็นลิงก์ MP4 หรือ M3U8 สำรองของคุณ
+    const FALLBACK_VIDEO_TYPE = "video/mp4"; // ประเภทไฟล์ เช่น "video/mp4" หรือ "application/x-mpegURL"
+    // ==========================================
 
-    // 1. พิมพ์ด่าตัวใหญ่ๆ ใน Console เผื่อมันเปิด F12 สำเร็จ
-    console.log("%c" + TROLL_MESSAGE, "color: red; font-size: 40px; font-weight: bold; text-shadow: 2px 2px 0px black;");
-    console.log("%cพยายามจะหาลิงก์ .m3u8 หรอ? ฝันไปเถอะ! 😜", "color: yellow; font-size: 20px; background: black; padding: 10px;");
-
-    // 2. ดักการคลิกขวา และ Copy ถ้าพยายามทำ ให้เด้งข้อความด่า
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        alert(TROLL_MESSAGE);
-    });
-    document.addEventListener('copy', function(e) {
-        e.preventDefault();
-        alert(TROLL_MESSAGE);
-    });
-
-    // 3. ปิดคีย์ลัดพวก F12, Ctrl+Shift+I ฯลฯ
+    // --- 1. ระบบความปลอดภัย (ป้องกัน F12 / DevTools) ---
     document.onkeydown = function(e) {
-        if(e.keyCode == 123) { alert(TROLL_MESSAGE); return false; }
-        if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) { alert(TROLL_MESSAGE); return false; }
-        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { alert(TROLL_MESSAGE); return false; }
+        if(e.keyCode == 123) return false;
+        if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) return false;
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
     };
 
-    // 4. กับดัก Console (ถ้ามันเปิดได้ เว็บจะค้างหรือรีเฟรช)
     setInterval(function() {
         var before = new Date().getTime();
         debugger; 
         var after = new Date().getTime();
         if (after - before > 100) { 
-            document.body.innerHTML = `<h1 style="color:red; text-align:center; margin-top:20%; font-size:50px;">${TROLL_MESSAGE}</h1>`;
+            window.location.reload(); 
         }
     }, 1000);
 
-    // ==========================================
-    // 🔐 ระบบเข้ารหัสลิงก์ (Base64) เพื่อซ่อนลิงก์จากหน้า HTML
-    // ==========================================
-    // นำลิงก์ https://dried-declared.../chunks.m3u8 ของคุณไปแปลงเป็น Base64 ได้ข้อความด้านล่างนี้
-    // (ทำให้บอทหรือคนที่หาคำว่า ".m3u8" ในโค้ด หาไม่เจอ)
-    const SECRET_STREAM_URL = "aHR0cHM6Ly9ubC51dGFrby5tb2UvcGlnb28vaW5kZXgubTN1OA==";
-    
-    // โหมดสตรีมเสีย
-    const FALLBACK_MODE = "text"; 
-    const FALLBACK_VIDEO_URL = ""; 
-    const FALLBACK_VIDEO_TYPE = "video/mp4"; 
-
-    // ถอดรหัสลิงก์ตอนจะเล่น
-    const decodedStreamUrl = atob(SECRET_STREAM_URL);
-
-    // --- ตั้งค่าตัวเล่นวิดีโอ ---
+    // --- 2. ตั้งค่าตัวเล่นวิดีโอ ---
     var player = videojs('stream-player', {
         autoplay: 'any',
         fluid: false,
-        html5: { vhs: { overrideNative: true } },
+        html5: {
+            vhs: {
+                enableLowInitialPlaylist: false,
+                fastQualityChangeHtml5: true,
+                overrideNative: true
+            }
+        },
         controlBar: {
             children: [
-                'playToggle', 'volumePanel', 'currentTimeDisplay', 
-                'timeDivider', 'durationDisplay', 'progressControl', 
-                'liveDisplay', 'fullscreenToggle',
+                'playToggle',
+                'volumePanel',
+                'currentTimeDisplay',
+                'timeDivider',
+                'durationDisplay',
+                'progressControl',
+                'liveDisplay',
+                'fullscreenToggle',
             ]
         }
     });
 
     player.ready(function() {
+        // สร้างและฝังโลโก้
         var logoContainer = document.createElement('div');
         logoContainer.className = 'vjs-custom-logo';
         logoContainer.innerHTML = '<img src="https://file.garden/aech34tN8glaOMqR/logostream/New%20Project%20(2).png" alt="Logo">';
         player.el().appendChild(logoContainer);
 
-        // ใส่ลิงก์ที่ถอดรหัสแล้วเข้าไปใน Player (คนอ่านโค้ดดิบๆ จะไม่เห็นลิงก์นี้)
-        player.src({
-            src: decodedStreamUrl,
-            type: 'application/x-mpegURL'
-        });
-
         this.play().catch(function(error) {
-            console.log("Autoplay ถูกบล็อก:", error);
+            console.log("Autoplay ถูกบล็อกหรือมีปัญหา:", error);
         });
         
         this.on('loadedmetadata', function() {
@@ -181,18 +168,26 @@
         });
     });
 
+    // --- 3. ระบบจับ Error (เมื่อลิงก์หลักเสีย) ---
     player.on('error', function() {
-        console.log("⚠️ ลิงก์หลักเสียโหลดระบบสำรอง...");
-        if (FALLBACK_MODE === "video" && FALLBACK_VIDEO_URL !== "") {
-            player.error(null); 
-            player.src({ src: FALLBACK_VIDEO_URL, type: FALLBACK_VIDEO_TYPE });
+        console.log("⚠️ ลิงก์หลักเสีย หรือไม่สามารถเล่นได้ ทำการโหลดระบบสำรอง...");
+        
+        if (FALLBACK_MODE === "video") {
+            // โหมด: เล่นคลิปสำรอง
+            player.error(null); // ล้างแจ้งเตือน error เดิมออกก่อน
+            player.src({
+                src: FALLBACK_VIDEO_URL,
+                type: FALLBACK_VIDEO_TYPE
+            });
             player.play();
         } else {
-            player.el().style.display = 'none'; 
-            document.getElementById('offline-ui').style.display = 'flex'; 
+            // โหมด: แสดงตัวหนังสือ OFFLINE
+            player.el().style.display = 'none'; // ซ่อนกล่องวิดีโอทิ้งไป
+            document.getElementById('offline-ui').style.display = 'flex'; // แสดงหน้าจอตัวหนังสือแทน
         }
     });
 
+    // ป้องกันภาพค้างเวลาสลับหน้าจอ
     document.addEventListener("visibilitychange", function() {
         if (!document.hidden && !player.error()) {
             player.play();
