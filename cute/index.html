@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>R E M I E _ O S</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&family=Press+Start+2P&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+/* ─── CSS VARIABLES ─────────────────────────────────────── */
+:root {
+    --blue-primary: #00b4d8;
+    --blue-dark: #0077b6;
+    --blue-light: #90e0ef;
+    --bg: #f0f8ff;
+    --win-bg: #ffffff;
+    --win-border: #00b4d8;
+    --text: #333333;
+    --text-dim: #8d99ae;
+    --cur-main: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%2300b4d8" stroke="white" stroke-width="1.5" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 2, auto;
+    --cur-point: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path fill="white" stroke="%2300b4d8" stroke-width="2" d="M10,2 L10,18 L13,15 L16,22 L19,21 L16,14 L20,14 L10,2 Z"/></svg>') 10 2, pointer;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; cursor:var(--cur-main) !important; scrollbar-width:none; -ms-overflow-style:none; user-select:none; }
+*::-webkit-scrollbar { display:none; }
+a,button,.t-icon,.start-item,.close-win,.close-viewer,.gallery-thumb,.viewer-nav,.btn-social-icon,.page-btn { cursor:var(--cur-point) !important; }
+
+body { background-color:var(--bg); color:var(--text); font-family:'Kanit','Zen Maru Gothic',sans-serif; height:100vh; overflow:hidden; }
+
+.pixel-font { font-family:'Press Start 2P',cursive; font-size:0.6rem; }
+.text-blue { color:var(--blue-primary) !important; }
+.text-dim { color:var(--text-dim) !important; }
+.border-blue { border:2px solid var(--blue-primary) !important; }
+
+/* ─── DESKTOP ─────────────────────────────────────────── */
+.desktop { height:calc(100vh - 50px); position:relative; overflow:hidden; padding-top:50px; }
+.bg-vignette { position:absolute; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle,transparent 50%,rgba(0,0,0,0.05)); z-index:-1; pointer-events:none; }
+#bg-particles { position:absolute; top:0; left:0; width:100%; height:100%; z-index:-2; pointer-events:none; opacity:0.8; }
+
+/* ─── TOP BAR ─────────────────────────────────────────── */
+.top-info { position:fixed; top:0; width:100%; background:rgba(255,255,255,0.7); backdrop-filter:blur(10px); z-index:1000; border-bottom:1px solid rgba(0,180,216,0.3); color:var(--text); }
+
+/* ─── WINDOWS ─────────────────────────────────────────── */
+.win { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:90%; max-width:450px; background:var(--win-bg); border:3px solid var(--win-border); border-radius:12px; z-index:10; box-shadow:0 10px 30px rgba(0,180,216,0.15); }
+.win.d-none { display:none !important; opacity:0; }
+.win-header { background:var(--blue-primary); color:white; border-radius:8px 8px 0 0; padding:8px 10px; display:flex; align-items:center; gap:10px; }
+.win-dots { display:flex; gap:5px; }
+.win-dots span { width:12px; height:12px; border-radius:50%; background:rgba(255,255,255,0.4); display:block; }
+.win-dots .close-win,.win-dots .close-viewer { background:#ff4d4d !important; }
+.win-title { font-family:'Press Start 2P',cursive; font-size:0.6rem; flex-grow:1; }
+.win-body { background:#ffffff !important; color:#333333 !important; padding:15px; max-height:70vh; overflow-y:auto; scroll-behavior:smooth; }
+
+/* ─── AVATAR ─────────────────────────────────────────── */
+.avatar { width:120px; height:120px; border-radius:50%; border:4px solid var(--blue-primary); object-fit:cover; }
+.blink-cursor { color:var(--blue-primary); animation:blink 0.8s infinite; }
+@keyframes blink { 50%{opacity:0} }
+
+/* ─── SOCIAL BUTTONS ─────────────────────────────────── */
+.btn-social-icon { display:flex; align-items:center; justify-content:center; width:45px; height:45px; border:2px solid var(--blue-primary); color:var(--blue-primary); background:transparent; border-radius:50%; font-size:1.2rem; transition:all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); text-decoration:none; box-shadow:3px 3px 0 rgba(0,180,216,0.2); }
+.btn-social-icon:hover { background:var(--blue-primary); color:white; transform:scale(1.1) rotate(5deg); }
+
+/* ─── GALLERY ─────────────────────────────────────────── */
+.gallery-thumb { transition:0.2s; height:180px; width:100%; object-fit:cover; border:2px solid var(--blue-primary); border-radius:8px; }
+.gallery-thumb:hover { transform:scale(1.03); border-color:var(--blue-dark) !important; }
+.gallery-set-label { font-size:0.65rem; color:var(--blue-primary); font-family:'Press Start 2P',cursive; text-align:center; margin-top:4px; }
+
+/* ─── SCHEDULE ─────────────────────────────────────────── */
+.schedule-item { background:#fafafa; border-radius:8px; border:1px solid rgba(0,180,216,0.2); transition:0.2s; }
+.schedule-item:hover { background:#f0f8ff; border-color:var(--blue-primary); }
+.bg-blue { background-color:var(--blue-primary) !important; font-family:'Press Start 2P',cursive; font-size:0.5rem; padding:6px 8px; }
+.hover-underline:hover { text-decoration:underline !important; }
+
+/* ─── PAGINATION ─────────────────────────────────────── */
+.pagination-container { display:flex; justify-content:center; align-items:center; gap:15px; margin-top:15px; width:100%; }
+.page-btn { background:var(--win-bg); border:2px solid var(--blue-primary); color:var(--blue-primary); padding:5px 15px; border-radius:5px; transition:0.3s; font-family:'Press Start 2P',cursive; font-size:0.5rem; }
+.page-btn:hover:not(:disabled) { background:var(--blue-primary); color:white; }
+.page-btn:disabled { border-color:var(--text-dim); color:var(--text-dim); opacity:0.5; pointer-events:none; }
+.page-text { color:var(--text); font-size:0.6rem; font-family:'Press Start 2P',cursive; }
+
+/* ─── VIEWER ─────────────────────────────────────────── */
+.viewer-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,180,216,0.6); border:2px solid white; color:white; width:35px; height:35px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.viewer-nav:hover { background:var(--blue-dark); transform:translateY(-50%) scale(1.1); }
+.viewer-nav.left { left:10px; }
+.viewer-nav.right { right:10px; }
+
+/* ─── TASKBAR ─────────────────────────────────────────── */
+.taskbar { position:fixed; bottom:0; width:100%; height:50px; background:var(--win-bg); border-top:2px solid var(--blue-primary); z-index:2000; box-shadow:0 -2px 10px rgba(0,0,0,0.05); display:flex; align-items:center; padding:0 10px; }
+.start-btn { background:var(--blue-primary); border:none; color:white; padding:5px 15px; border-radius:5px; font-family:'Press Start 2P'; font-size:0.55rem; box-shadow:2px 2px 0 rgba(0,0,0,0.1); transition:0.2s; display:flex; align-items:center; gap:8px; }
+.start-btn:active { transform:translate(2px,2px); box-shadow:none; }
+.task-divider { width:2px; height:30px; background:rgba(0,180,216,0.2); margin:0 8px; }
+.t-icon { font-size:1.3rem; color:var(--text-dim); padding:5px; border-bottom:3px solid transparent; transition:0.3s; }
+.t-icon.active { color:var(--blue-primary); border-bottom-color:var(--blue-primary); }
+.task-credit { font-size:0.7rem; color:var(--text-dim); }
+.task-credit a { color:var(--blue-primary); text-decoration:none; font-weight:bold; }
+.task-icons { display:flex; gap:12px; flex-grow:1; }
+
+/* ─── START MENU ─────────────────────────────────────── */
+.start-menu { position:fixed; bottom:55px; left:10px; width:200px; background:var(--win-bg); border:2px solid var(--blue-primary); border-radius:10px; box-shadow:5px 5px 15px rgba(0,0,0,0.1); z-index:3000; }
+.start-header { background:var(--blue-primary); color:white; padding:10px; font-size:0.5rem; border-radius:8px 8px 0 0; font-family:'Press Start 2P',cursive; }
+.start-item { padding:12px 15px; font-size:0.85rem; transition:0.2s; display:flex; gap:10px; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); }
+.start-item:last-child { border-bottom:none; }
+.start-item:hover { background:rgba(0,180,216,0.1); color:var(--blue-primary); }
+
+/* ─── INTRO ─────────────────────────────────────────── */
+#intro-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:9999; display:flex; justify-content:center; align-items:center; transition:0.5s; }
+
+/* ─── HEART POP ─────────────────────────────────────── */
+.heart-pop { position:absolute; color:var(--blue-primary); font-size:20px; pointer-events:none; animation:pop 0.6s forwards ease-out; z-index:5000; }
+@keyframes pop { 0%{transform:scale(1) translateY(0);opacity:1} 100%{transform:scale(1.5) translateY(-40px);opacity:0} }
+
+/* ─── TOAST ─────────────────────────────────────────── */
+.toast-notif { position:fixed; top:60px; right:16px; background:var(--blue-primary); color:white; padding:10px 18px; border-radius:8px; font-size:0.8rem; z-index:9998; opacity:0; transform:translateY(-10px); transition:0.3s; pointer-events:none; font-family:'Press Start 2P',cursive; font-size:0.5rem; }
+.toast-notif.show { opacity:1; transform:translateY(0); }
+
+/* ════════════════════════════════════════════════════════
+   ADMIN PANEL
+════════════════════════════════════════════════════════ */
+#admin-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(6px); z-index:99999;
+    display:none; justify-content:center; align-items:center;
+}
+#admin-overlay.show { display:flex; }
+
+/* Login box */
+.admin-login-box {
+    background:#fff; border:3px solid var(--blue-primary);
+    border-radius:16px; padding:36px 32px; width:340px;
+    box-shadow:0 20px 60px rgba(0,180,216,0.25);
+    text-align:center;
+}
+.admin-login-box h2 { font-family:'Press Start 2P',cursive; font-size:0.7rem; color:var(--blue-primary); margin-bottom:6px; }
+.admin-login-box p { font-size:0.75rem; color:var(--text-dim); margin-bottom:24px; }
+.admin-input { width:100%; border:2px solid var(--blue-primary); border-radius:8px; padding:10px 14px; font-family:'Kanit',sans-serif; font-size:0.9rem; color:var(--text); outline:none; margin-bottom:12px; background:#f8fcff; transition:0.2s; cursor:text !important; user-select:text !important; }
+.admin-input:focus { border-color:var(--blue-dark); box-shadow:0 0 0 3px rgba(0,180,216,0.15); }
+.admin-login-btn { width:100%; background:var(--blue-primary); color:white; border:none; border-radius:8px; padding:11px; font-family:'Press Start 2P',cursive; font-size:0.55rem; margin-top:4px; transition:0.2s; }
+.admin-login-btn:hover { background:var(--blue-dark); }
+.admin-err { color:#e63946; font-size:0.75rem; margin-top:8px; min-height:18px; }
+.admin-close-login { position:absolute; top:14px; right:16px; background:none; border:none; font-size:1.3rem; color:var(--text-dim); }
+.admin-close-login:hover { color:var(--text); }
+.login-box-wrap { position:relative; }
+
+/* Dashboard */
+.admin-dashboard {
+    background:#fff; border:3px solid var(--blue-primary);
+    border-radius:16px; width:min(96vw,820px); max-height:90vh;
+    box-shadow:0 20px 60px rgba(0,180,216,0.25);
+    display:flex; flex-direction:column; overflow:hidden;
+}
+.admin-dash-header { background:var(--blue-primary); color:white; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.admin-dash-header h2 { font-family:'Press Start 2P',cursive; font-size:0.65rem; }
+.admin-dash-body { display:flex; flex:1; overflow:hidden; }
+
+/* Sidebar */
+.admin-sidebar { width:160px; flex-shrink:0; border-right:2px solid rgba(0,180,216,0.2); padding:12px 0; background:#f8fcff; overflow-y:auto; }
+.admin-nav-item { padding:11px 16px; font-size:0.8rem; display:flex; align-items:center; gap:8px; transition:0.2s; border-left:3px solid transparent; }
+.admin-nav-item:hover { background:rgba(0,180,216,0.08); color:var(--blue-primary); cursor:var(--cur-point) !important; }
+.admin-nav-item.active { background:rgba(0,180,216,0.12); color:var(--blue-primary); border-left-color:var(--blue-primary); font-weight:600; }
+.admin-nav-item i { width:16px; text-align:center; }
+
+/* Content panels */
+.admin-content { flex:1; overflow-y:auto; padding:20px; }
+.admin-panel { display:none; }
+.admin-panel.active { display:block; }
+.panel-title { font-family:'Press Start 2P',cursive; font-size:0.6rem; color:var(--blue-primary); margin-bottom:18px; padding-bottom:10px; border-bottom:2px solid rgba(0,180,216,0.2); }
+
+/* Admin form elements */
+.admin-label { font-size:0.78rem; font-weight:600; color:var(--text); margin-bottom:4px; display:block; }
+.admin-field { width:100%; border:1.5px solid rgba(0,180,216,0.4); border-radius:7px; padding:9px 12px; font-family:'Kanit',sans-serif; font-size:0.88rem; color:var(--text); outline:none; background:#fff; transition:0.2s; margin-bottom:12px; cursor:text !important; user-select:text !important; }
+.admin-field:focus { border-color:var(--blue-primary); box-shadow:0 0 0 3px rgba(0,180,216,0.12); }
+textarea.admin-field { resize:vertical; min-height:70px; }
+.admin-btn { background:var(--blue-primary); color:white; border:none; border-radius:7px; padding:9px 20px; font-family:'Press Start 2P',cursive; font-size:0.5rem; transition:0.2s; }
+.admin-btn:hover { background:var(--blue-dark); transform:translateY(-1px); }
+.admin-btn.danger { background:#e63946; }
+.admin-btn.danger:hover { background:#c1121f; }
+.admin-btn.secondary { background:#8d99ae; }
+.admin-btn.secondary:hover { background:#555; }
+.admin-card { background:#f8fcff; border:1.5px solid rgba(0,180,216,0.2); border-radius:10px; padding:16px; margin-bottom:12px; }
+.admin-card-title { font-size:0.8rem; font-weight:600; color:var(--blue-primary); margin-bottom:10px; }
+
+/* Schedule list in admin */
+.sch-row { display:flex; align-items:center; gap:8px; background:#f0f8ff; border:1px solid rgba(0,180,216,0.2); border-radius:8px; padding:10px 12px; margin-bottom:8px; }
+.sch-row-info { flex:1; font-size:0.8rem; }
+.sch-row-date { font-family:'Press Start 2P',cursive; font-size:0.5rem; color:var(--blue-primary); }
+.sch-row-title { font-weight:600; color:var(--text); }
+
+/* Gallery sets list in admin */
+.gal-row { display:flex; align-items:center; gap:10px; background:#f0f8ff; border:1px solid rgba(0,180,216,0.2); border-radius:8px; padding:10px 12px; margin-bottom:8px; }
+.gal-row img { width:56px; height:56px; object-fit:cover; border-radius:6px; border:2px solid var(--blue-primary); flex-shrink:0; }
+.gal-row-info { flex:1; font-size:0.8rem; }
+.gal-row-id { font-family:'Press Start 2P',cursive; font-size:0.5rem; color:var(--blue-primary); }
+.gal-row-count { color:var(--text-dim); font-size:0.75rem; }
+
+/* Separator */
+.admin-sep { border:none; border-top:1.5px solid rgba(0,180,216,0.15); margin:16px 0; }
+
+/* Password change */
+.change-pw-box { max-width:380px; }
+
+/* ─── RESPONSIVE ─────────────────────────────────────── */
+@media (max-width:500px) {
+    .win { width:95%; }
+    .gallery-thumb { height:120px; }
+    .admin-sidebar { width:110px; }
+    .admin-nav-item { font-size:0.72rem; padding:10px 10px; }
+}
+    </style>
+</head>
+<body>
+
+<!-- ══ INTRO OVERLAY ══════════════════════════════════════ -->
+<div id="intro-overlay">
+    <div class="text-center">
+        <div class="spinner-border text-blue mb-3" role="status" id="intro-spinner"></div>
+        <p class="pixel-font text-blue" id="intro-text">SECURE BOOTING...</p>
+    </div>
+</div>
+
+<!-- ══ TOAST ═════════════════════════════════════════════ -->
+<div class="toast-notif" id="toast"></div>
+
+<!-- ══ DESKTOP ════════════════════════════════════════════ -->
+<div class="desktop">
+    <div class="bg-vignette"></div>
+    <canvas id="bg-particles"></canvas>
+
+    <!-- TOP BAR -->
+    <div class="top-info d-flex justify-content-between align-items-center px-3 py-2">
+        <div class="sys-label pixel-font">REMIE OS</div>
+        <div class="d-flex align-items-center gap-3">
+            <div id="date" class="pixel-font" style="font-size:0.5rem;opacity:0.8;">-- ---</div>
+            <div id="clock" class="pixel-font">00:00</div>
+        </div>
+    </div>
+
+    <!-- ── WIN: PROFILE ───────────────────────────────── -->
+    <div class="win shadow-lg active" id="win-profile">
+        <div class="win-header">
+            <div class="win-dots"><span></span><span></span><span></span></div>
+            <div class="win-title">PROFILE.EXE</div>
+        </div>
+        <div class="win-body p-4 text-center">
+            <div class="mb-3">
+                <img id="profile-avatar" src="https://file.garden/aech34tN8glaOMqR/Remiie/pfp/New%20Project%20(1).png" alt="Avatar" class="avatar">
+            </div>
+            <h1 id="title-main" class="pixel-font mb-2" style="font-size:0.8rem;"></h1>
+            <div class="sub-text mb-4">
+                <span id="title-sub"></span><span class="blink-cursor">_</span>
+            </div>
+            <p id="profile-bio" class="small text-dim mb-3" style="font-size:0.8rem;"></p>
+            <div class="d-flex justify-content-center gap-3 mt-3" id="social-links">
+                <!-- rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ── WIN: GALLERY ───────────────────────────────── -->
+    <div class="win shadow-lg d-none" id="win-gallery">
+        <div class="win-header">
+            <div class="win-dots"><span class="close-win"></span><span></span><span></span></div>
+            <div class="win-title">IG_GALLERY.PNG</div>
+        </div>
+        <div class="win-body p-3 d-flex flex-column" style="min-height:480px;">
+            <p class="small text-center text-blue mb-3 pixel-font" style="font-size:0.5rem;">&gt; CLICK TO VIEW SET &lt;</p>
+            <div class="row g-2 flex-grow-1" id="gallery-container"></div>
+            <div id="gallery-pagination-wrapper" class="pagination-container"></div>
+        </div>
+    </div>
+
+    <!-- ── WIN: VIEWER ────────────────────────────────── -->
+    <div class="win shadow-lg d-none" id="win-viewer" style="z-index:2500;max-width:400px;">
+        <div class="win-header">
+            <div class="win-dots"><span class="close-viewer"></span><span></span><span></span></div>
+            <div class="win-title">VIEWER.EXE</div>
+            <div class="pixel-font text-white" style="font-size:0.5rem;" id="viewer-counter">1/1</div>
+        </div>
+        <div class="win-body p-2 position-relative d-flex justify-content-center align-items-center" style="background:rgba(0,0,0,0.85) !important;min-height:300px;">
+            <img id="viewer-img" src="" class="img-fluid rounded" style="max-height:60vh;object-fit:contain;box-shadow:0 0 15px rgba(0,180,216,0.4);">
+            <button id="btn-prev" class="viewer-nav left"><i class="fa-solid fa-chevron-left"></i></button>
+            <button id="btn-next" class="viewer-nav right"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <!-- ── WIN: SCHEDULE ──────────────────────────────── -->
+    <div class="win shadow-lg d-none" id="win-schedule" style="max-width:400px;">
+        <div class="win-header">
+            <div class="win-dots"><span class="close-win"></span><span></span><span></span></div>
+            <div class="win-title">SCHEDULE.LOG</div>
+        </div>
+        <div class="win-body p-2 d-flex flex-column" style="min-height:480px;">
+            <div id="schedule-list" class="flex-grow-1"></div>
+            <div id="schedule-pagination-wrapper" class="pagination-container"></div>
+            <div class="p-2 text-center small text-dim mt-2" id="schedule-note" style="font-size:0.75rem;"></div>
+        </div>
+    </div>
+
+    <!-- ── WIN: SYS INFO ──────────────────────────────── -->
+    <div class="win shadow-lg d-none" id="win-sysinfo" style="max-width:350px;">
+        <div class="win-header">
+            <div class="win-dots"><span class="close-win"></span><span></span><span></span></div>
+            <div class="win-title">SYS_INFO.TXT</div>
+        </div>
+        <div class="win-body p-4 text-center">
+            <i class="fa-solid fa-cloud text-blue fs-1 mb-3"></i>
+            <h2 class="pixel-font mb-3 text-blue" style="font-size:0.7rem;">Remie OS v2.0</h2>
+            <p class="small mb-3">Fan website made with 💙 by <a href="https://flukkieboyy.vercel.app/" target="_blank" class="text-blue text-decoration-none fw-bold">@flukkieboyy</a></p>
+            <hr style="border-color:rgba(0,180,216,0.3);">
+            <p class="small text-dim">Status: Everything fine ✨</p>
+        </div>
+    </div>
+</div><!-- /desktop -->
+
+<!-- ══ TASKBAR ════════════════════════════════════════════ -->
+<div class="taskbar">
+    <button id="start-btn" class="start-btn"><i class="fa-brands fa-windows"></i> START</button>
+    <div class="task-divider"></div>
+    <div class="task-icons">
+        <div class="t-icon active" data-id="win-profile" title="Profile"><i class="fa-solid fa-user"></i></div>
+        <div class="t-icon" data-id="win-gallery" title="Gallery"><i class="fa-solid fa-image"></i></div>
+        <div class="t-icon" data-id="win-schedule" title="Schedule"><i class="fa-solid fa-calendar-days"></i></div>
+    </div>
+    <div class="task-credit d-none d-md-block pe-2">
+        Made with 💙 by <a href="https://flukkieboyy.vercel.app/" target="_blank">FLUKKIEBOYY</a>
+    </div>
+</div>
+
+<!-- ══ START MENU ═════════════════════════════════════════ -->
+<div id="start-menu" class="start-menu d-none">
+    <div class="start-header">REMIE OS MENU</div>
+    <div class="start-item" onclick="location.reload()"><i class="fa-solid fa-rotate"></i> RESTART</div>
+    <div class="start-item" data-id="win-sysinfo"><i class="fa-solid fa-circle-info"></i> SYSTEM INFO</div>
+    <div class="start-item" id="admin-menu-btn"><i class="fa-solid fa-lock"></i> ADMIN PANEL</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ADMIN OVERLAY
+══════════════════════════════════════════════════════════ -->
+<div id="admin-overlay">
+
+    <!-- LOGIN BOX -->
+    <div id="admin-login-wrap" class="login-box-wrap">
+        <div class="admin-login-box">
+            <div style="font-size:2.5rem;margin-bottom:12px;">🔐</div>
+            <h2>ADMIN LOGIN</h2>
+            <p>Enter credentials to access dashboard</p>
+            <input class="admin-input" type="text" id="admin-user" placeholder="Username" autocomplete="off">
+            <input class="admin-input" type="password" id="admin-pass" placeholder="Password">
+            <button class="admin-login-btn" id="admin-login-btn"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; LOGIN</button>
+            <div class="admin-err" id="admin-err"></div>
+            <div style="margin-top:14px;font-size:0.7rem;color:var(--text-dim);">Default: admin / remie2025</div>
+        </div>
+        <button class="admin-close-login" id="admin-close-login-btn">✕</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="admin-dashboard" class="admin-dashboard" style="display:none;">
+        <div class="admin-dash-header">
+            <h2>⚙️ REMIE OS — ADMIN PANEL</h2>
+            <button class="admin-btn secondary" id="admin-logout-btn" style="font-size:0.48rem;padding:6px 14px;">LOGOUT</button>
+        </div>
+        <div class="admin-dash-body">
+
+            <!-- SIDEBAR -->
+            <div class="admin-sidebar">
+                <div class="admin-nav-item active" data-panel="panel-profile"><i class="fa-solid fa-user"></i> Profile</div>
+                <div class="admin-nav-item" data-panel="panel-social"><i class="fa-solid fa-share-nodes"></i> Social</div>
+                <div class="admin-nav-item" data-panel="panel-gallery"><i class="fa-solid fa-images"></i> Gallery</div>
+                <div class="admin-nav-item" data-panel="panel-schedule"><i class="fa-solid fa-calendar-days"></i> Schedule</div>
+                <div class="admin-nav-item" data-panel="panel-appearance"><i class="fa-solid fa-palette"></i> Theme</div>
+                <div class="admin-nav-item" data-panel="panel-security"><i class="fa-solid fa-shield-halved"></i> Security</div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="admin-content">
+
+                <!-- ── Profile Panel ── -->
+                <div class="admin-panel active" id="panel-profile">
+                    <div class="panel-title">PROFILE SETTINGS</div>
+                    <div class="admin-card">
+                        <div class="admin-card-title">Display Name & Title</div>
+                        <label class="admin-label">Main Name (pixel text)</label>
+                        <input class="admin-field" type="text" id="cfg-name" placeholder="e.g. R E M I E レミー">
+                        <label class="admin-label">Rotating Phrases (comma-separated)</label>
+                        <input class="admin-field" type="text" id="cfg-phrases" placeholder="My Name is Remie, QT🍒, Welcome to REMIE OS">
+                        <label class="admin-label">Short Bio</label>
+                        <textarea class="admin-field" id="cfg-bio" placeholder="Short description shown on profile window..."></textarea>
+                        <label class="admin-label">Avatar Image URL</label>
+                        <input class="admin-field" type="url" id="cfg-avatar" placeholder="https://...">
+                        <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
+                            <img id="cfg-avatar-preview" src="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--blue-primary);object-fit:cover;display:none;">
+                            <button class="admin-btn secondary" id="cfg-avatar-preview-btn" style="font-size:0.45rem;">PREVIEW</button>
+                        </div>
+                    </div>
+                    <button class="admin-btn" id="save-profile-btn">💾 SAVE PROFILE</button>
+                </div>
+
+                <!-- ── Social Panel ── -->
+                <div class="admin-panel" id="panel-social">
+                    <div class="panel-title">SOCIAL LINKS</div>
+                    <div class="admin-card" id="social-editor">
+                        <!-- rendered by JS -->
+                    </div>
+                    <button class="admin-btn secondary" id="add-social-btn" style="margin-right:8px;">+ ADD LINK</button>
+                    <button class="admin-btn" id="save-social-btn">💾 SAVE SOCIAL</button>
+                </div>
+
+                <!-- ── Gallery Panel ── -->
+                <div class="admin-panel" id="panel-gallery">
+                    <div class="panel-title">GALLERY SETS</div>
+                    <div id="gallery-admin-list"></div>
+                    <hr class="admin-sep">
+                    <div class="admin-card">
+                        <div class="admin-card-title">Add New Set</div>
+                        <label class="admin-label">Set Label</label>
+                        <input class="admin-field" type="text" id="new-set-label" placeholder="e.g. Summer 2025">
+                        <label class="admin-label">Image URLs (one per line)</label>
+                        <textarea class="admin-field" id="new-set-urls" rows="5" placeholder="https://image1.jpg&#10;https://image2.jpg"></textarea>
+                        <button class="admin-btn" id="add-set-btn">+ ADD SET</button>
+                    </div>
+                </div>
+
+                <!-- ── Schedule Panel ── -->
+                <div class="admin-panel" id="panel-schedule">
+                    <div class="panel-title">SCHEDULE</div>
+                    <div id="schedule-admin-list"></div>
+                    <hr class="admin-sep">
+                    <div class="admin-card">
+                        <div class="admin-card-title">Add New Event</div>
+                        <label class="admin-label">Date Label</label>
+                        <input class="admin-field" type="text" id="new-sch-date" placeholder="e.g. 20 JUN">
+                        <label class="admin-label">Event Title</label>
+                        <input class="admin-field" type="text" id="new-sch-title" placeholder="e.g. LILITH COSPLAY">
+                        <div style="display:flex;gap:12px;">
+                            <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:var(--cur-point) !important;">
+                                <input type="checkbox" id="new-sch-special" style="cursor:var(--cur-point) !important;"> Special day?
+                            </label>
+                        </div>
+                        <div id="new-sch-extra" class="mt-2">
+                            <label class="admin-label mt-2">Location</label>
+                            <input class="admin-field" type="text" id="new-sch-location" placeholder="Venue name">
+                            <label class="admin-label">Google Maps URL</label>
+                            <input class="admin-field" type="url" id="new-sch-map" placeholder="https://maps.google.com/?q=...">
+                            <label class="admin-label">Booth Info</label>
+                            <input class="admin-field" type="text" id="new-sch-booth" placeholder="e.g. i41-46">
+                            <label class="admin-label">Stage Info</label>
+                            <input class="admin-field" type="text" id="new-sch-stage" placeholder="e.g. ✅ 14:00">
+                            <label class="admin-label">Note (optional)</label>
+                            <input class="admin-field" type="text" id="new-sch-note" placeholder="e.g. ❗ Order Drinks Only">
+                        </div>
+                        <button class="admin-btn mt-2" id="add-sch-btn">+ ADD EVENT</button>
+                    </div>
+                    <hr class="admin-sep">
+                    <div class="admin-card">
+                        <div class="admin-card-title">Schedule Footer Note</div>
+                        <input class="admin-field" type="text" id="cfg-sch-note" placeholder="*อัพเดตตารางงานจาก...">
+                        <button class="admin-btn" id="save-sch-note-btn">💾 SAVE NOTE</button>
+                    </div>
+                </div>
+
+                <!-- ── Appearance Panel ── -->
+                <div class="admin-panel" id="panel-appearance">
+                    <div class="panel-title">THEME & APPEARANCE</div>
+                    <div class="admin-card">
+                        <div class="admin-card-title">Color Theme</div>
+                        <label class="admin-label">Primary Blue</label>
+                        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
+                            <input type="color" id="cfg-color-primary" value="#00b4d8" style="width:48px;height:36px;border:2px solid var(--blue-primary);border-radius:6px;cursor:var(--cur-point) !important;background:none;">
+                            <input class="admin-field" type="text" id="cfg-color-primary-hex" placeholder="#00b4d8" style="margin-bottom:0;flex:1;">
+                        </div>
+                        <label class="admin-label">Dark Blue (hover/dark)</label>
+                        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
+                            <input type="color" id="cfg-color-dark" value="#0077b6" style="width:48px;height:36px;border:2px solid var(--blue-primary);border-radius:6px;cursor:var(--cur-point) !important;background:none;">
+                            <input class="admin-field" type="text" id="cfg-color-dark-hex" placeholder="#0077b6" style="margin-bottom:0;flex:1;">
+                        </div>
+                        <label class="admin-label">Background</label>
+                        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
+                            <input type="color" id="cfg-color-bg" value="#f0f8ff" style="width:48px;height:36px;border:2px solid var(--blue-primary);border-radius:6px;cursor:var(--cur-point) !important;background:none;">
+                            <input class="admin-field" type="text" id="cfg-color-bg-hex" placeholder="#f0f8ff" style="margin-bottom:0;flex:1;">
+                        </div>
+                        <button class="admin-btn" id="save-theme-btn">💾 APPLY THEME</button>
+                        <button class="admin-btn secondary" id="reset-theme-btn" style="margin-left:8px;">↺ RESET</button>
+                    </div>
+                    <div class="admin-card mt-3">
+                        <div class="admin-card-title">OS Title</div>
+                        <label class="admin-label">Top-bar / Tab Title</label>
+                        <input class="admin-field" type="text" id="cfg-os-title" placeholder="REMIE OS">
+                        <button class="admin-btn" id="save-title-btn">💾 SAVE</button>
+                    </div>
+                </div>
+
+                <!-- ── Security Panel ── -->
+                <div class="admin-panel" id="panel-security">
+                    <div class="panel-title">SECURITY</div>
+                    <div class="admin-card change-pw-box">
+                        <div class="admin-card-title">Change Admin Password</div>
+                        <label class="admin-label">Current Password</label>
+                        <input class="admin-field" type="password" id="sec-cur-pass" placeholder="Current password">
+                        <label class="admin-label">New Username</label>
+                        <input class="admin-field" type="text" id="sec-new-user" placeholder="New username">
+                        <label class="admin-label">New Password</label>
+                        <input class="admin-field" type="password" id="sec-new-pass" placeholder="New password (min 6 chars)">
+                        <label class="admin-label">Confirm New Password</label>
+                        <input class="admin-field" type="password" id="sec-confirm-pass" placeholder="Confirm password">
+                        <div class="admin-err" id="sec-err" style="margin-bottom:8px;"></div>
+                        <button class="admin-btn" id="save-security-btn">🔒 UPDATE CREDENTIALS</button>
+                    </div>
+                    <div class="admin-card mt-3" style="border-color:rgba(230,57,70,0.3);">
+                        <div class="admin-card-title" style="color:#e63946;">⚠️ Danger Zone</div>
+                        <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:12px;">Reset ALL site data to factory defaults. This cannot be undone.</p>
+                        <button class="admin-btn danger" id="factory-reset-btn">🗑 FACTORY RESET</button>
+                    </div>
+                </div>
+
+            </div><!-- /admin-content -->
+        </div><!-- /admin-dash-body -->
+    </div><!-- /admin-dashboard -->
+
+</div><!-- /admin-overlay -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════════
+//  REMIE OS v2 — Main Script + Admin Panel
+// ══════════════════════════════════════════════════════════════
+
+// ── Security ─────────────────────────────────────────────────
+document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("keydown", e => {
+    if (e.key==="F12"||(e.ctrlKey&&e.shiftKey&&["I","J","C"].includes(e.key))||(e.ctrlKey&&e.key==="U")) {
+        e.preventDefault(); return false;
+    }
+});
+
+// ── Default Data ──────────────────────────────────────────────
+const DEFAULTS = {
+    name:    "R E M I E レミー",
+    phrases: ["My Name is Remie","QT🍒","Welcome to REMIE OS","はじめまして!"],
+    bio:     "",
+    avatar:  "https://file.garden/aech34tN8glaOMqR/Remiie/pfp/New%20Project%20(1).png",
+    socials: [
+        {icon:"fa-brands fa-instagram", url:"https://www.instagram.com/remieeimer/",  label:"Instagram"},
+        {icon:"fa-brands fa-x-twitter", url:"https://x.com/reminermy",                label:"Twitter (X)"},
+        {icon:"fa-brands fa-tiktok",    url:"https://www.tiktok.com/@jellyrmie",       label:"TikTok"},
+        {icon:"fa-brands fa-facebook",  url:"https://www.facebook.com/reminermy/",     label:"Facebook"}
+    ],
+    gallery: [
+        { id:"set_latest", label:"Latest Set", images:[
+            "https://instagram.futp1-1.fna.fbcdn.net/v/t51.82787-15/658139856_18365630728207890_2288431323310666243_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ig_cache_key=Mzg2NjQ0ODcyMTczMjAxMjI1OA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkyMC5zZHIuQzMifQ%3D%3D&_nc_ohc=RmjuKLPjZT4Q7kNvwGruGBg&_nc_oc=AdqfwllXgPcuXssTLjE04E9Iy0iJufyNK8W9mtGim4lvQegn9X-Gr5ovrWnwjfrOVJjsinxH6029AwKy6jVAKg7Q&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.futp1-1.fna&_nc_gid=Ty5MMg3X20j13JIh_u2Y0g&_nc_ss=7a22e&oh=00_Af3OIE8B2zUnPiCmRugOp8C0Jp8hJ78FX4XhsEmPB3-Ytw&oe=69F43FF0",
+            "https://instagram.futp1-1.fna.fbcdn.net/v/t51.82787-15/657332650_18365630767207890_2366060363257620119_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=101&ig_cache_key=Mzg2NjQ0ODcyMTc0MDM5ODY0OQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkxMS5zZHIuQzMifQ%3D%3D&_nc_ohc=NKkrLGyB7cgQ7kNvwEFvLWX&_nc_oc=AdqLQcMSjghJ6zLcMnzxRVJ6bjNsyTsAU33YIKHMoX4TINkxAb9-6ahK8tiR1qoWw8oTyuSA-fxmSopRWyexEnDP&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.futp1-1.fna&_nc_gid=Ty5MMg3X20j13JIh_u2Y0g&_nc_ss=7a22e&oh=00_Af37aKn_Gl1Woc_uO4v_enY9PWsJAlx7QcA0ecISafZGbA&oe=69F446A1",
+            "https://instagram.futp1-1.fna.fbcdn.net/v/t51.82787-15/658187946_18365630779207890_5368661585661094235_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=Mzg2NjQ0ODcyMTc4MjMwOTg5Nw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkyMC5zZHIuQzMifQ%3D%3D&_nc_ohc=5zHm3sdi2gwQ7kNvwGM7yom&_nc_oc=Adr17FtaIe67PY6XUMMRgRAVGenBPrMsq5fhD6-REunv9b17W2QZC5vuuvR90kByWTTSCCfJ8IrEe2t_GHA3bNUg&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.futp1-1.fna&_nc_gid=Ty5MMg3X20j13JIh_u2Y0g&_nc_ss=7a22e&oh=00_Af3ASTxkRlanV6FwIp7QBPhiOXlAemQD7nXZDBUFz1jW5Q&oe=69F41F39",
+            "https://instagram.futp1-1.fna.fbcdn.net/v/t51.82787-15/656368449_18365630788207890_7152316178315597852_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ig_cache_key=Mzg2NjQ0ODcyMTc1NzIwNzcwNQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkyMC5zZHIuQzMifQ%3D%3D&_nc_ohc=HrCYidz8C2cQ7kNvwGtUPmP&_nc_oc=AdrgekuB3AGDs311ijALnEJTXSAEECceFoX0tdBeg0wWyZzbLAHj-vyR021kaAWJ9ealKantNxnk84CDQW-RWNVQ&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.futp1-1.fna&_nc_gid=Ty5MMg3X20j13JIh_u2Y0g&_nc_ss=7a22e&oh=00_Af20o8nbrFfaK4FNY6HG__FkoIdHS_ez7z4KammSyUvscA&oe=69F417B7"
+        ]},
+        { id:"set2", label:"Set 2", images:[
+            "https://instagram.futp1-2.fna.fbcdn.net/v/t51.82787-15/649473108_18362230303207890_4643581290609604032_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=Mzg1MjAyMzkxOTc4NDE1MDMyNg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkxNy5zZHIuQzMifQ%3D%3D&_nc_ohc=7e8bAV34UmUQ7kNvwFY_ps4&_nc_oc=AdrlAaseSz_MlcwekU8bIQEezFajYHURlAVK1Agu9Ok6EXMThJaxCltOF5yvEW-dsVEaQARuQM5cxGLghbEDdhib&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.futp1-2.fna&_nc_gid=qkzpiibmxhOrA7vZ4005GQ&_nc_ss=7a22e&oh=00_Af2BGZD38OaG-LFHREVjM93vqaskJ2X630RzOa7IZIWqzQ&oe=69F40D7A",
+            "https://instagram.futp1-1.fna.fbcdn.net/v/t51.82787-15/650721232_18362230321207890_5242038300137356766_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ig_cache_key=Mzg1MjAyMzkyNDI2MzYxODEzMQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkyMC5zZHIuQzMifQ%3D%3D&_nc_ohc=2NVUdipPgf0Q7kNvwHusRJy&_nc_oc=Ado7FHvqpM70iEvEK0Aqo88SjpGrDi37PJ5YIuSfiBOH93xnwGVgYT-PD_g3r010IM41rweMdkEGdFP6d8T8eSB8&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.futp1-1.fna&_nc_gid=qkzpiibmxhOrA7vZ4005GQ&_nc_ss=7a22e&oh=00_Af0tOrp9tiOI2G0Ox4sQv4kgj-1OE4lSseuG9Gkw02_v6w&oe=69F41C30"
+        ]},
+        { id:"set3", label:"Set 3", images:[
+            "https://instagram.futp1-1.fna.fbcdn.net/v/t51.82787-15/649080583_18361496887207890_1118029884908727445_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ig_cache_key=Mzg0ODM1NzMyNzA5MjE0MDAwMg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=58cdad&efg=eyJ2ZW5jb2RlX3RhZyI6InhwaWRzLjE0NDB4MTkyMC5zZHIuQzMifQ%3D%3D&_nc_ohc=MqIOnzJagNEQ7kNvwFf2trL&_nc_oc=Adps8KYrLTZIuN0HMRZxKdZ3jmnrIGZ6dgJ1vM4khK4H9NGFh5l2DIe6uZU5RFcqCSzA3nf1nbNnrp23_wcUXpSJ&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=instagram.futp1-1.fna&_nc_gid=Ty5MMg3X20j13JIh_u2Y0g&_nc_ss=7a22e&oh=00_Af3-CB-gBgvVJl0CZDg0MnMwh0Cq59rvVor8qdQs8Y7iaQ&oe=69F44096"
+        ]}
+    ],
+    schedules: [
+        { date:"12 JUNE", title:"🎂 HAPPY BIRTHDAY TO ME", isSpecial:true },
+        { date:"20 JUNE", title:"LILITH COSPLAY", location:"MCC Hall The Mall Bangkapi", mapUrl:"https://maps.google.com/?q=MCC+Hall+The+Mall+Bangkapi", booth:"✅ (รอแจ้งเลขบูธ)", stage:"✅ (รอแจ้งเวลา)", isSpecial:false },
+        { date:"28 JUNE", title:"Verso Event", location:"MCC Hall, The Mall Bangkae", mapUrl:"https://maps.google.com/?q=MCC+Hall+The+Mall+Bangkae", booth:"รอแจ้งอีกครั้ง", stage:"รอแจ้งอีกครั้ง", isSpecial:false }
+    ],
+    scheduleNote: "*อัพเดตตารางงานจากห้อง \"ฟาร์มม๋าของมุ้มี่🐶\"",
+    theme: { primary:"#00b4d8", dark:"#0077b6", bg:"#f0f8ff" },
+    osTitle: "REMIE OS",
+    adminUser: "admin",
+    adminPass: "remie2025"
+};
+
+// ── Storage helpers ───────────────────────────────────────────
+function load(key) {
+    try { const v = localStorage.getItem("remie_"+key); return v ? JSON.parse(v) : null; } catch { return null; }
+}
+function save(key, val) {
+    try { localStorage.setItem("remie_"+key, JSON.stringify(val)); } catch {}
+}
+function cfg(key) { return load(key) ?? DEFAULTS[key]; }
+
+// ── Toast ─────────────────────────────────────────────────────
+const toastEl = document.getElementById('toast');
+function showToast(msg, dur=2000) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    setTimeout(() => toastEl.classList.remove('show'), dur);
+}
+
+// ── Audio ─────────────────────────────────────────────────────
+const audio = new (window.AudioContext || window.webkitAudioContext)();
+function playClick() {
+    if (audio.state==='suspended') audio.resume();
+    const osc=audio.createOscillator(), gain=audio.createGain();
+    osc.type='sine'; osc.frequency.setValueAtTime(600,audio.currentTime);
+    gain.gain.setValueAtTime(0.08,audio.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01,audio.currentTime+0.1);
+    osc.connect(gain); gain.connect(audio.destination);
+    osc.start(); osc.stop(audio.currentTime+0.1);
+}
+
+// ── Typing effect ─────────────────────────────────────────────
+let charIdx=0, phraseIdx=0, isDeleting=false, isTypingMain=true;
+const titleMain=document.getElementById('title-main');
+const titleSub=document.getElementById('title-sub');
+
+function runTyping() {
+    const textMain = cfg('name');
+    const phrases  = Array.isArray(cfg('phrases')) ? cfg('phrases') : String(cfg('phrases')).split(',').map(s=>s.trim());
+
+    if (isTypingMain) {
+        if (charIdx < textMain.length) {
+            titleMain.textContent += textMain.charAt(charIdx);
+            playClick(); charIdx++; setTimeout(runTyping, 120);
+        } else { isTypingMain=false; charIdx=0; setTimeout(runTyping, 1000); }
+    } else {
+        const current = phrases[phraseIdx];
+        titleSub.textContent = isDeleting ? current.substring(0,charIdx-1) : current.substring(0,charIdx+1);
+        charIdx = isDeleting ? charIdx-1 : charIdx+1;
+        let speed = isDeleting ? 50 : 100;
+        if (!isDeleting && charIdx===current.length) { speed=2000; isDeleting=true; }
+        else if (isDeleting && charIdx===0) { isDeleting=false; phraseIdx=(phraseIdx+1)%phrases.length; speed=500; }
+        setTimeout(runTyping, speed);
+    }
+}
+
+// ── Heart pop ─────────────────────────────────────────────────
+document.addEventListener('click', e => {
+    if (document.getElementById('start-menu').contains(e.target) ||
+        document.getElementById('start-btn').contains(e.target) ||
+        document.getElementById('admin-overlay').contains(e.target) ||
+        e.target.closest('a') || e.target.closest('button')) return;
+    const h=document.createElement('div');
+    h.className='heart-pop'; h.innerHTML='💙';
+    h.style.left=(e.pageX-10)+'px'; h.style.top=(e.pageY-10)+'px';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),600);
+});
+
+// ── Pagination ────────────────────────────────────────────────
+const ITEMS_PER_PAGE=4;
+let currentGalPage=1, currentSchedulePage=1;
+
+function setupPagination(wrapperId, totalPages, currentPage, onChange) {
+    const el=document.getElementById(wrapperId);
+    if (!el) return;
+    if (totalPages<=1) { el.innerHTML=''; return; }
+    el.innerHTML=`
+        <button class="page-btn" id="${wrapperId}-prev" ${currentPage===1?'disabled':''}>&lt; PREV</button>
+        <span class="page-text">${currentPage} / ${totalPages}</span>
+        <button class="page-btn" id="${wrapperId}-next" ${currentPage===totalPages?'disabled':''}>NEXT &gt;</button>`;
+    document.getElementById(`${wrapperId}-prev`)?.addEventListener('click',()=>{playClick();onChange(currentPage-1);});
+    document.getElementById(`${wrapperId}-next`)?.addEventListener('click',()=>{playClick();onChange(currentPage+1);});
+}
+
+// ── GALLERY ───────────────────────────────────────────────────
+let currentSet=[], currentImgIdx=0;
+const winViewer=document.getElementById('win-viewer');
+const viewerImg=document.getElementById('viewer-img');
+const viewerCounter=document.getElementById('viewer-counter');
+
+function renderGallery() {
+    const galleryData = cfg('gallery');
+    const container=document.getElementById('gallery-container');
+    const totalPages=Math.ceil(galleryData.length/ITEMS_PER_PAGE)||1;
+    const startIdx=(currentGalPage-1)*ITEMS_PER_PAGE;
+    const pageItems=galleryData.slice(startIdx,startIdx+ITEMS_PER_PAGE);
+    container.innerHTML='';
+    pageItems.forEach(item=>{
+        const coverImg=item.images[0];
+        const col=document.createElement('div');
+        col.className='col-6';
+        col.innerHTML=`
+            <img src="${coverImg}" class="img-fluid rounded border-blue gallery-thumb" data-id="${item.id}">
+            <div class="gallery-set-label">${item.label||item.id}</div>`;
+        container.appendChild(col);
+    });
+    document.querySelectorAll('.gallery-thumb').forEach(thumb=>{
+        thumb.addEventListener('click',()=>{
+            if(!winViewer.classList.contains('d-none')) return;
+            const setObj=galleryData.find(s=>s.id===thumb.dataset.id);
+            if(setObj){ currentSet=setObj.images; currentImgIdx=0; updateViewer(); winViewer.classList.remove('d-none'); playClick(); }
+        });
+    });
+    setupPagination('gallery-pagination-wrapper',totalPages,currentGalPage,p=>{currentGalPage=p;renderGallery();});
+}
+
+function updateViewer() {
+    viewerImg.src=currentSet[currentImgIdx];
+    viewerCounter.textContent=`${currentImgIdx+1}/${currentSet.length}`;
+    const show=currentSet.length>1;
+    document.getElementById('btn-prev').style.display=show?'flex':'none';
+    document.getElementById('btn-next').style.display=show?'flex':'none';
+}
+
+document.getElementById('btn-prev').addEventListener('click',()=>{ currentImgIdx=(currentImgIdx-1+currentSet.length)%currentSet.length; updateViewer(); playClick(); });
+document.getElementById('btn-next').addEventListener('click',()=>{ currentImgIdx=(currentImgIdx+1)%currentSet.length; updateViewer(); playClick(); });
+document.querySelector('.close-viewer').addEventListener('click',e=>{ e.stopPropagation(); winViewer.classList.add('d-none'); playClick(); });
+
+// ── SCHEDULE ──────────────────────────────────────────────────
+function renderSchedule() {
+    const schedules=cfg('schedules');
+    const container=document.getElementById('schedule-list');
+    const totalPages=Math.ceil(schedules.length/ITEMS_PER_PAGE)||1;
+    const pageItems=schedules.slice((currentSchedulePage-1)*ITEMS_PER_PAGE, currentSchedulePage*ITEMS_PER_PAGE);
+    container.innerHTML=pageItems.map(item=>`
+        <div class="schedule-item mb-3 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-blue text-white">${item.date}</span>
+                <strong class="text-blue" style="font-size:0.9rem;">${item.title}</strong>
+            </div>
+            ${!item.isSpecial ? `
+                <div class="small text-dark mt-2">
+                    <div class="mb-2"><i class="fa-solid fa-location-dot text-danger"></i>
+                    <a href="${item.mapUrl||'#'}" target="_blank" class="text-decoration-none text-blue fw-bold hover-underline">${item.location||''}</a></div>
+                    ${item.note?`<div class="text-danger fw-bold mb-2" style="font-size:0.8rem;">${item.note}</div>`:''}
+                    <div class="row g-1 mt-2" style="font-size:0.75rem;">
+                        <div class="col-12 col-sm-6"><strong>BOOTH:</strong> <span class="text-secondary">${item.booth||'-'}</span></div>
+                        <div class="col-12 col-sm-6"><strong>STAGE:</strong> <span class="text-secondary">${item.stage||'-'}</span></div>
+                    </div>
+                </div>
+            ` : `<div class="small text-secondary mt-2 text-center py-2 fw-bold">
+                    <i class="fa-solid fa-cake-candles text-danger mb-1" style="font-size:1.2rem;"></i><br>Special Day! 🎉
+                </div>`}
+        </div>`).join('');
+    document.getElementById('schedule-note').textContent=cfg('scheduleNote');
+    setupPagination('schedule-pagination-wrapper',totalPages,currentSchedulePage,p=>{currentSchedulePage=p;renderSchedule();});
+}
+
+// ── PROFILE ───────────────────────────────────────────────────
+function renderProfile() {
+    document.getElementById('profile-avatar').src = cfg('avatar');
+    document.getElementById('profile-bio').textContent = cfg('bio');
+    // socials
+    const socials = cfg('socials');
+    const linksEl = document.getElementById('social-links');
+    linksEl.innerHTML = socials.map(s=>`
+        <a href="${s.url}" target="_blank" class="btn-social-icon" title="${s.label}">
+            <i class="${s.icon}"></i>
+        </a>`).join('');
+}
+
+// ── THEME ─────────────────────────────────────────────────────
+function applyTheme() {
+    const t = cfg('theme');
+    document.documentElement.style.setProperty('--blue-primary', t.primary||'#00b4d8');
+    document.documentElement.style.setProperty('--blue-dark',    t.dark||'#0077b6');
+    document.documentElement.style.setProperty('--bg',           t.bg||'#f0f8ff');
+}
+function applyTitle() {
+    const title=cfg('osTitle');
+    document.title=title;
+    document.querySelector('.sys-label').textContent=title;
+}
+
+// ── WINDOW SYSTEM ─────────────────────────────────────────────
+let zCounter=100;
+const wins=document.querySelectorAll('.win:not(#win-viewer)');
+const tIcons=document.querySelectorAll('.t-icon');
+
+function makeDraggable(win) {
+    const header=win.querySelector('.win-header');
+    let dragging=false, sx,sy,ix,iy;
+    header.addEventListener('mousedown',e=>{
+        if(e.target.classList.contains('close-win')||e.target.classList.contains('close-viewer')) return;
+        dragging=true; sx=e.clientX; sy=e.clientY; ix=win.offsetLeft; iy=win.offsetTop;
+        win.style.zIndex=++zCounter; document.body.style.userSelect='none';
+    });
+    document.addEventListener('mousemove',e=>{
+        if(!dragging) return; e.preventDefault();
+        let nx=ix+(e.clientX-sx), ny=iy+(e.clientY-sy);
+        nx=Math.max(0,Math.min(nx,window.innerWidth-win.offsetWidth));
+        ny=Math.max(0,Math.min(ny,window.innerHeight-win.offsetHeight-55));
+        win.style.left=nx+'px'; win.style.top=ny+'px';
+    });
+    document.addEventListener('mouseup',()=>{ dragging=false; document.body.style.userSelect='auto'; });
+}
+document.querySelectorAll('.win').forEach(w=>makeDraggable(w));
+
+function showWin(id) {
+    if(!winViewer.classList.contains('d-none')) winViewer.classList.add('d-none');
+    wins.forEach(w=>w.classList.add('d-none'));
+    const target=document.getElementById(id);
+    if(target){ target.classList.remove('d-none'); target.style.zIndex=++zCounter; target.querySelector('.win-body').scrollTop=0; }
+    tIcons.forEach(i=>i.classList.toggle('active', i.dataset.id===id));
+    document.getElementById('start-menu').classList.add('d-none');
+}
+tIcons.forEach(icon=>icon.addEventListener('click',()=>{playClick();showWin(icon.dataset.id);}));
+document.querySelectorAll('.start-item[data-id]').forEach(item=>item.addEventListener('click',()=>showWin(item.dataset.id)));
+document.querySelectorAll('.close-win').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+        e.stopPropagation();
+        const win=btn.closest('.win');
+        win.classList.add('d-none');
+        document.querySelector(`.t-icon[data-id="${win.id}"]`)?.classList.remove('active');
+    });
+});
+
+// ── CLOCK ─────────────────────────────────────────────────────
+function updateSystemTime() {
+    const d=new Date();
+    document.getElementById('clock').textContent=`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const day=String(d.getDate()).padStart(2,'0');
+    const month=d.toLocaleString('en-US',{month:'short'}).toUpperCase();
+    document.getElementById('date').textContent=`${day} ${month}`;
+}
+
+// ── START MENU ────────────────────────────────────────────────
+const startBtn=document.getElementById('start-btn');
+const startMenu=document.getElementById('start-menu');
+startBtn.addEventListener('click',e=>{ e.stopPropagation(); startMenu.classList.toggle('d-none'); });
+document.addEventListener('click',e=>{
+    if(!startMenu.contains(e.target)&&!startBtn.contains(e.target)) startMenu.classList.add('d-none');
+});
+
+// ── PARTICLES ─────────────────────────────────────────────────
+const canvas=document.getElementById('bg-particles');
+const ctx=canvas.getContext('2d');
+let particles=[];
+function resizeCanvas() { canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+class Particle {
+    constructor() {
+        this.x=Math.random()*canvas.width; this.y=Math.random()*canvas.height;
+        this.size=Math.random()*2+1;
+        this.speedX=Math.random()*0.5+0.1; this.speedY=-(Math.random()*0.5+0.1);
+        this.color=getComputedStyle(document.documentElement).getPropertyValue('--blue-primary').trim()||'#00b4d8';
+    }
+    update() {
+        this.x+=this.speedX; this.y+=this.speedY;
+        if(this.x>canvas.width) this.x=0;
+        if(this.y<0) this.y=canvas.height;
+    }
+    draw() { ctx.fillStyle=this.color; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
+}
+function initParticles() { particles=[]; const n=(canvas.width*canvas.height)/8000; for(let i=0;i<n;i++) particles.push(new Particle()); }
+function animateParticles() {
+    if(!document.getElementById('intro-overlay').classList.contains('d-none')){ requestAnimationFrame(animateParticles); return; }
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{p.update();p.draw();});
+    requestAnimationFrame(animateParticles);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  ADMIN PANEL LOGIC
+// ══════════════════════════════════════════════════════════════
+const adminOverlay=document.getElementById('admin-overlay');
+const adminLoginWrap=document.getElementById('admin-login-wrap');
+const adminDashboard=document.getElementById('admin-dashboard');
+
+// Open admin
+document.getElementById('admin-menu-btn').addEventListener('click',()=>{
+    startMenu.classList.add('d-none');
+    adminOverlay.classList.add('show');
+    adminLoginWrap.style.display='block';
+    adminDashboard.style.display='none';
+    document.getElementById('admin-err').textContent='';
+    document.getElementById('admin-user').value='';
+    document.getElementById('admin-pass').value='';
+});
+document.getElementById('admin-close-login-btn').addEventListener('click',()=>{ adminOverlay.classList.remove('show'); });
+adminOverlay.addEventListener('click',e=>{ if(e.target===adminOverlay) adminOverlay.classList.remove('show'); });
+
+// Login
+document.getElementById('admin-login-btn').addEventListener('click',doLogin);
+document.getElementById('admin-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+
+function doLogin() {
+    const u=document.getElementById('admin-user').value.trim();
+    const p=document.getElementById('admin-pass').value;
+    const savedUser=load('adminUser')??DEFAULTS.adminUser;
+    const savedPass=load('adminPass')??DEFAULTS.adminPass;
+    if(u===savedUser && p===savedPass) {
+        adminLoginWrap.style.display='none';
+        adminDashboard.style.display='flex';
+        loadAdminPanels();
+        playClick();
+    } else {
+        document.getElementById('admin-err').textContent='❌ Incorrect username or password';
+    }
+}
+
+// Logout
+document.getElementById('admin-logout-btn').addEventListener('click',()=>{
+    adminDashboard.style.display='none';
+    adminOverlay.classList.remove('show');
+    showToast('👋 Logged out');
+});
+
+// Sidebar nav
+document.querySelectorAll('.admin-nav-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+        document.querySelectorAll('.admin-nav-item').forEach(i=>i.classList.remove('active'));
+        document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+        item.classList.add('active');
+        document.getElementById(item.dataset.panel).classList.add('active');
+        playClick();
+    });
+});
+
+// ── Load admin panels ─────────────────────────────────────────
+function loadAdminPanels() {
+    loadProfilePanel();
+    loadSocialPanel();
+    loadGalleryPanel();
+    loadSchedulePanel();
+    loadAppearancePanel();
+}
+
+// ── Profile panel ─────────────────────────────────────────────
+function loadProfilePanel() {
+    document.getElementById('cfg-name').value    = cfg('name');
+    const ph = cfg('phrases');
+    document.getElementById('cfg-phrases').value = Array.isArray(ph) ? ph.join(', ') : ph;
+    document.getElementById('cfg-bio').value     = cfg('bio');
+    document.getElementById('cfg-avatar').value  = cfg('avatar');
+}
+
+document.getElementById('cfg-avatar-preview-btn').addEventListener('click',()=>{
+    const url=document.getElementById('cfg-avatar').value.trim();
+    const prev=document.getElementById('cfg-avatar-preview');
+    prev.src=url; prev.style.display=url?'block':'none';
+});
+
+document.getElementById('save-profile-btn').addEventListener('click',()=>{
+    save('name',    document.getElementById('cfg-name').value.trim() || DEFAULTS.name);
+    save('phrases', document.getElementById('cfg-phrases').value.split(',').map(s=>s.trim()).filter(Boolean));
+    save('bio',     document.getElementById('cfg-bio').value.trim());
+    save('avatar',  document.getElementById('cfg-avatar').value.trim() || DEFAULTS.avatar);
+    renderProfile();
+    // reset typing
+    titleMain.textContent=''; titleSub.textContent='';
+    charIdx=0; phraseIdx=0; isDeleting=false; isTypingMain=true;
+    setTimeout(runTyping, 300);
+    showToast('✅ Profile saved!');
+});
+
+// ── Social panel ──────────────────────────────────────────────
+function loadSocialPanel() {
+    const socials=cfg('socials');
+    const editor=document.getElementById('social-editor');
+    editor.innerHTML='';
+    socials.forEach((s,i)=>{
+        const row=document.createElement('div');
+        row.className='d-flex gap-2 align-items-center mb-2';
+        row.innerHTML=`
+            <input class="admin-field" style="margin:0;flex:1;" type="text" placeholder="FA class e.g. fa-brands fa-instagram" value="${s.icon}" data-social-icon="${i}">
+            <input class="admin-field" style="margin:0;flex:2;" type="url" placeholder="URL" value="${s.url}" data-social-url="${i}">
+            <input class="admin-field" style="margin:0;flex:1;" type="text" placeholder="Label" value="${s.label}" data-social-label="${i}">
+            <button class="admin-btn danger" style="padding:7px 10px;white-space:nowrap;" data-remove-social="${i}">✕</button>`;
+        editor.appendChild(row);
+    });
+    editor.querySelectorAll('[data-remove-social]').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const idx=parseInt(btn.dataset.removeSocial);
+            const updated=cfg('socials').filter((_,i)=>i!==idx);
+            save('socials',updated); loadSocialPanel(); showToast('Removed!');
+        });
+    });
+}
+
+document.getElementById('add-social-btn').addEventListener('click',()=>{
+    const updated=cfg('socials');
+    updated.push({icon:"fa-solid fa-link",url:"https://",label:"Link"});
+    save('socials',updated); loadSocialPanel();
+});
+
+document.getElementById('save-social-btn').addEventListener('click',()=>{
+    const icons=[...document.querySelectorAll('[data-social-icon]')].map(el=>el.value.trim());
+    const urls=[...document.querySelectorAll('[data-social-url]')].map(el=>el.value.trim());
+    const labels=[...document.querySelectorAll('[data-social-label]')].map(el=>el.value.trim());
+    const updated=icons.map((ic,i)=>({icon:ic,url:urls[i],label:labels[i]}));
+    save('socials',updated); renderProfile(); showToast('✅ Social links saved!');
+});
+
+// ── Gallery panel ─────────────────────────────────────────────
+function loadGalleryPanel() {
+    const galleryData=cfg('gallery');
+    const list=document.getElementById('gallery-admin-list');
+    list.innerHTML='';
+    galleryData.forEach((set,i)=>{
+        const row=document.createElement('div');
+        row.className='gal-row';
+        row.innerHTML=`
+            <img src="${set.images[0]||''}" onerror="this.src='https://placehold.co/56x56/e0f4ff/00b4d8?text=?'">
+            <div class="gal-row-info">
+                <div class="gal-row-id">${set.id}</div>
+                <input class="admin-field" style="margin:4px 0 2px;" type="text" placeholder="Label" value="${set.label||''}" data-gal-label="${i}">
+                <div class="gal-row-count">${set.images.length} image(s)</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+                <button class="admin-btn" style="font-size:0.42rem;padding:5px 8px;" data-edit-set="${i}">EDIT IMGS</button>
+                <button class="admin-btn danger" style="font-size:0.42rem;padding:5px 8px;" data-remove-set="${i}">DELETE</button>
+            </div>`;
+        list.appendChild(row);
+    });
+    list.querySelectorAll('[data-remove-set]').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            if(!confirm('Delete this gallery set?')) return;
+            const updated=cfg('gallery').filter((_,i)=>i!==parseInt(btn.dataset.removeSet));
+            save('gallery',updated); renderGallery(); loadGalleryPanel(); showToast('🗑 Set deleted');
+        });
+    });
+    list.querySelectorAll('[data-gal-label]').forEach(input=>{
+        input.addEventListener('change',()=>{
+            const updated=cfg('gallery');
+            updated[parseInt(input.dataset.galLabel)].label=input.value.trim();
+            save('gallery',updated); renderGallery();
+        });
+    });
+    list.querySelectorAll('[data-edit-set]').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const idx=parseInt(btn.dataset.editSet);
+            const set=cfg('gallery')[idx];
+            const newUrls=prompt(`Edit image URLs for "${set.label||set.id}"\n(one URL per line):`, set.images.join('\n'));
+            if(newUrls===null) return;
+            const updated=cfg('gallery');
+            updated[idx].images=newUrls.split('\n').map(s=>s.trim()).filter(Boolean);
+            save('gallery',updated); renderGallery(); loadGalleryPanel(); showToast('✅ Images updated');
+        });
+    });
+}
+
+document.getElementById('add-set-btn').addEventListener('click',()=>{
+    const label=document.getElementById('new-set-label').value.trim();
+    const urls=document.getElementById('new-set-urls').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+    if(!label||urls.length===0) { showToast('⚠️ Fill in label & at least one URL'); return; }
+    const id='set_'+Date.now();
+    const updated=cfg('gallery');
+    updated.push({id,label,images:urls});
+    save('gallery',updated); renderGallery(); loadGalleryPanel();
+    document.getElementById('new-set-label').value='';
+    document.getElementById('new-set-urls').value='';
+    showToast('✅ Gallery set added!');
+});
+
+// ── Schedule panel ────────────────────────────────────────────
+function loadSchedulePanel() {
+    const schedules=cfg('schedules');
+    const list=document.getElementById('schedule-admin-list');
+    list.innerHTML='';
+    schedules.forEach((item,i)=>{
+        const row=document.createElement('div');
+        row.className='sch-row';
+        row.innerHTML=`
+            <div class="sch-row-info">
+                <div class="sch-row-date">${item.date}</div>
+                <div class="sch-row-title">${item.title} ${item.isSpecial?'🎂':''}</div>
+                ${!item.isSpecial&&item.location?`<div style="font-size:0.72rem;color:var(--text-dim);">${item.location}</div>`:''}
+            </div>
+            <button class="admin-btn danger" style="font-size:0.42rem;padding:5px 8px;" data-remove-sch="${i}">✕</button>`;
+        list.appendChild(row);
+    });
+    list.querySelectorAll('[data-remove-sch]').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const updated=cfg('schedules').filter((_,i)=>i!==parseInt(btn.dataset.removeSch));
+            save('schedules',updated); renderSchedule(); loadSchedulePanel(); showToast('🗑 Event removed');
+        });
+    });
+    document.getElementById('cfg-sch-note').value=cfg('scheduleNote');
+}
+
+// Toggle extra fields for special day
+document.getElementById('new-sch-special').addEventListener('change',e=>{
+    document.getElementById('new-sch-extra').style.display=e.target.checked?'none':'block';
+});
+
+document.getElementById('add-sch-btn').addEventListener('click',()=>{
+    const date=document.getElementById('new-sch-date').value.trim();
+    const title=document.getElementById('new-sch-title').value.trim();
+    const isSpecial=document.getElementById('new-sch-special').checked;
+    if(!date||!title) { showToast('⚠️ Date and title required'); return; }
+    const newItem=isSpecial ? {date,title,isSpecial:true} : {
+        date,title,isSpecial:false,
+        location:document.getElementById('new-sch-location').value.trim(),
+        mapUrl:document.getElementById('new-sch-map').value.trim(),
+        booth:document.getElementById('new-sch-booth').value.trim(),
+        stage:document.getElementById('new-sch-stage').value.trim(),
+        note:document.getElementById('new-sch-note').value.trim()
+    };
+    const updated=cfg('schedules');
+    updated.push(newItem);
+    save('schedules',updated); renderSchedule(); loadSchedulePanel();
+    ['new-sch-date','new-sch-title','new-sch-location','new-sch-map','new-sch-booth','new-sch-stage','new-sch-note'].forEach(id=>{ document.getElementById(id).value=''; });
+    document.getElementById('new-sch-special').checked=false;
+    document.getElementById('new-sch-extra').style.display='block';
+    showToast('✅ Event added!');
+});
+
+document.getElementById('save-sch-note-btn').addEventListener('click',()=>{
+    save('scheduleNote',document.getElementById('cfg-sch-note').value);
+    renderSchedule(); showToast('✅ Note saved!');
+});
+
+// ── Appearance panel ──────────────────────────────────────────
+function loadAppearancePanel() {
+    const t=cfg('theme');
+    document.getElementById('cfg-color-primary').value     = t.primary||'#00b4d8';
+    document.getElementById('cfg-color-primary-hex').value = t.primary||'#00b4d8';
+    document.getElementById('cfg-color-dark').value        = t.dark||'#0077b6';
+    document.getElementById('cfg-color-dark-hex').value    = t.dark||'#0077b6';
+    document.getElementById('cfg-color-bg').value          = t.bg||'#f0f8ff';
+    document.getElementById('cfg-color-bg-hex').value      = t.bg||'#f0f8ff';
+    document.getElementById('cfg-os-title').value          = cfg('osTitle');
+
+    // sync color picker <-> hex input
+    [['cfg-color-primary','cfg-color-primary-hex'],
+     ['cfg-color-dark','cfg-color-dark-hex'],
+     ['cfg-color-bg','cfg-color-bg-hex']].forEach(([pick,hex])=>{
+        document.getElementById(pick).addEventListener('input',e=>{ document.getElementById(hex).value=e.target.value; });
+        document.getElementById(hex).addEventListener('input',e=>{ if(/^#[0-9a-f]{6}$/i.test(e.target.value)) document.getElementById(pick).value=e.target.value; });
+    });
+}
+
+document.getElementById('save-theme-btn').addEventListener('click',()=>{
+    const t={
+        primary: document.getElementById('cfg-color-primary-hex').value||'#00b4d8',
+        dark:    document.getElementById('cfg-color-dark-hex').value||'#0077b6',
+        bg:      document.getElementById('cfg-color-bg-hex').value||'#f0f8ff'
+    };
+    save('theme',t); applyTheme(); showToast('🎨 Theme applied!');
+});
+document.getElementById('reset-theme-btn').addEventListener('click',()=>{
+    save('theme',DEFAULTS.theme); applyTheme(); loadAppearancePanel(); showToast('↺ Theme reset');
+});
+document.getElementById('save-title-btn').addEventListener('click',()=>{
+    save('osTitle',document.getElementById('cfg-os-title').value.trim()||'REMIE OS');
+    applyTitle(); showToast('✅ Title saved!');
+});
+
+// ── Security panel ────────────────────────────────────────────
+document.getElementById('save-security-btn').addEventListener('click',()=>{
+    const cur=document.getElementById('sec-cur-pass').value;
+    const newU=document.getElementById('sec-new-user').value.trim();
+    const newP=document.getElementById('sec-new-pass').value;
+    const con=document.getElementById('sec-confirm-pass').value;
+    const err=document.getElementById('sec-err');
+    const savedPass=load('adminPass')??DEFAULTS.adminPass;
+    if(cur!==savedPass){ err.textContent='❌ Current password incorrect'; return; }
+    if(!newU||!newP){ err.textContent='❌ Username and password required'; return; }
+    if(newP.length<6){ err.textContent='❌ Password must be at least 6 characters'; return; }
+    if(newP!==con){ err.textContent='❌ Passwords do not match'; return; }
+    save('adminUser',newU); save('adminPass',newP);
+    err.textContent='';
+    ['sec-cur-pass','sec-new-user','sec-new-pass','sec-confirm-pass'].forEach(id=>document.getElementById(id).value='');
+    showToast('🔒 Credentials updated!');
+});
+
+document.getElementById('factory-reset-btn').addEventListener('click',()=>{
+    if(!confirm('⚠️ This will DELETE all your changes and reset to defaults.\n\nAre you sure?')) return;
+    ['name','phrases','bio','avatar','socials','gallery','schedules','scheduleNote','theme','osTitle','adminUser','adminPass'].forEach(k=>{
+        localStorage.removeItem('remie_'+k);
+    });
+    showToast('🔄 Factory reset complete. Reloading...');
+    setTimeout(()=>location.reload(), 1500);
+});
+
+// ══════════════════════════════════════════════════════════════
+//  BOOT / INIT
+// ══════════════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+    applyTheme();
+    applyTitle();
+    renderProfile();
+    renderGallery();
+    renderSchedule();
+    resizeCanvas();
+    initParticles();
+    animateParticles();
+
+    const intro=document.getElementById('intro-overlay');
+    const introText=document.getElementById('intro-text');
+    const introSpinner=document.getElementById('intro-spinner');
+
+    introSpinner.classList.add('d-none');
+    introText.innerHTML='&gt; CLICK TO BOOT SYSTEM &lt;';
+    introText.classList.add('blink-cursor');
+    intro.style.cursor='pointer';
+
+    intro.addEventListener('click',()=>{
+        if(audio.state==='suspended') audio.resume();
+        playClick();
+        introSpinner.classList.remove('d-none');
+        introText.classList.remove('blink-cursor');
+        introText.textContent='SECURE BOOTING...';
+        intro.style.cursor='default';
+        setTimeout(()=>{
+            intro.style.opacity='0';
+            setTimeout(()=>{ intro.style.display='none'; runTyping(); }, 500);
+        }, 1200);
+    }, {once:true});
+});
+
+window.addEventListener('resize',()=>{ resizeCanvas(); initParticles(); });
+setInterval(updateSystemTime,1000); updateSystemTime();
+</script>
+</body>
+</html>
