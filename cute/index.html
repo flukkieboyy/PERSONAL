@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>R E M I E _ O S</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500&family=Press+Start+2P&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Press+Start+2P&family=Sarabun:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
 /* ─── CSS VARIABLES ─────────────────────────────────────── */
@@ -26,9 +26,10 @@
 *::-webkit-scrollbar { display:none; }
 a,button,.t-icon,.start-item,.close-win,.close-viewer,.gallery-thumb,.viewer-nav,.btn-social-icon,.page-btn { cursor:var(--cur-point) !important; }
 
-body { background-color:var(--bg); color:var(--text); font-family:'Kanit','Zen Maru Gothic',sans-serif; height:100vh; overflow:hidden; }
+body { background-color:var(--bg); color:var(--text); font-family:'Sarabun','Kanit',sans-serif; font-size:15px; height:100vh; overflow:hidden; }
 
 .pixel-font { font-family:'Press Start 2P',cursive; font-size:0.6rem; }
+.thai-font  { font-family:'Sarabun','Kanit',sans-serif !important; font-size:0.95rem; line-height:1.6; }
 .text-blue { color:var(--blue-primary) !important; }
 .text-dim { color:var(--text-dim) !important; }
 .border-blue { border:2px solid var(--blue-primary) !important; }
@@ -49,7 +50,7 @@ body { background-color:var(--bg); color:var(--text); font-family:'Kanit','Zen M
 .win-dots span { width:12px; height:12px; border-radius:50%; background:rgba(255,255,255,0.4); display:block; }
 .win-dots .close-win,.win-dots .close-viewer { background:#ff4d4d !important; }
 .win-title { font-family:'Press Start 2P',cursive; font-size:0.6rem; flex-grow:1; }
-.win-body { background:#ffffff !important; color:#333333 !important; padding:15px; max-height:70vh; overflow-y:auto; scroll-behavior:smooth; }
+.win-body { background:#ffffff !important; color:#333333 !important; padding:15px; max-height:70vh; overflow-y:auto; scroll-behavior:smooth; font-family:'Sarabun',sans-serif; font-size:0.95rem; }
 
 /* ─── AVATAR ─────────────────────────────────────────── */
 .avatar { width:120px; height:120px; border-radius:50%; border:4px solid var(--blue-primary); object-fit:cover; }
@@ -66,7 +67,7 @@ body { background-color:var(--bg); color:var(--text); font-family:'Kanit','Zen M
 .gallery-set-label { font-size:0.65rem; color:var(--blue-primary); font-family:'Press Start 2P',cursive; text-align:center; margin-top:4px; }
 
 /* ─── SCHEDULE ─────────────────────────────────────────── */
-.schedule-item { background:#fafafa; border-radius:8px; border:1px solid rgba(0,180,216,0.2); transition:0.2s; }
+.schedule-item { background:#fafafa; border-radius:8px; border:1px solid rgba(0,180,216,0.2); transition:0.2s; font-family:'Sarabun',sans-serif; }
 .schedule-item:hover { background:#f0f8ff; border-color:var(--blue-primary); }
 .bg-blue { background-color:var(--blue-primary) !important; font-family:'Press Start 2P',cursive; font-size:0.5rem; padding:6px 8px; }
 .hover-underline:hover { text-decoration:underline !important; }
@@ -98,7 +99,7 @@ body { background-color:var(--bg); color:var(--text); font-family:'Kanit','Zen M
 /* ─── START MENU ─────────────────────────────────────── */
 .start-menu { position:fixed; bottom:55px; left:10px; width:200px; background:var(--win-bg); border:2px solid var(--blue-primary); border-radius:10px; box-shadow:5px 5px 15px rgba(0,0,0,0.1); z-index:3000; }
 .start-header { background:var(--blue-primary); color:white; padding:10px; font-size:0.5rem; border-radius:8px 8px 0 0; font-family:'Press Start 2P',cursive; }
-.start-item { padding:12px 15px; font-size:0.85rem; transition:0.2s; display:flex; gap:10px; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); }
+.start-item { padding:12px 15px; font-family:'Sarabun',sans-serif; font-size:0.95rem; font-weight:500; transition:0.2s; display:flex; gap:10px; align-items:center; border-bottom:1px solid rgba(0,0,0,0.05); }
 .start-item:last-child { border-bottom:none; }
 .start-item:hover { background:rgba(0,180,216,0.1); color:var(--blue-primary); }
 
@@ -131,12 +132,12 @@ body { background-color:var(--bg); color:var(--text); font-family:'Kanit','Zen M
     text-align:center;
 }
 .admin-login-box h2 { font-family:'Press Start 2P',cursive; font-size:0.7rem; color:var(--blue-primary); margin-bottom:6px; }
-.admin-login-box p { font-size:0.75rem; color:var(--text-dim); margin-bottom:24px; }
-.admin-input { width:100%; border:2px solid var(--blue-primary); border-radius:8px; padding:10px 14px; font-family:'Kanit',sans-serif; font-size:0.9rem; color:var(--text); outline:none; margin-bottom:12px; background:#f8fcff; transition:0.2s; cursor:text !important; user-select:text !important; }
+.admin-login-box p { font-family:'Sarabun',sans-serif; font-size:0.9rem; color:var(--text-dim); margin-bottom:24px; }
+.admin-input { width:100%; border:2px solid var(--blue-primary); border-radius:8px; padding:10px 14px; font-family:'Sarabun',sans-serif; font-size:1rem; color:var(--text); outline:none; margin-bottom:12px; background:#f8fcff; transition:0.2s; cursor:text !important; user-select:text !important; }
 .admin-input:focus { border-color:var(--blue-dark); box-shadow:0 0 0 3px rgba(0,180,216,0.15); }
 .admin-login-btn { width:100%; background:var(--blue-primary); color:white; border:none; border-radius:8px; padding:11px; font-family:'Press Start 2P',cursive; font-size:0.55rem; margin-top:4px; transition:0.2s; }
 .admin-login-btn:hover { background:var(--blue-dark); }
-.admin-err { color:#e63946; font-size:0.75rem; margin-top:8px; min-height:18px; }
+.admin-err { font-family:'Sarabun',sans-serif; color:#e63946; font-size:0.88rem; margin-top:8px; min-height:18px; }
 .admin-close-login { position:absolute; top:14px; right:16px; background:none; border:none; font-size:1.3rem; color:var(--text-dim); }
 .admin-close-login:hover { color:var(--text); }
 .login-box-wrap { position:relative; }
@@ -154,9 +155,9 @@ body { background-color:var(--bg); color:var(--text); font-family:'Kanit','Zen M
 
 /* Sidebar */
 .admin-sidebar { width:160px; flex-shrink:0; border-right:2px solid rgba(0,180,216,0.2); padding:12px 0; background:#f8fcff; overflow-y:auto; }
-.admin-nav-item { padding:11px 16px; font-size:0.8rem; display:flex; align-items:center; gap:8px; transition:0.2s; border-left:3px solid transparent; }
+.admin-nav-item { padding:11px 16px; font-family:'Sarabun',sans-serif; font-size:0.9rem; font-weight:500; display:flex; align-items:center; gap:8px; transition:0.2s; border-left:3px solid transparent; }
 .admin-nav-item:hover { background:rgba(0,180,216,0.08); color:var(--blue-primary); cursor:var(--cur-point) !important; }
-.admin-nav-item.active { background:rgba(0,180,216,0.12); color:var(--blue-primary); border-left-color:var(--blue-primary); font-weight:600; }
+.admin-nav-item.active { background:rgba(0,180,216,0.12); color:var(--blue-primary); border-left-color:var(--blue-primary); font-weight:700; }
 .admin-nav-item i { width:16px; text-align:center; }
 
 /* Content panels */
@@ -166,8 +167,8 @@ body { background-color:var(--bg); color:var(--text); font-family:'Kanit','Zen M
 .panel-title { font-family:'Press Start 2P',cursive; font-size:0.6rem; color:var(--blue-primary); margin-bottom:18px; padding-bottom:10px; border-bottom:2px solid rgba(0,180,216,0.2); }
 
 /* Admin form elements */
-.admin-label { font-size:0.78rem; font-weight:600; color:var(--text); margin-bottom:4px; display:block; }
-.admin-field { width:100%; border:1.5px solid rgba(0,180,216,0.4); border-radius:7px; padding:9px 12px; font-family:'Kanit',sans-serif; font-size:0.88rem; color:var(--text); outline:none; background:#fff; transition:0.2s; margin-bottom:12px; cursor:text !important; user-select:text !important; }
+.admin-label { font-family:'Sarabun',sans-serif; font-size:0.9rem; font-weight:600; color:var(--text); margin-bottom:4px; display:block; }
+.admin-field { width:100%; border:1.5px solid rgba(0,180,216,0.4); border-radius:7px; padding:9px 12px; font-family:'Sarabun',sans-serif; font-size:0.95rem; color:var(--text); outline:none; background:#fff; transition:0.2s; margin-bottom:12px; cursor:text !important; user-select:text !important; }
 .admin-field:focus { border-color:var(--blue-primary); box-shadow:0 0 0 3px rgba(0,180,216,0.12); }
 textarea.admin-field { resize:vertical; min-height:70px; }
 .admin-btn { background:var(--blue-primary); color:white; border:none; border-radius:7px; padding:9px 20px; font-family:'Press Start 2P',cursive; font-size:0.5rem; transition:0.2s; }
@@ -177,26 +178,130 @@ textarea.admin-field { resize:vertical; min-height:70px; }
 .admin-btn.secondary { background:#8d99ae; }
 .admin-btn.secondary:hover { background:#555; }
 .admin-card { background:#f8fcff; border:1.5px solid rgba(0,180,216,0.2); border-radius:10px; padding:16px; margin-bottom:12px; }
-.admin-card-title { font-size:0.8rem; font-weight:600; color:var(--blue-primary); margin-bottom:10px; }
+.admin-card-title { font-family:'Sarabun',sans-serif; font-size:1rem; font-weight:700; color:var(--blue-primary); margin-bottom:10px; }
 
 /* Schedule list in admin */
 .sch-row { display:flex; align-items:center; gap:8px; background:#f0f8ff; border:1px solid rgba(0,180,216,0.2); border-radius:8px; padding:10px 12px; margin-bottom:8px; }
-.sch-row-info { flex:1; font-size:0.8rem; }
-.sch-row-date { font-family:'Press Start 2P',cursive; font-size:0.5rem; color:var(--blue-primary); }
-.sch-row-title { font-weight:600; color:var(--text); }
+.sch-row-info { flex:1; }
+.sch-row-date { font-family:'Press Start 2P',cursive; font-size:0.5rem; color:var(--blue-primary); margin-bottom:3px; }
+.sch-row-title { font-family:'Sarabun',sans-serif; font-size:0.95rem; font-weight:600; color:var(--text); }
 
 /* Gallery sets list in admin */
 .gal-row { display:flex; align-items:center; gap:10px; background:#f0f8ff; border:1px solid rgba(0,180,216,0.2); border-radius:8px; padding:10px 12px; margin-bottom:8px; }
 .gal-row img { width:56px; height:56px; object-fit:cover; border-radius:6px; border:2px solid var(--blue-primary); flex-shrink:0; }
-.gal-row-info { flex:1; font-size:0.8rem; }
+.gal-row-info { flex:1; }
 .gal-row-id { font-family:'Press Start 2P',cursive; font-size:0.5rem; color:var(--blue-primary); }
-.gal-row-count { color:var(--text-dim); font-size:0.75rem; }
+.gal-row-count { font-family:'Sarabun',sans-serif; font-size:0.85rem; color:var(--text-dim); }
 
 /* Separator */
 .admin-sep { border:none; border-top:1.5px solid rgba(0,180,216,0.15); margin:16px 0; }
 
+/* Upload button – ชัดเจน มีกรอบ */
+.upload-btn {
+    display:inline-flex; align-items:center; gap:6px;
+    border:2px dashed var(--blue-primary);
+    background:#e8f8fd; color:var(--blue-primary);
+    border-radius:8px; padding:9px 16px;
+    font-family:'Sarabun',sans-serif; font-size:0.92rem; font-weight:600;
+    cursor:var(--cur-point) !important;
+    transition:all 0.2s; margin-bottom:6px; width:100%;
+    justify-content:center; box-shadow:0 2px 6px rgba(0,180,216,0.15);
+}
+.upload-btn:hover { background:var(--blue-primary); color:white; border-style:solid; }
+.upload-btn i { font-size:1rem; }
+
+/* Real-time status bar */
+#rt-status-bar {
+    position:fixed; bottom:52px; left:0; width:100%;
+    background:rgba(0,180,216,0.92); color:white;
+    font-family:'Press Start 2P',cursive; font-size:0.45rem;
+    text-align:center; padding:5px 10px; z-index:1999;
+    display:none; animation:slideUp 0.3s ease;
+    backdrop-filter:blur(4px);
+}
+#rt-status-bar.show { display:block; }
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+
+/* Firebase sync dot */
+.sync-dot {
+    width:8px; height:8px; border-radius:50%; display:inline-block;
+    margin-right:5px; vertical-align:middle;
+}
+.sync-dot.online  { background:#4ade80; box-shadow:0 0 6px #4ade80; animation:pulse-green 1.5s infinite; }
+.sync-dot.offline { background:#f87171; }
+.sync-dot.syncing { background:#fbbf24; animation:pulse-yellow 0.6s infinite; }
+@keyframes pulse-green  { 0%,100%{opacity:1} 50%{opacity:0.5} }
+@keyframes pulse-yellow { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* Update banner */
+#update-banner {
+    position:fixed; top:50px; left:0; width:100%;
+    background:linear-gradient(90deg,var(--blue-primary),var(--blue-dark));
+    color:white; text-align:center; padding:8px 12px; z-index:1998;
+    font-family:'Press Start 2P',cursive; font-size:0.45rem;
+    display:none; cursor:var(--cur-point) !important;
+    box-shadow:0 3px 10px rgba(0,180,216,0.3);
+}
+#update-banner.show { display:flex; align-items:center; justify-content:center; gap:10px; }
+
 /* Password change */
 .change-pw-box { max-width:380px; }
+
+/* Shop tab buttons */
+.shop-tab-btn.active { background:var(--blue-primary) !important; color:white !important; }
+.shop-tab-btn.secondary { background:#8d99ae !important; color:white !important; }
+
+/* ─── SHOP ───────────────────────────────────────────── */
+.shop-header-banner {
+    background: linear-gradient(135deg, var(--blue-primary), var(--blue-dark));
+    color: white; padding: 14px; text-align: center; border-radius: 8px;
+    margin-bottom: 14px;
+}
+.shop-banner-title { font-family:'Press Start 2P',cursive; font-size:0.6rem; margin-bottom:6px; line-height:1.8; }
+.shop-banner-sub { font-family:'Sarabun',sans-serif; font-size:0.95rem; opacity:0.95; font-weight:500; }
+.shop-timer-bar {
+    background:#fff3cd; border:1.5px solid #ffc107; border-radius:8px;
+    padding:10px 12px; text-align:center; margin-bottom:12px;
+}
+.shop-timer-bar.expired { background:#f8d7da; border-color:#e63946; color:#e63946; }
+.shop-timer-label { font-family:'Sarabun',sans-serif; font-size:0.85rem; color:#856404; font-weight:600; margin-bottom:4px; }
+.shop-timer-bar.expired .shop-timer-label { color:#e63946; }
+#shop-countdown { font-family:'Press Start 2P',cursive; font-size:0.7rem; color:var(--blue-dark); margin-top:4px; }
+.shop-item-card {
+    background:#fafafa; border:2px solid rgba(0,180,216,0.25); border-radius:12px;
+    padding:14px; margin-bottom:12px; transition:0.2s;
+}
+.shop-item-card:hover { border-color:var(--blue-primary); background:#f0f8ff; }
+.shop-item-card.sold-out { border-color:#aaa; background:#f0f0f0; filter:grayscale(0.6); }
+.shop-item-card.expired-item { border-color:#555; background:#1a1a1a; }
+.shop-item-card.expired-item .shop-item-name,
+.shop-item-card.expired-item .shop-item-desc,
+.shop-item-card.expired-item .shop-price-row { color:#999 !important; }
+.shop-item-img { width:100%; height:160px; object-fit:cover; border-radius:8px; border:2px solid rgba(0,180,216,0.3); margin-bottom:10px; }
+.shop-item-img-placeholder { width:100%; height:100px; background:linear-gradient(135deg,#e0f4ff,#b3e5fc); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:2rem; margin-bottom:10px; border:2px solid rgba(0,180,216,0.2); }
+.shop-item-name { font-family:'Press Start 2P',cursive; font-size:0.52rem; color:var(--blue-dark); margin-bottom:8px; line-height:1.8; }
+.shop-item-desc { font-family:'Sarabun',sans-serif; font-size:0.95rem; color:var(--text-dim); margin-bottom:8px; line-height:1.6; font-weight:400; }
+.shop-price-row { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.shop-price-tag { background:var(--blue-primary); color:white; border-radius:6px; padding:5px 12px; font-family:'Press Start 2P',cursive; font-size:0.52rem; }
+.shop-price-variant { background:#e0f4ff; color:var(--blue-dark); border-radius:6px; padding:5px 10px; font-family:'Sarabun',sans-serif; font-size:0.9rem; border:1px solid rgba(0,180,216,0.3); font-weight:600; }
+.shop-status-badge { border-radius:6px; padding:4px 10px; font-family:'Sarabun',sans-serif; font-size:0.8rem; font-weight:600; display:inline-block; }
+.shop-status-badge.in-stock { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
+.shop-status-badge.sold-out-badge { background:#e2e3e5; color:#555; border:1px solid #ccc; }
+.shop-status-badge.expired-badge { background:#1a1a1a; color:#888; border:1px solid #444; }
+.shop-buy-btn {
+    width:100%; background:var(--blue-primary); color:white; border:none;
+    border-radius:8px; padding:11px; font-family:'Sarabun',sans-serif;
+    font-size:1rem; font-weight:600; transition:0.2s; letter-spacing:0.02em;
+}
+.shop-buy-btn:hover { background:var(--blue-dark); transform:translateY(-1px); }
+.shop-buy-btn:disabled { background:#aaa; cursor:default !important; transform:none; }
+.shop-after-msg { font-family:'Sarabun',sans-serif; font-size:0.9rem; color:var(--blue-dark); text-align:center; margin-top:7px; font-style:italic; font-weight:500; }
+.shop-section-note { background:#e0f4ff; border:1.5px solid rgba(0,180,216,0.3); border-radius:8px; padding:10px 14px; text-align:center; font-family:'Sarabun',sans-serif; font-size:0.9rem; color:var(--blue-dark); margin-bottom:14px; font-weight:500; }
+
+/* Shop admin rows */
+.shop-row { background:#f0f8ff; border:1px solid rgba(0,180,216,0.2); border-radius:8px; padding:12px; margin-bottom:10px; }
+.shop-row-name { font-family:'Press Start 2P',cursive; font-size:0.5rem; color:var(--blue-primary); margin-bottom:5px; line-height:1.8; }
+.shop-row-meta { font-family:'Sarabun',sans-serif; font-size:0.9rem; color:var(--text-dim); }
 
 /* ─── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width:500px) {
@@ -220,6 +325,12 @@ textarea.admin-field { resize:vertical; min-height:70px; }
 <!-- ══ TOAST ═════════════════════════════════════════════ -->
 <div class="toast-notif" id="toast"></div>
 
+<!-- ══ UPDATE BANNER ════════════════════════════════════ -->
+<div id="update-banner" onclick="location.reload()">
+    <span id="sync-dot" class="sync-dot syncing"></span>
+    <span>🔄 มีอัพเดตใหม่! คลิกที่นี่เพื่อรีโหลด</span>
+</div>
+
 <!-- ══ DESKTOP ════════════════════════════════════════════ -->
 <div class="desktop">
     <div class="bg-vignette"></div>
@@ -229,6 +340,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
     <div class="top-info d-flex justify-content-between align-items-center px-3 py-2">
         <div class="sys-label pixel-font">REMIE OS</div>
         <div class="d-flex align-items-center gap-3">
+            <span id="sync-dot" class="sync-dot syncing" title="Firebase sync status"></span>
             <div id="date" class="pixel-font" style="font-size:0.5rem;opacity:0.8;">-- ---</div>
             <div id="clock" class="pixel-font">00:00</div>
         </div>
@@ -283,7 +395,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
     </div>
 
     <!-- ── WIN: SCHEDULE ──────────────────────────────── -->
-    <div class="win shadow-lg d-none" id="win-schedule" style="max-width:400px;">
+    <div class="win shadow-lg d-none" id="win-schedule" style="max-width:420px;">
         <div class="win-header">
             <div class="win-dots"><span class="close-win"></span><span></span><span></span></div>
             <div class="win-title">SCHEDULE.LOG</div>
@@ -291,7 +403,28 @@ textarea.admin-field { resize:vertical; min-height:70px; }
         <div class="win-body p-2 d-flex flex-column" style="min-height:480px;">
             <div id="schedule-list" class="flex-grow-1"></div>
             <div id="schedule-pagination-wrapper" class="pagination-container"></div>
-            <div class="p-2 text-center small text-dim mt-2" id="schedule-note" style="font-size:0.75rem;"></div>
+            <div class="p-2 text-center small text-dim mt-2" id="schedule-note" style="font-family:'Sarabun',sans-serif;font-size:0.85rem;"></div>
+        </div>
+    </div>
+
+    <!-- ── WIN: SCHEDULE DETAIL ──────────────────────── -->
+    <div class="win shadow-lg d-none" id="win-sch-detail" style="max-width:420px;z-index:2600;">
+        <div class="win-header">
+            <div class="win-dots"><span class="close-win"></span><span></span><span></span></div>
+            <div class="win-title" id="sch-detail-wintitle">EVENT.INFO</div>
+        </div>
+        <div class="win-body p-3" style="min-height:300px;" id="sch-detail-body">
+        </div>
+    </div>
+
+    <!-- ── WIN: SHOP ──────────────────────────────────── -->
+    <div class="win shadow-lg d-none" id="win-shop" style="max-width:420px;">
+        <div class="win-header">
+            <div class="win-dots"><span class="close-win"></span><span></span><span></span></div>
+            <div class="win-title">SHOP.EXE</div>
+        </div>
+        <div class="win-body p-3 d-flex flex-column" style="min-height:480px;">
+            <div id="shop-content"><!-- rendered by JS --></div>
         </div>
     </div>
 
@@ -307,6 +440,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
             <p class="small mb-3">Fan website made with 💙 by <a href="https://flukkieboyy.vercel.app/" target="_blank" class="text-blue text-decoration-none fw-bold">@flukkieboyy</a></p>
             <hr style="border-color:rgba(0,180,216,0.3);">
             <p class="small text-dim">Status: Everything fine ✨</p>
+            <p class="small text-dim mt-2">Built with REMIE OS v2 + Admin Panel</p>
         </div>
     </div>
 </div><!-- /desktop -->
@@ -319,6 +453,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
         <div class="t-icon active" data-id="win-profile" title="Profile"><i class="fa-solid fa-user"></i></div>
         <div class="t-icon" data-id="win-gallery" title="Gallery"><i class="fa-solid fa-image"></i></div>
         <div class="t-icon" data-id="win-schedule" title="Schedule"><i class="fa-solid fa-calendar-days"></i></div>
+        <div class="t-icon" data-id="win-shop" title="Shop"><i class="fa-solid fa-bag-shopping"></i></div>
     </div>
     <div class="task-credit d-none d-md-block pe-2">
         Made with 💙 by <a href="https://flukkieboyy.vercel.app/" target="_blank">FLUKKIEBOYY</a>
@@ -348,7 +483,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
             <input class="admin-input" type="password" id="admin-pass" placeholder="Password">
             <button class="admin-login-btn" id="admin-login-btn"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; LOGIN</button>
             <div class="admin-err" id="admin-err"></div>
-            <!--<div style="margin-top:14px;font-size:0.7rem;color:var(--text-dim);">Default: admin / remie2025</div> -->
+            <div style="margin-top:14px;font-size:0.7rem;color:var(--text-dim);">Default: admin / remie2025</div>
         </div>
         <button class="admin-close-login" id="admin-close-login-btn">✕</button>
     </div>
@@ -368,6 +503,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                 <div class="admin-nav-item" data-panel="panel-gallery"><i class="fa-solid fa-images"></i> Gallery</div>
                 <div class="admin-nav-item" data-panel="panel-schedule"><i class="fa-solid fa-calendar-days"></i> Schedule</div>
                 <div class="admin-nav-item" data-panel="panel-appearance"><i class="fa-solid fa-palette"></i> Theme</div>
+                <div class="admin-nav-item" data-panel="panel-shop"><i class="fa-solid fa-bag-shopping"></i> Shop</div>
                 <div class="admin-nav-item" data-panel="panel-security"><i class="fa-solid fa-shield-halved"></i> Security</div>
             </div>
 
@@ -385,8 +521,11 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                         <input class="admin-field" type="text" id="cfg-phrases" placeholder="My Name is Remie, QT🍒, Welcome to REMIE OS">
                         <label class="admin-label">Short Bio</label>
                         <textarea class="admin-field" id="cfg-bio" placeholder="Short description shown on profile window..."></textarea>
-                        <label class="admin-label">Avatar Image URL</label>
+                        <label class="admin-label">รูป Avatar (URL หรืออัพจากเครื่อง)</label>
                         <input class="admin-field" type="url" id="cfg-avatar" placeholder="https://...">
+                        <div style="margin-bottom:12px;">
+                            <label class="upload-btn"><input type="file" id="cfg-avatar-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
+                        </div>
                         <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
                             <img id="cfg-avatar-preview" src="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--blue-primary);object-fit:cover;display:none;">
                             <button class="admin-btn secondary" id="cfg-avatar-preview-btn" style="font-size:0.45rem;">PREVIEW</button>
@@ -423,36 +562,81 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                 <!-- ── Schedule Panel ── -->
                 <div class="admin-panel" id="panel-schedule">
                     <div class="panel-title">SCHEDULE</div>
+
+                    <!-- Edit modal -->
+                    <div id="sch-edit-modal" style="display:none;background:#fff;border:2px solid var(--blue-primary);border-radius:12px;padding:16px;margin-bottom:16px;">
+                        <div class="admin-card-title">✏️ แก้ไขกิจกรรม</div>
+                        <input type="hidden" id="edit-sch-idx">
+                        <label class="admin-label">ชื่อกิจกรรม</label>
+                        <input class="admin-field" type="text" id="edit-sch-title">
+                        <label class="admin-label">วันที่จัดงาน</label>
+                        <input class="admin-field" type="date" id="edit-sch-date-real">
+                        <label style="display:flex;align-items:center;gap:6px;font-family:'Sarabun',sans-serif;font-size:0.9rem;margin-bottom:10px;cursor:var(--cur-point) !important;">
+                            <input type="checkbox" id="edit-sch-special" style="cursor:var(--cur-point) !important;"> วันพิเศษ (ไม่มีสถานที่)
+                        </label>
+                        <div id="edit-sch-extra">
+                            <label class="admin-label">ชื่อสถานที่</label>
+                            <input class="admin-field" type="text" id="edit-sch-location" placeholder="e.g. MCC Hall The Mall Bangkapi">
+                            <label class="admin-label">รูปแผนที่ / รูปสถานที่ (URL หรืออัพจากเครื่อง)</label>
+                            <div class="upload-row">
+                                <input class="admin-field" type="url" id="edit-sch-mapimg" placeholder="https://... หรืออัพรูปด้านล่าง" style="margin-bottom:6px;">
+                                <label class="upload-btn"><input type="file" id="edit-sch-mapimg-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
+                                <img id="edit-sch-mapimg-preview" src="" style="display:none;width:100%;border-radius:8px;margin-top:6px;border:1.5px solid rgba(0,180,216,0.3);">
+                            </div>
+                            <label class="admin-label">บูธ</label>
+                            <input class="admin-field" type="text" id="edit-sch-booth" placeholder="e.g. i41-46">
+                            <label class="admin-label">Stage</label>
+                            <input class="admin-field" type="text" id="edit-sch-stage" placeholder="e.g. ✅ 14:00">
+                            <label class="admin-label">หมายเหตุ</label>
+                            <input class="admin-field" type="text" id="edit-sch-note" placeholder="e.g. ❗ Order Drinks Only">
+                            <label class="admin-label">รูปสินค้าที่ขายในงาน (URL หรืออัพจากเครื่อง แต่ละบรรทัด)</label>
+                            <textarea class="admin-field" id="edit-sch-shopimgs" rows="3" placeholder="https://img1.jpg&#10;https://img2.jpg"></textarea>
+                            <label class="upload-btn" style="margin-bottom:10px;"><input type="file" id="edit-sch-shopimgs-file" accept="image/*" multiple style="display:none;">📁 เลือกรูปสินค้าจากเครื่อง (เลือกได้หลายรูป)</label>
+                            <div id="edit-sch-shopimgs-preview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:4px;">
+                            <button class="admin-btn" id="save-edit-sch-btn" style="flex:1;">💾 บันทึกการแก้ไข</button>
+                            <button class="admin-btn secondary" id="cancel-edit-sch-btn">ยกเลิก</button>
+                        </div>
+                    </div>
+
                     <div id="schedule-admin-list"></div>
                     <hr class="admin-sep">
+
                     <div class="admin-card">
-                        <div class="admin-card-title">Add New Event</div>
-                        <label class="admin-label">Date Label</label>
-                        <input class="admin-field" type="text" id="new-sch-date" placeholder="e.g. 20 JUN">
-                        <label class="admin-label">Event Title</label>
+                        <div class="admin-card-title">➕ เพิ่มกิจกรรมใหม่</div>
+                        <label class="admin-label">ชื่อกิจกรรม <span style="color:#e63946;">*</span></label>
                         <input class="admin-field" type="text" id="new-sch-title" placeholder="e.g. LILITH COSPLAY">
-                        <div style="display:flex;gap:12px;">
-                            <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;cursor:var(--cur-point) !important;">
-                                <input type="checkbox" id="new-sch-special" style="cursor:var(--cur-point) !important;"> Special day?
-                            </label>
-                        </div>
-                        <div id="new-sch-extra" class="mt-2">
-                            <label class="admin-label mt-2">Location</label>
-                            <input class="admin-field" type="text" id="new-sch-location" placeholder="Venue name">
-                            <label class="admin-label">Google Maps URL</label>
-                            <input class="admin-field" type="url" id="new-sch-map" placeholder="https://maps.google.com/?q=...">
-                            <label class="admin-label">Booth Info</label>
+                        <label class="admin-label">วันที่จัดงาน <span style="color:#e63946;">*</span></label>
+                        <input class="admin-field" type="date" id="new-sch-date-real">
+                        <label style="display:flex;align-items:center;gap:6px;font-family:'Sarabun',sans-serif;font-size:0.9rem;margin-bottom:10px;cursor:var(--cur-point) !important;">
+                            <input type="checkbox" id="new-sch-special" style="cursor:var(--cur-point) !important;"> วันพิเศษ (ไม่มีสถานที่)
+                        </label>
+                        <div id="new-sch-extra">
+                            <label class="admin-label">ชื่อสถานที่</label>
+                            <input class="admin-field" type="text" id="new-sch-location" placeholder="e.g. MCC Hall The Mall Bangkapi">
+                            <label class="admin-label">รูปแผนที่ / รูปสถานที่ (URL หรืออัพจากเครื่อง)</label>
+                            <div class="upload-row">
+                                <input class="admin-field" type="url" id="new-sch-mapimg" placeholder="https://... หรืออัพรูปด้านล่าง" style="margin-bottom:6px;">
+                                <label class="upload-btn"><input type="file" id="new-sch-mapimg-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
+                                <img id="new-sch-mapimg-preview" src="" style="display:none;width:100%;border-radius:8px;margin-top:6px;border:1.5px solid rgba(0,180,216,0.3);">
+                            </div>
+                            <label class="admin-label">บูธ</label>
                             <input class="admin-field" type="text" id="new-sch-booth" placeholder="e.g. i41-46">
-                            <label class="admin-label">Stage Info</label>
+                            <label class="admin-label">Stage</label>
                             <input class="admin-field" type="text" id="new-sch-stage" placeholder="e.g. ✅ 14:00">
-                            <label class="admin-label">Note (optional)</label>
+                            <label class="admin-label">หมายเหตุ</label>
                             <input class="admin-field" type="text" id="new-sch-note" placeholder="e.g. ❗ Order Drinks Only">
+                            <label class="admin-label">รูปสินค้าที่ขายในงาน (URL หรืออัพจากเครื่อง แต่ละบรรทัด)</label>
+                            <textarea class="admin-field" id="new-sch-shopimgs" rows="3" placeholder="https://img1.jpg&#10;https://img2.jpg"></textarea>
+                            <label class="upload-btn" style="margin-bottom:10px;"><input type="file" id="new-sch-shopimgs-file" accept="image/*" multiple style="display:none;">📁 เลือกรูปสินค้าจากเครื่อง (เลือกได้หลายรูป)</label>
+                            <div id="new-sch-shopimgs-preview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
                         </div>
-                        <button class="admin-btn mt-2" id="add-sch-btn">+ ADD EVENT</button>
+                        <button class="admin-btn mt-2" id="add-sch-btn" style="width:100%;">➕ เพิ่มกิจกรรม</button>
                     </div>
                     <hr class="admin-sep">
                     <div class="admin-card">
-                        <div class="admin-card-title">Schedule Footer Note</div>
+                        <div class="admin-card-title">หมายเหตุท้ายตาราง</div>
                         <input class="admin-field" type="text" id="cfg-sch-note" placeholder="*อัพเดตตารางงานจาก...">
                         <button class="admin-btn" id="save-sch-note-btn">💾 SAVE NOTE</button>
                     </div>
@@ -462,30 +646,124 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                 <div class="admin-panel" id="panel-appearance">
                     <div class="panel-title">THEME & APPEARANCE</div>
                     <div class="admin-card">
-                        <div class="admin-card-title">Color Theme</div>
-                        <label class="admin-label">Primary Blue</label>
-                        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
-                            <input type="color" id="cfg-color-primary" value="#00b4d8" style="width:48px;height:36px;border:2px solid var(--blue-primary);border-radius:6px;cursor:var(--cur-point) !important;background:none;">
-                            <input class="admin-field" type="text" id="cfg-color-primary-hex" placeholder="#00b4d8" style="margin-bottom:0;flex:1;">
-                        </div>
-                        <label class="admin-label">Dark Blue (hover/dark)</label>
-                        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
-                            <input type="color" id="cfg-color-dark" value="#0077b6" style="width:48px;height:36px;border:2px solid var(--blue-primary);border-radius:6px;cursor:var(--cur-point) !important;background:none;">
-                            <input class="admin-field" type="text" id="cfg-color-dark-hex" placeholder="#0077b6" style="margin-bottom:0;flex:1;">
-                        </div>
-                        <label class="admin-label">Background</label>
-                        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
-                            <input type="color" id="cfg-color-bg" value="#f0f8ff" style="width:48px;height:36px;border:2px solid var(--blue-primary);border-radius:6px;cursor:var(--cur-point) !important;background:none;">
-                            <input class="admin-field" type="text" id="cfg-color-bg-hex" placeholder="#f0f8ff" style="margin-bottom:0;flex:1;">
-                        </div>
-                        <button class="admin-btn" id="save-theme-btn">💾 APPLY THEME</button>
-                        <button class="admin-btn secondary" id="reset-theme-btn" style="margin-left:8px;">↺ RESET</button>
-                    </div>
-                    <div class="admin-card mt-3">
                         <div class="admin-card-title">OS Title</div>
                         <label class="admin-label">Top-bar / Tab Title</label>
                         <input class="admin-field" type="text" id="cfg-os-title" placeholder="REMIE OS">
                         <button class="admin-btn" id="save-title-btn">💾 SAVE</button>
+                    </div>
+                </div>
+
+                <!-- ── Shop Panel ── -->
+                <div class="admin-panel" id="panel-shop">
+                    <div class="panel-title">SHOP SETTINGS</div>
+
+                    <!-- Tab bar -->
+                    <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;">
+                        <button class="admin-btn shop-tab-btn active" data-tab="tab-shop-info" style="font-size:0.42rem;padding:7px 12px;">🏪 ข้อมูลร้าน</button>
+                        <button class="admin-btn shop-tab-btn secondary" data-tab="tab-shop-items" style="font-size:0.42rem;padding:7px 12px;">📦 สินค้า</button>
+                    </div>
+
+                    <!-- TAB: ข้อมูลร้าน -->
+                    <div id="tab-shop-info" class="shop-tab-content">
+                        <div class="admin-card">
+                            <div class="admin-card-title">🏪 หัวข้อร้านและข้อความ</div>
+                            <label class="admin-label">ชื่อร้าน (Shop Title)</label>
+                            <input class="admin-field" type="text" id="cfg-shop-title" placeholder="e.g. REMIE's BIRTHDAY SHOP">
+                            <label class="admin-label">คำอธิบายใต้ชื่อ (Subtitle)</label>
+                            <input class="admin-field" type="text" id="cfg-shop-sub" placeholder="e.g. Pre-order 5–14 June 2026">
+                            <label class="admin-label">หมายเหตุด้านบน (Note)</label>
+                            <input class="admin-field" type="text" id="cfg-shop-note" placeholder="e.g. *T-shirt & MousePad for Pre-order only*">
+                            <label class="admin-label">ข้อความหลังกดสั่งซื้อ</label>
+                            <input class="admin-field" type="text" id="cfg-shop-aftermsg" placeholder="e.g. ซื้อแล้วโปรดแจ้งที่ IG: @remieeimer">
+                            <label class="admin-label">Instagram URL (ปุ่มสั่งซื้อจะลิงก์ไปที่นี่ ถ้าไม่มี Form)</label>
+                            <input class="admin-field" type="url" id="cfg-shop-ig" placeholder="https://www.instagram.com/remieeimer/">
+                            <button class="admin-btn" id="save-shop-global-btn">💾 บันทึกข้อมูลร้าน</button>
+                        </div>
+                        <div class="admin-card mt-3">
+                            <div class="admin-card-title">⏰ กำหนดช่วงเวลาขาย</div>
+                            <p style="font-size:0.72rem;color:var(--text-dim);margin-bottom:10px;">เมื่อหมดเวลา ร้านจะเป็นสีดำและปุ่มสั่งซื้อจะถูกปิด</p>
+                            <label class="admin-label">วันเริ่มขาย</label>
+                            <input class="admin-field" type="datetime-local" id="cfg-shop-start">
+                            <label class="admin-label">วันสิ้นสุด</label>
+                            <input class="admin-field" type="datetime-local" id="cfg-shop-end">
+                            <button class="admin-btn" id="save-shop-period-btn">💾 บันทึกช่วงเวลา</button>
+                        </div>
+                    </div>
+
+                    <!-- TAB: สินค้า -->
+                    <div id="tab-shop-items" class="shop-tab-content" style="display:none;">
+
+                        <!-- Edit modal (hidden by default) -->
+                        <div id="shop-edit-modal" style="display:none;background:#fff;border:2px solid var(--blue-primary);border-radius:12px;padding:16px;margin-bottom:16px;position:relative;">
+                            <div class="admin-card-title" style="margin-bottom:12px;">✏️ แก้ไขสินค้า</div>
+                            <input type="hidden" id="edit-item-idx">
+                            <label class="admin-label">ชื่อสินค้า</label>
+                            <input class="admin-field" type="text" id="edit-shop-name">
+                            <label class="admin-label">คำอธิบาย</label>
+                            <textarea class="admin-field" id="edit-shop-desc" rows="2"></textarea>
+                            <label class="admin-label">รูปภาพ URL</label>
+                            <input class="admin-field" type="url" id="edit-shop-img">
+                            <label class="admin-label">โหมดราคา</label>
+                            <select class="admin-field" id="edit-shop-price-mode" style="cursor:var(--cur-point) !important;">
+                                <option value="single">ราคาเดียว</option>
+                                <option value="variants">หลายตัวเลือก</option>
+                            </select>
+                            <div id="edit-shop-single-wrap">
+                                <label class="admin-label">ราคา (฿)</label>
+                                <input class="admin-field" type="number" id="edit-shop-price">
+                            </div>
+                            <div id="edit-shop-variants-wrap" style="display:none;">
+                                <label class="admin-label">ตัวเลือกราคา (ชื่อ:ราคา แต่ละบรรทัด)</label>
+                                <textarea class="admin-field" id="edit-shop-variants" rows="4" placeholder="White:390&#10;Black:390&#10;Bundle:720"></textarea>
+                            </div>
+                            <label class="admin-label">Google Form URL (ไม่มีใส่ว่าง)</label>
+                            <input class="admin-field" type="url" id="edit-shop-form" placeholder="https://forms.gle/...">
+                            <label class="admin-label">สถานะ</label>
+                            <select class="admin-field" id="edit-shop-status" style="cursor:var(--cur-point) !important;">
+                                <option value="available">✅ มีสินค้า</option>
+                                <option value="soldout">❌ ของหมด</option>
+                            </select>
+                            <div style="display:flex;gap:8px;margin-top:4px;">
+                                <button class="admin-btn" id="save-edit-item-btn" style="flex:1;">💾 บันทึกการแก้ไข</button>
+                                <button class="admin-btn secondary" id="cancel-edit-item-btn">ยกเลิก</button>
+                            </div>
+                        </div>
+
+                        <!-- Item list -->
+                        <div id="shop-admin-list"></div>
+
+                        <!-- Add new -->
+                        <hr class="admin-sep">
+                        <div class="admin-card">
+                            <div class="admin-card-title">➕ เพิ่มสินค้าใหม่</div>
+                            <label class="admin-label">ชื่อสินค้า <span style="color:#e63946;">*</span></label>
+                            <input class="admin-field" type="text" id="new-shop-name" placeholder="e.g. BIRTHDAY T-SHIRT">
+                            <label class="admin-label">คำอธิบาย</label>
+                            <textarea class="admin-field" id="new-shop-desc" rows="2" placeholder="รายละเอียดสินค้า..."></textarea>
+                            <label class="admin-label">รูปภาพ URL</label>
+                            <input class="admin-field" type="url" id="new-shop-img" placeholder="https://...">
+                            <label class="admin-label">โหมดราคา</label>
+                            <select class="admin-field" id="new-shop-price-mode" style="cursor:var(--cur-point) !important;">
+                                <option value="single">ราคาเดียว</option>
+                                <option value="variants">หลายตัวเลือก</option>
+                            </select>
+                            <div id="new-shop-single-wrap">
+                                <label class="admin-label">ราคา (฿)</label>
+                                <input class="admin-field" type="number" id="new-shop-price" placeholder="390">
+                            </div>
+                            <div id="new-shop-variants-wrap" style="display:none;">
+                                <label class="admin-label">ตัวเลือกราคา (ชื่อ:ราคา แต่ละบรรทัด)</label>
+                                <textarea class="admin-field" id="new-shop-variants" rows="4" placeholder="White:390&#10;Black:390&#10;Bundle:720"></textarea>
+                            </div>
+                            <label class="admin-label">Google Form URL (ไม่มีปล่อยว่าง → ใช้ IG แทน)</label>
+                            <input class="admin-field" type="url" id="new-shop-form" placeholder="https://forms.gle/...">
+                            <label class="admin-label">สถานะเริ่มต้น</label>
+                            <select class="admin-field" id="new-shop-status" style="cursor:var(--cur-point) !important;">
+                                <option value="available">✅ มีสินค้า</option>
+                                <option value="soldout">❌ ของหมด</option>
+                            </select>
+                            <button class="admin-btn mt-2" id="add-shop-item-btn" style="width:100%;">➕ เพิ่มสินค้า</button>
+                        </div>
                     </div>
                 </div>
 
@@ -519,6 +797,89 @@ textarea.admin-field { resize:vertical; min-height:70px; }
 </div><!-- /admin-overlay -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Firebase Realtime DB (ESM) -->
+<script type="module">
+// ══════════════════════════════════════════════════════════════
+//  FIREBASE REALTIME DATABASE — REMIE OS
+//  🔧 แก้ไข firebaseConfig ให้ตรงกับ Firebase project ของคุณ
+// ══════════════════════════════════════════════════════════════
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, get, onValue }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// ── ⚙️ กรอก Firebase config ของคุณที่นี่ ──────────────────
+const firebaseConfig = {
+    apiKey:            "AIzaSyDF9Vq35P3YlpE0Ly-NbiPuHk0OcOcrmP8",
+    authDomain:        "remiie.firebaseapp.com",
+    databaseURL:       "https://remiie-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId:         "remiie",
+    storageBucket:     "remiie.firebasestorage.app",
+    messagingSenderId: "450473310310",
+    appId:             "1:450473310310:web:9a0fcef94d091c5d3ad5a7"
+};
+// ───────────────────────────────────────────────────────────
+
+const fbApp = initializeApp(firebaseConfig);
+const db    = getDatabase(fbApp);
+
+const DB_KEYS = ['name','phrases','bio','avatar','socials','gallery','schedules','scheduleNote','theme','osTitle','shop','adminUser','adminPass'];
+
+// ── fbSave: เขียน Firebase + localStorage พร้อมกัน ──────────
+window.fbSave = function(key, val) {
+    window.markFbWrite();
+    set(ref(db, 'remie/' + key), val).catch(e => console.warn('fbSave error', e));
+};
+
+// ── Sync dot helper ──────────────────────────────────────────
+window.setSyncDot = function(state) {
+    const d = document.getElementById('sync-dot');
+    if (!d) return;
+    d.className = 'sync-dot ' + state;
+};
+
+// ── Update banner ────────────────────────────────────────────
+window.showUpdateBanner = function() {
+    const b = document.getElementById('update-banner');
+    if (b) b.classList.add('show');
+};
+
+// ── Real-time listeners (อื่นเปลี่ยน → แจ้งเตือน) ──────────
+let _lastFbWrite = 0;
+window.markFbWrite = function() { _lastFbWrite = Date.now(); };
+
+function startFbListeners() {
+    setSyncDot('online');
+    DB_KEYS.forEach(key => {
+        onValue(ref(db, 'remie/' + key), snap => {
+            if (!snap.exists()) return;
+            const val  = snap.val();
+            const prev = localStorage.getItem('remie_' + key);
+            const str  = JSON.stringify(val);
+            if (prev === str) return;                          // ไม่มีอะไรเปลี่ยน
+
+            const ownWrite = (Date.now() - _lastFbWrite) < 2500;
+            localStorage.setItem('remie_' + key, str);
+            if (!ownWrite) showUpdateBanner();                  // คนอื่นเปลี่ยน
+        });
+    });
+}
+
+// ── Initial pull: Firebase → localStorage ───────────────────
+Promise.all(
+    DB_KEYS.map(key =>
+        get(ref(db, 'remie/' + key))
+            .then(snap => { if (snap.exists()) localStorage.setItem('remie_'+key, JSON.stringify(snap.val())); })
+            .catch(() => {})
+    )
+).then(() => {
+    startFbListeners();
+    // re-render หลังดึงข้อมูลครั้งแรก
+    if (typeof renderProfile === 'function') {
+        renderProfile(); renderGallery(); renderSchedule(); renderShop();
+        applyTheme(); applyTitle();
+    }
+}).catch(() => setSyncDot('offline'));
+</script>
 <script>
 // ══════════════════════════════════════════════════════════════
 //  REMIE OS v2 — Main Script + Admin Panel
@@ -568,7 +929,39 @@ const DEFAULTS = {
     theme: { primary:"#00b4d8", dark:"#0077b6", bg:"#f0f8ff" },
     osTitle: "REMIE OS",
     adminUser: "admin",
-    adminPass: "remie2025"
+    adminPass: "remie2025",
+    shop: {
+        title: "REMIE's BIRTHDAY SHOP",
+        sub: "Pre-order 5 – 14 June 2026",
+        note: "*Birthday T-shirt & MousePad for Pre-order only*",
+        igUrl: "https://www.instagram.com/remieeimer/",
+        afterMsg: "ซื้อแล้วโปรดแจ้งที่ IG: @remieeimer 💙",
+        start: "2026-06-05T00:00",
+        end: "2026-06-14T23:59",
+        items: [
+            {
+                id:"item_tshirt", name:"BIRTHDAY T-SHIRT", desc:"สกรีน 'Birthday but with Nie' มีทั้งสีขาวและดำ",
+                img:"", priceMode:"variants",
+                variants:[{label:"White (S-XL)",price:390},{label:"Black (S-XL)",price:390},{label:"Bundle (White+Black)",price:720}],
+                price:390, formUrl:"", status:"available"
+            },
+            {
+                id:"item_photobook", name:"PHOTOBOOK", desc:"Birthday but with Remie — Limited Edition",
+                img:"", priceMode:"single", variants:[], price:490,
+                formUrl:"", status:"available"
+            },
+            {
+                id:"item_mousepad", name:"MOUSEPAD", desc:"Pre-order only • ส่งหลังงาน",
+                img:"", priceMode:"single", variants:[], price:350,
+                formUrl:"", status:"available"
+            },
+            {
+                id:"item_pincheki", name:"PIN CHEKI", desc:"ฟิล์มอินสแตนท์ลายพิเศษ",
+                img:"", priceMode:"single", variants:[], price:150,
+                formUrl:"", status:"available"
+            }
+        ]
+    }
 };
 
 // ── Storage helpers ───────────────────────────────────────────
@@ -576,7 +969,11 @@ function load(key) {
     try { const v = localStorage.getItem("remie_"+key); return v ? JSON.parse(v) : null; } catch { return null; }
 }
 function save(key, val) {
-    try { localStorage.setItem("remie_"+key, JSON.stringify(val)); } catch {}
+    try {
+        localStorage.setItem("remie_"+key, JSON.stringify(val));
+        // ซิงค์ขึ้น Firebase ด้วย (ถ้า ready)
+        if (typeof window.fbSave === 'function') window.fbSave(key, val);
+    } catch {}
 }
 function cfg(key) { return load(key) ?? DEFAULTS[key]; }
 
@@ -905,6 +1302,7 @@ function loadAdminPanels() {
     loadGalleryPanel();
     loadSchedulePanel();
     loadAppearancePanel();
+    loadShopPanel();
 }
 
 // ── Profile panel ─────────────────────────────────────────────
@@ -1048,13 +1446,41 @@ function loadSchedulePanel() {
                 <div class="sch-row-title">${item.title} ${item.isSpecial?'🎂':''}</div>
                 ${!item.isSpecial&&item.location?`<div style="font-size:0.72rem;color:var(--text-dim);">${item.location}</div>`:''}
             </div>
-            <button class="admin-btn danger" style="font-size:0.42rem;padding:5px 8px;" data-remove-sch="${i}">✕</button>`;
+            <div style="display:flex;gap:5px;">
+                <button class="admin-btn" style="font-size:0.4rem;padding:5px 8px;background:#0077b6;" data-edit-sch="${i}">✏️ แก้ไข</button>
+                <button class="admin-btn danger" style="font-size:0.42rem;padding:5px 8px;" data-remove-sch="${i}">✕</button>
+            </div>`;
         list.appendChild(row);
     });
     list.querySelectorAll('[data-remove-sch]').forEach(btn=>{
         btn.addEventListener('click',()=>{
             const updated=cfg('schedules').filter((_,i)=>i!==parseInt(btn.dataset.removeSch));
             save('schedules',updated); renderSchedule(); loadSchedulePanel(); showToast('🗑 Event removed');
+        });
+    });
+    list.querySelectorAll('[data-edit-sch]').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            const idx=parseInt(btn.dataset.editSch);
+            const item=cfg('schedules')[idx];
+            const modal=document.getElementById('sch-edit-modal');
+            document.getElementById('edit-sch-idx').value=idx;
+            document.getElementById('edit-sch-title').value=item.title||'';
+            document.getElementById('edit-sch-date-real').value=item.dateReal||'';
+            document.getElementById('edit-sch-special').checked=!!item.isSpecial;
+            document.getElementById('edit-sch-extra').style.display=item.isSpecial?'none':'block';
+            document.getElementById('edit-sch-location').value=item.location||'';
+            document.getElementById('edit-sch-mapimg').value=item.mapImg||item.mapUrl||'';
+            document.getElementById('edit-sch-booth').value=item.booth||'';
+            document.getElementById('edit-sch-stage').value=item.stage||'';
+            document.getElementById('edit-sch-note').value=item.note||'';
+            document.getElementById('edit-sch-shopimgs').value=Array.isArray(item.shopImgs)?item.shopImgs.join('\n'):'';
+            // preview
+            const prev=document.getElementById('edit-sch-mapimg-preview');
+            if(item.mapImg){ prev.src=item.mapImg; prev.style.display='block'; } else { prev.style.display='none'; }
+            document.getElementById('edit-sch-shopimgs-preview').innerHTML='';
+            if(Array.isArray(item.shopImgs)) item.shopImgs.forEach(u=>{ const im=document.createElement('img'); im.src=u; im.style.cssText='width:56px;height:56px;object-fit:cover;border-radius:6px;border:2px solid var(--blue-primary);'; document.getElementById('edit-sch-shopimgs-preview').appendChild(im); });
+            modal.style.display='block';
+            modal.scrollIntoView({behavior:'smooth'});
         });
     });
     document.getElementById('cfg-sch-note').value=cfg('scheduleNote');
@@ -1065,25 +1491,73 @@ document.getElementById('new-sch-special').addEventListener('change',e=>{
     document.getElementById('new-sch-extra').style.display=e.target.checked?'none':'block';
 });
 
+// Edit schedule – special toggle
+document.getElementById('edit-sch-special').addEventListener('change',e=>{
+    document.getElementById('edit-sch-extra').style.display=e.target.checked?'none':'block';
+});
+
+// Save edit schedule
+document.getElementById('save-edit-sch-btn').addEventListener('click',()=>{
+    const idx=parseInt(document.getElementById('edit-sch-idx').value);
+    const isSpecial=document.getElementById('edit-sch-special').checked;
+    const dateReal=document.getElementById('edit-sch-date-real').value;
+    const title=document.getElementById('edit-sch-title').value.trim();
+    if(!title){ showToast('⚠️ กรุณาใส่ชื่อกิจกรรม'); return; }
+    // Format date label
+    let dateLabel=dateReal;
+    if(dateReal){
+        const d=new Date(dateReal+'T00:00:00');
+        dateLabel=d.toLocaleDateString('th-TH',{day:'numeric',month:'long'}).toUpperCase();
+    }
+    const mapImgUrl=document.getElementById('edit-sch-mapimg').value.trim();
+    const shopImgsRaw=document.getElementById('edit-sch-shopimgs').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+    const updated=cfg('schedules');
+    updated[idx]=isSpecial ? {date:dateLabel,dateReal,title,isSpecial:true} : {
+        date:dateLabel, dateReal, title, isSpecial:false,
+        location:document.getElementById('edit-sch-location').value.trim(),
+        mapImg:mapImgUrl,
+        mapUrl:document.getElementById('edit-sch-mapimg').value.trim()||updated[idx]?.mapUrl||'',
+        booth:document.getElementById('edit-sch-booth').value.trim(),
+        stage:document.getElementById('edit-sch-stage').value.trim(),
+        note:document.getElementById('edit-sch-note').value.trim(),
+        shopImgs:shopImgsRaw
+    };
+    save('schedules',updated); renderSchedule(); loadSchedulePanel();
+    document.getElementById('sch-edit-modal').style.display='none';
+    showToast('✅ แก้ไขกิจกรรมแล้ว');
+});
+
+document.getElementById('cancel-edit-sch-btn').addEventListener('click',()=>{
+    document.getElementById('sch-edit-modal').style.display='none';
+});
+
 document.getElementById('add-sch-btn').addEventListener('click',()=>{
-    const date=document.getElementById('new-sch-date').value.trim();
+    const dateReal=document.getElementById('new-sch-date-real').value;
     const title=document.getElementById('new-sch-title').value.trim();
     const isSpecial=document.getElementById('new-sch-special').checked;
-    if(!date||!title) { showToast('⚠️ Date and title required'); return; }
-    const newItem=isSpecial ? {date,title,isSpecial:true} : {
-        date,title,isSpecial:false,
+    if(!dateReal||!title) { showToast('⚠️ Date and title required'); return; }
+    const d=new Date(dateReal+'T00:00:00');
+    const dateLabel=d.toLocaleDateString('th-TH',{day:'numeric',month:'long'}).toUpperCase();
+    const mapImgUrl=document.getElementById('new-sch-mapimg').value.trim();
+    const shopImgsRaw=document.getElementById('new-sch-shopimgs').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+    const newItem=isSpecial ? {date:dateLabel,dateReal,title,isSpecial:true} : {
+        date:dateLabel, dateReal, title, isSpecial:false,
         location:document.getElementById('new-sch-location').value.trim(),
-        mapUrl:document.getElementById('new-sch-map').value.trim(),
+        mapImg:mapImgUrl,
+        mapUrl:document.getElementById('new-sch-mapimg').value.trim(),
         booth:document.getElementById('new-sch-booth').value.trim(),
         stage:document.getElementById('new-sch-stage').value.trim(),
-        note:document.getElementById('new-sch-note').value.trim()
+        note:document.getElementById('new-sch-note').value.trim(),
+        shopImgs:shopImgsRaw
     };
     const updated=cfg('schedules');
     updated.push(newItem);
     save('schedules',updated); renderSchedule(); loadSchedulePanel();
-    ['new-sch-date','new-sch-title','new-sch-location','new-sch-map','new-sch-booth','new-sch-stage','new-sch-note'].forEach(id=>{ document.getElementById(id).value=''; });
+    ['new-sch-title','new-sch-date-real','new-sch-location','new-sch-mapimg','new-sch-booth','new-sch-stage','new-sch-note','new-sch-shopimgs'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
     document.getElementById('new-sch-special').checked=false;
     document.getElementById('new-sch-extra').style.display='block';
+    document.getElementById('new-sch-mapimg-preview').style.display='none';
+    document.getElementById('new-sch-shopimgs-preview').innerHTML='';
     showToast('✅ Event added!');
 });
 
@@ -1092,37 +1566,53 @@ document.getElementById('save-sch-note-btn').addEventListener('click',()=>{
     renderSchedule(); showToast('✅ Note saved!');
 });
 
+// ── File upload → base64 helper ───────────────────────────────
+function fileToBase64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsDataURL(file); }); }
+
+// Upload handlers: new schedule map image
+document.getElementById('new-sch-mapimg-file').addEventListener('change',async function(){
+    if(!this.files[0]) return;
+    const b64=await fileToBase64(this.files[0]);
+    document.getElementById('new-sch-mapimg').value=b64;
+    const prev=document.getElementById('new-sch-mapimg-preview');
+    prev.src=b64; prev.style.display='block';
+    showToast('📷 โหลดรูปแล้ว');
+});
+// Upload handlers: edit schedule map image
+document.getElementById('edit-sch-mapimg-file').addEventListener('change',async function(){
+    if(!this.files[0]) return;
+    const b64=await fileToBase64(this.files[0]);
+    document.getElementById('edit-sch-mapimg').value=b64;
+    const prev=document.getElementById('edit-sch-mapimg-preview');
+    prev.src=b64; prev.style.display='block';
+    showToast('📷 โหลดรูปแล้ว');
+});
+// Upload handlers: new schedule shop images (multiple)
+document.getElementById('new-sch-shopimgs-file').addEventListener('change',async function(){
+    if(!this.files.length) return;
+    const b64s=await Promise.all([...this.files].map(fileToBase64));
+    const cur=document.getElementById('new-sch-shopimgs').value.trim();
+    document.getElementById('new-sch-shopimgs').value=(cur?cur+'\n':'')+b64s.join('\n');
+    const wrap=document.getElementById('new-sch-shopimgs-preview');
+    b64s.forEach(u=>{ const im=document.createElement('img'); im.src=u; im.style.cssText='width:56px;height:56px;object-fit:cover;border-radius:6px;border:2px solid var(--blue-primary);'; wrap.appendChild(im); });
+    showToast(`📷 โหลด ${b64s.length} รูปแล้ว`);
+});
+// Upload handlers: edit schedule shop images (multiple)
+document.getElementById('edit-sch-shopimgs-file').addEventListener('change',async function(){
+    if(!this.files.length) return;
+    const b64s=await Promise.all([...this.files].map(fileToBase64));
+    const cur=document.getElementById('edit-sch-shopimgs').value.trim();
+    document.getElementById('edit-sch-shopimgs').value=(cur?cur+'\n':'')+b64s.join('\n');
+    const wrap=document.getElementById('edit-sch-shopimgs-preview');
+    b64s.forEach(u=>{ const im=document.createElement('img'); im.src=u; im.style.cssText='width:56px;height:56px;object-fit:cover;border-radius:6px;border:2px solid var(--blue-primary);'; wrap.appendChild(im); });
+    showToast(`📷 โหลด ${b64s.length} รูปแล้ว`);
+});
+
 // ── Appearance panel ──────────────────────────────────────────
 function loadAppearancePanel() {
-    const t=cfg('theme');
-    document.getElementById('cfg-color-primary').value     = t.primary||'#00b4d8';
-    document.getElementById('cfg-color-primary-hex').value = t.primary||'#00b4d8';
-    document.getElementById('cfg-color-dark').value        = t.dark||'#0077b6';
-    document.getElementById('cfg-color-dark-hex').value    = t.dark||'#0077b6';
-    document.getElementById('cfg-color-bg').value          = t.bg||'#f0f8ff';
-    document.getElementById('cfg-color-bg-hex').value      = t.bg||'#f0f8ff';
-    document.getElementById('cfg-os-title').value          = cfg('osTitle');
-
-    // sync color picker <-> hex input
-    [['cfg-color-primary','cfg-color-primary-hex'],
-     ['cfg-color-dark','cfg-color-dark-hex'],
-     ['cfg-color-bg','cfg-color-bg-hex']].forEach(([pick,hex])=>{
-        document.getElementById(pick).addEventListener('input',e=>{ document.getElementById(hex).value=e.target.value; });
-        document.getElementById(hex).addEventListener('input',e=>{ if(/^#[0-9a-f]{6}$/i.test(e.target.value)) document.getElementById(pick).value=e.target.value; });
-    });
+    document.getElementById('cfg-os-title').value = cfg('osTitle');
 }
 
-document.getElementById('save-theme-btn').addEventListener('click',()=>{
-    const t={
-        primary: document.getElementById('cfg-color-primary-hex').value||'#00b4d8',
-        dark:    document.getElementById('cfg-color-dark-hex').value||'#0077b6',
-        bg:      document.getElementById('cfg-color-bg-hex').value||'#f0f8ff'
-    };
-    save('theme',t); applyTheme(); showToast('🎨 Theme applied!');
-});
-document.getElementById('reset-theme-btn').addEventListener('click',()=>{
-    save('theme',DEFAULTS.theme); applyTheme(); loadAppearancePanel(); showToast('↺ Theme reset');
-});
 document.getElementById('save-title-btn').addEventListener('click',()=>{
     save('osTitle',document.getElementById('cfg-os-title').value.trim()||'REMIE OS');
     applyTitle(); showToast('✅ Title saved!');
@@ -1148,11 +1638,298 @@ document.getElementById('save-security-btn').addEventListener('click',()=>{
 
 document.getElementById('factory-reset-btn').addEventListener('click',()=>{
     if(!confirm('⚠️ This will DELETE all your changes and reset to defaults.\n\nAre you sure?')) return;
-    ['name','phrases','bio','avatar','socials','gallery','schedules','scheduleNote','theme','osTitle','adminUser','adminPass'].forEach(k=>{
+    ['name','phrases','bio','avatar','socials','gallery','schedules','scheduleNote','theme','osTitle','adminUser','adminPass','shop'].forEach(k=>{
         localStorage.removeItem('remie_'+k);
     });
     showToast('🔄 Factory reset complete. Reloading...');
     setTimeout(()=>location.reload(), 1500);
+});
+
+// ══════════════════════════════════════════════════════════════
+//  SHOP
+// ══════════════════════════════════════════════════════════════
+
+let shopTimerInterval = null;
+
+function getShopStatus() {
+    const s = cfg('shop');
+    const now = new Date();
+    const start = s.start ? new Date(s.start) : null;
+    const end   = s.end   ? new Date(s.end)   : null;
+    if (end && now > end)   return 'expired';
+    if (start && now < start) return 'not_started';
+    return 'active';
+}
+
+function renderShop() {
+    const s = cfg('shop');
+    const status = getShopStatus();
+    const container = document.getElementById('shop-content');
+    if (!container) return;
+    if (shopTimerInterval) { clearInterval(shopTimerInterval); shopTimerInterval = null; }
+
+    let html = '';
+
+    // expired → full dark overlay
+    const isExpired = status === 'expired';
+    if (isExpired) {
+        html += `<div style="background:#111;border-radius:10px;padding:24px;text-align:center;color:#555;margin-bottom:12px;">
+            <div style="font-size:2rem;margin-bottom:8px;">🔒</div>
+            <div style="font-family:'Press Start 2P',cursive;font-size:0.55rem;color:#444;">หมดเวลาการสั่งซื้อแล้ว</div>
+        </div>`;
+    }
+
+    // Header banner
+    html += `<div class="shop-header-banner" style="${isExpired?'filter:grayscale(1);opacity:0.4;':''}">
+        <div class="shop-banner-title">${s.title||'SHOP'}</div>
+        <div class="shop-banner-sub">${s.sub||''}</div>
+    </div>`;
+
+    // Timer bar
+    if (status === 'not_started') {
+        html += `<div class="shop-timer-bar"><div class="shop-timer-label">⏳ ยังไม่ถึงเวลาเปิดขาย — เปิดใน</div><div id="shop-countdown">--:--:--</div></div>`;
+    } else if (status === 'active' && s.end) {
+        html += `<div class="shop-timer-bar"><div class="shop-timer-label">⏱ เหลือเวลา</div><div id="shop-countdown">--:--:--</div></div>`;
+    }
+
+    if (s.note) html += `<div class="shop-section-note">${s.note}</div>`;
+
+    // Items
+    const items = s.items || [];
+    items.forEach(item => {
+        const soldOut = item.status === 'soldout';
+        let cardClass = 'shop-item-card';
+        if (isExpired) cardClass += ' expired-item';
+        else if (soldOut) cardClass += ' sold-out';
+
+        html += `<div class="${cardClass}">`;
+        if (item.img) {
+            html += `<img src="${item.img}" class="shop-item-img" alt="${item.name}" onerror="this.style.display='none'">`;
+        } else {
+            html += `<div class="shop-item-img-placeholder">🛍️</div>`;
+        }
+        html += `<div class="shop-item-name">${item.name}</div>`;
+        if (item.desc) html += `<div class="shop-item-desc">${item.desc}</div>`;
+
+        html += `<div class="shop-price-row">`;
+        if (item.priceMode === 'variants' && item.variants && item.variants.length > 0) {
+            item.variants.forEach(v => { html += `<span class="shop-price-variant">${v.label}: <b>฿${v.price}</b></span>`; });
+        } else {
+            html += `<span class="shop-price-tag">฿${item.price}</span>`;
+        }
+        if (isExpired)  html += `<span class="shop-status-badge expired-badge">⛔ หมดเวลา</span>`;
+        else if (soldOut) html += `<span class="shop-status-badge sold-out-badge">❌ ของหมดแล้ว</span>`;
+        html += `</div>`;
+
+        const orderUrl = item.formUrl || s.igUrl || '#';
+        const hasForm  = !!item.formUrl;
+        if (isExpired) {
+            html += `<button class="shop-buy-btn" disabled>⛔ หมดเวลาแล้ว</button>`;
+        } else if (soldOut) {
+            html += `<button class="shop-buy-btn" disabled>❌ ของหมดแล้ว</button>`;
+        } else {
+            const btnLabel = hasForm ? '📋 กรอกแบบฟอร์มสั่งซื้อ' : '🛒 สั่งซื้อ (IG)';
+            html += `<button class="shop-buy-btn" onclick="window.open('${orderUrl}','_blank')">${btnLabel}</button>`;
+            if (s.afterMsg) html += `<div class="shop-after-msg">📌 ${s.afterMsg}</div>`;
+        }
+        html += `</div>`;
+    });
+
+    if (items.length === 0) {
+        html += `<div class="text-center py-4 text-dim" style="font-size:0.8rem;">ยังไม่มีสินค้า<br><small>เพิ่มได้ในหลังบ้าน (Admin Panel → Shop)</small></div>`;
+    }
+
+    container.innerHTML = html;
+
+    // Countdown
+    if ((status === 'active' || status === 'not_started') && (s.end || s.start)) {
+        const targetDate = status === 'not_started' ? new Date(s.start) : new Date(s.end);
+        shopTimerInterval = setInterval(() => {
+            const diff = targetDate - new Date();
+            const el = document.getElementById('shop-countdown');
+            if (!el) { clearInterval(shopTimerInterval); return; }
+            if (diff <= 0) { clearInterval(shopTimerInterval); renderShop(); return; }
+            const d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000),
+                  m=Math.floor((diff%3600000)/60000), sec=Math.floor((diff%60000)/1000);
+            el.textContent = d>0
+                ? `${d}d ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`
+                : `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+        }, 1000);
+    }
+}
+
+// ── Shop Admin Panel ──────────────────────────────────────────
+
+// Tab switching
+document.querySelectorAll('.shop-tab-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        document.querySelectorAll('.shop-tab-btn').forEach(b=>{ b.classList.remove('active'); b.classList.add('secondary'); });
+        document.querySelectorAll('.shop-tab-content').forEach(c=>c.style.display='none');
+        btn.classList.add('active'); btn.classList.remove('secondary');
+        document.getElementById(btn.dataset.tab).style.display='block';
+        playClick();
+        if(btn.dataset.tab==='tab-shop-items') renderShopAdminList();
+    });
+});
+
+function loadShopPanel() {
+    const s = cfg('shop');
+    document.getElementById('cfg-shop-title').value    = s.title||'';
+    document.getElementById('cfg-shop-sub').value      = s.sub||'';
+    document.getElementById('cfg-shop-note').value     = s.note||'';
+    document.getElementById('cfg-shop-ig').value       = s.igUrl||'';
+    document.getElementById('cfg-shop-aftermsg').value = s.afterMsg||'';
+    document.getElementById('cfg-shop-start').value    = s.start||'';
+    document.getElementById('cfg-shop-end').value      = s.end||'';
+    renderShopAdminList();
+}
+
+function renderShopAdminList() {
+    const s = cfg('shop');
+    const list = document.getElementById('shop-admin-list');
+    if (!list) return;
+    const items = s.items||[];
+    if (items.length===0) { list.innerHTML='<p style="font-size:0.8rem;color:var(--text-dim);margin-bottom:12px;">ยังไม่มีสินค้า กรอกฟอร์มด้านล่างเพื่อเพิ่ม</p>'; return; }
+    list.innerHTML = items.map((item,i)=>{
+        const priceText = item.priceMode==='variants'&&item.variants?.length
+            ? item.variants.map(v=>`${v.label} ฿${v.price}`).join(' / ')
+            : `฿${item.price}`;
+        const statusColor = item.status==='soldout' ? '#e63946' : '#2d9e5a';
+        const statusText  = item.status==='soldout' ? '❌ ของหมด' : '✅ มีสินค้า';
+        return `<div class="shop-row" id="shoprow-${i}">
+            <div style="display:flex;align-items:flex-start;gap:10px;">
+                ${item.img?`<img src="${item.img}" style="width:52px;height:52px;object-fit:cover;border-radius:8px;border:1.5px solid rgba(0,180,216,0.3);flex-shrink:0;" onerror="this.style.display='none'">`:'<div style="width:52px;height:52px;background:#e0f4ff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">🛍️</div>'}
+                <div style="flex:1;min-width:0;">
+                    <div class="shop-row-name">${item.name}</div>
+                    <div class="shop-row-meta">${priceText}</div>
+                    <div style="font-size:0.72rem;margin-top:2px;color:${statusColor};font-weight:600;">${statusText}</div>
+                    ${item.formUrl?`<div style="font-size:0.7rem;color:var(--blue-primary);margin-top:2px;">📋 มี Google Form</div>`:''}
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:10px;">
+                <button class="admin-btn secondary" style="font-size:0.4rem;padding:5px 10px;flex:1;" onclick="openEditItem(${i})">✏️ แก้ไข</button>
+                <select class="admin-field" style="margin:0;padding:4px 6px;font-size:0.7rem;flex:1;" onchange="updateShopItemStatus(${i},this.value)">
+                    <option value="available" ${item.status==='available'?'selected':''}>✅ มีสินค้า</option>
+                    <option value="soldout"   ${item.status==='soldout'?'selected':''}>❌ ของหมด</option>
+                </select>
+                <button class="admin-btn danger" style="font-size:0.4rem;padding:5px 8px;" onclick="deleteShopItem(${i})">🗑</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function openEditItem(idx) {
+    const s=cfg('shop'); const item=s.items[idx];
+    document.getElementById('edit-item-idx').value     = idx;
+    document.getElementById('edit-shop-name').value    = item.name;
+    document.getElementById('edit-shop-desc').value    = item.desc||'';
+    document.getElementById('edit-shop-img').value     = item.img||'';
+    document.getElementById('edit-shop-price-mode').value = item.priceMode||'single';
+    document.getElementById('edit-shop-price').value   = item.price||0;
+    document.getElementById('edit-shop-variants').value= item.variants?.map(v=>`${v.label}:${v.price}`).join('\n')||'';
+    document.getElementById('edit-shop-form').value    = item.formUrl||'';
+    document.getElementById('edit-shop-status').value  = item.status||'available';
+    document.getElementById('edit-shop-single-wrap').style.display   = item.priceMode==='variants'?'none':'block';
+    document.getElementById('edit-shop-variants-wrap').style.display = item.priceMode==='variants'?'block':'none';
+    document.getElementById('shop-edit-modal').style.display = 'block';
+    document.getElementById('shop-edit-modal').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+document.getElementById('edit-shop-price-mode').addEventListener('change',function(){
+    document.getElementById('edit-shop-single-wrap').style.display   = this.value==='single'?'block':'none';
+    document.getElementById('edit-shop-variants-wrap').style.display = this.value==='variants'?'block':'none';
+});
+
+document.getElementById('save-edit-item-btn').addEventListener('click',()=>{
+    const idx = parseInt(document.getElementById('edit-item-idx').value);
+    const s=cfg('shop');
+    const mode=document.getElementById('edit-shop-price-mode').value;
+    let variants=[], price=0;
+    if(mode==='variants'){
+        const raw=document.getElementById('edit-shop-variants').value.trim().split('\n').filter(Boolean);
+        variants=raw.map(line=>{ const [label,...rest]=line.split(':'); return {label:label.trim(),price:parseInt(rest.join(':'))||0}; });
+        price=variants[0]?.price||0;
+    } else {
+        price=parseInt(document.getElementById('edit-shop-price').value)||0;
+    }
+    s.items[idx]={
+        ...s.items[idx],
+        name:    document.getElementById('edit-shop-name').value.trim(),
+        desc:    document.getElementById('edit-shop-desc').value.trim(),
+        img:     document.getElementById('edit-shop-img').value.trim(),
+        priceMode: mode, variants, price,
+        formUrl: document.getElementById('edit-shop-form').value.trim(),
+        status:  document.getElementById('edit-shop-status').value,
+    };
+    save('shop',s); renderShopAdminList(); renderShop();
+    document.getElementById('shop-edit-modal').style.display='none';
+    showToast('✅ แก้ไขสินค้าแล้ว');
+});
+
+document.getElementById('cancel-edit-item-btn').addEventListener('click',()=>{
+    document.getElementById('shop-edit-modal').style.display='none';
+});
+
+function updateShopItemStatus(idx, status) {
+    const s=cfg('shop'); s.items[idx].status=status;
+    save('shop',s); renderShop(); showToast('✅ อัพเดตสถานะแล้ว');
+}
+function deleteShopItem(idx) {
+    if(!confirm('ลบสินค้านี้?')) return;
+    const s=cfg('shop'); s.items.splice(idx,1);
+    save('shop',s); renderShopAdminList(); renderShop(); showToast('🗑 ลบสินค้าแล้ว');
+}
+
+document.getElementById('save-shop-global-btn').addEventListener('click',()=>{
+    const s=cfg('shop');
+    s.title    = document.getElementById('cfg-shop-title').value.trim();
+    s.sub      = document.getElementById('cfg-shop-sub').value.trim();
+    s.note     = document.getElementById('cfg-shop-note').value.trim();
+    s.igUrl    = document.getElementById('cfg-shop-ig').value.trim();
+    s.afterMsg = document.getElementById('cfg-shop-aftermsg').value.trim();
+    save('shop',s); renderShop(); showToast('✅ บันทึกข้อมูลร้านแล้ว');
+});
+
+document.getElementById('save-shop-period-btn').addEventListener('click',()=>{
+    const s=cfg('shop');
+    s.start=document.getElementById('cfg-shop-start').value;
+    s.end  =document.getElementById('cfg-shop-end').value;
+    save('shop',s); renderShop(); showToast('✅ บันทึกช่วงเวลาแล้ว');
+});
+
+// Price mode toggle (add new item)
+document.getElementById('new-shop-price-mode').addEventListener('change',function(){
+    document.getElementById('new-shop-single-wrap').style.display   = this.value==='single'?'block':'none';
+    document.getElementById('new-shop-variants-wrap').style.display = this.value==='variants'?'block':'none';
+});
+
+document.getElementById('add-shop-item-btn').addEventListener('click',()=>{
+    const name=document.getElementById('new-shop-name').value.trim();
+    if(!name){ showToast('❌ กรุณาใส่ชื่อสินค้า'); return; }
+    const mode=document.getElementById('new-shop-price-mode').value;
+    let variants=[], price=0;
+    if(mode==='variants'){
+        const raw=document.getElementById('new-shop-variants').value.trim().split('\n').filter(Boolean);
+        variants=raw.map(line=>{ const [label,...rest]=line.split(':'); return {label:label.trim(),price:parseInt(rest.join(':'))||0}; });
+        price=variants[0]?.price||0;
+    } else {
+        price=parseInt(document.getElementById('new-shop-price').value)||0;
+    }
+    const newItem={
+        id:'item_'+Date.now(), name,
+        desc:    document.getElementById('new-shop-desc').value.trim(),
+        img:     document.getElementById('new-shop-img').value.trim(),
+        priceMode: mode, variants, price,
+        formUrl: document.getElementById('new-shop-form').value.trim(),
+        status:  document.getElementById('new-shop-status').value
+    };
+    const s=cfg('shop'); s.items.push(newItem); save('shop',s);
+    renderShopAdminList(); renderShop(); showToast('✅ เพิ่มสินค้าแล้ว');
+    ['new-shop-name','new-shop-desc','new-shop-img','new-shop-price','new-shop-variants','new-shop-form'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('new-shop-status').value='available';
+    document.getElementById('new-shop-price-mode').value='single';
+    document.getElementById('new-shop-single-wrap').style.display='block';
+    document.getElementById('new-shop-variants-wrap').style.display='none';
 });
 
 // ══════════════════════════════════════════════════════════════
@@ -1164,6 +1941,7 @@ window.addEventListener('load', () => {
     renderProfile();
     renderGallery();
     renderSchedule();
+    renderShop();
     resizeCanvas();
     initParticles();
     animateParticles();
