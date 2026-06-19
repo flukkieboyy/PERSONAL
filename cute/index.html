@@ -836,7 +836,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
 (function(){
 // ── ⚙️ ตั้งค่าที่นี่ ─────────────────────────────────────────
 const KV_URL   = "https://assured-guinea-98984.upstash.io";  // จาก Vercel KV Dashboard
-const KV_TOKEN = "gQAAAAAAAYKoAAIgcDEyMzE1NWVhMTVjOGI0YjUwYTEwNjgwODNjYzZiMmJmMQ";                      // จาก Vercel KV Dashboard
+const KV_TOKEN = "ggAAAAAAAYKoAAIgcDHil04BPI_K33U9xNlmkfP8AlFE5Wk7_JqTDglu6jJUcw";                      // จาก Vercel KV Dashboard
 // ─────────────────────────────────────────────────────────────
 
 const DB_KEYS  = ['name','phrases','bio','avatar','socials','gallery','schedules','scheduleNote','theme','osTitle','shop'];
@@ -2162,19 +2162,24 @@ window.addEventListener('load', async () => {
     const introText=document.getElementById('intro-text');
     const introSpinner=document.getElementById('intro-spinner');
 
-    // ── ดึง KV ก่อน (ทำระหว่างที่ intro แสดงอยู่ ผู้ใช้ยังไม่เห็น) ──
-    introText.textContent='SYNCING DATA...';
-    if(typeof window.__kvInitialPull === 'function'){
-        await window.__kvInitialPull();
-    }
+    // ── render ด้วยข้อมูลที่มีอยู่ในเครื่อง (LocalStorage / Defaults) ทันที ไม่ต้องรอดึงเสร็จ ──
+	applyTheme();
+	applyTitle();
+	renderProfile();
+	renderGallery();
+	renderSchedule();
+	renderShop();
 
-    // ── render ด้วยข้อมูลล่าสุดจาก KV ──
-    applyTheme();
-    applyTitle();
-    renderProfile();
-    renderGallery();
-    renderSchedule();
-    renderShop();
+	// ── ปล่อยให้มันแอบไปดึงข้อมูลใน Background โดยไม่ต้องใส่ await ──
+	if(typeof window.__kvInitialPull === 'function'){
+		window.__kvInitialPull().then(() => {
+			// พอข้อมูลใหม่มาถึง ค่อยสั่งเรนเดอร์ซ้ำอีกรอบเงียบๆ
+			renderProfile();
+			renderGallery();
+			renderSchedule();
+			renderShop();
+		});
+	}
 
     // ── พร้อมแล้ว แสดงปุ่ม boot ──
     introSpinner.classList.add('d-none');
