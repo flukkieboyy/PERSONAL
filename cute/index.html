@@ -840,7 +840,9 @@ const KV_TOKEN = "ggAAAAAAAYKoAAIgcDHil04BPI_K33U9xNlmkfP8AlFE5Wk7_JqTDglu6jJUcw
 // ─────────────────────────────────────────────────────────────
 
 const DB_KEYS  = ['name','phrases','bio','avatar','socials','gallery','schedules','scheduleNote','theme','osTitle','shop'];
+const ALL_KV_NAMES = DB_KEYS.map(k=>'remie_'+k).concat(['remie__version']); // ทุกคีย์จริงใน KV รวม version
 const POLL_MS  = 4000;   // polling ทุก 4 วินาที (เร็ว + ประหยัด quota)
+const FETCH_TIMEOUT_MS = 4000; // ★ ใหม่: ตัดการรอถ้า KV ตอบช้ากว่า 4 วิ จะไม่ค้างหน้า boot
 let   _lastWrite = 0;    // timestamp ที่เราเขียนเองล่าสุด
 let   _pollTimer = null;
 let   _etag      = '';   // ใช้ track version รวม
@@ -856,35 +858,64 @@ function showUpdateBanner(){
 }
 window.markKvWrite = function(){ _lastWrite = Date.now(); };
 
-// ── KV REST wrappers ─────────────────────────────────────────
-async function kvGet(key){
-    const r=await fetch(`${KV_URL}/get/remie_${key}`,{
-        headers:{Authorization:`Bearer ${KV_TOKEN}`}
-    });
-    const j=await r.json();
-    return j.result;          // null หรือ JSON string
+// ── ★ ใหม่: fetch ที่มี timeout (ใช้ AbortController ตัดการรอเอง) ──
+async function fetchTimeout(url, opts={}, ms=FETCH_TIMEOUT_MS){
+    const ctrl = new AbortController();
+    const id = setTimeout(()=>ctrl.abort(), ms);
+    try{
+        return await fetch(url, {...opts, signal: ctrl.signal});
+    } finally {
+        clearTimeout(id);
+    }
 }
+
+// ── KV REST wrappers (ใช้สำหรับเขียนข้อมูล — ยังคงทีละคีย์) ──
 async function kvSet(key,val){
-    await fetch(`${KV_URL}/set/remie_${key}`,{
+    await fetchTimeout(`${KV_URL}/set/remie_${key}`,{
         method:'POST',
         headers:{Authorization:`Bearer ${KV_TOKEN}`,'Content-Type':'application/json'},
         body:JSON.stringify({value:JSON.stringify(val)})
     });
 }
-// ใช้ key พิเศษเก็บ timestamp version
-async function kvGetVersion(){
-    const r=await fetch(`${KV_URL}/get/remie__version`,{headers:{Authorization:`Bearer ${KV_TOKEN}`}});
-    const j=await r.json();
-    return j.result||'0';
-}
 async function kvBumpVersion(){
     const v=String(Date.now());
-    await fetch(`${KV_URL}/set/remie__version`,{
+    await fetchTimeout(`${KV_URL}/set/remie__version`,{
         method:'POST',
         headers:{Authorization:`Bearer ${KV_TOKEN}`,'Content-Type':'application/json'},
         body:JSON.stringify({value:v})
     });
     return v;
+}
+
+// ── ★ ใหม่: ดึงคีย์ทั้งหมด + version ในคำขอเดียว ผ่าน Upstash /pipeline ──
+//    ลด round-trip จาก 12 ครั้ง (11 คีย์ + version) เหลือแค่ 1 ครั้ง
+//    ถ้า pipeline ใช้ไม่ได้ด้วยเหตุผลใดก็ตาม จะ fallback ไปดึงทีละคีย์แบบ parallel (มี timeout กันค้างเหมือนกัน)
+async function kvGetAllPipelined(){
+    try{
+        const cmds = ALL_KV_NAMES.map(name=>['GET', name]);
+        const r = await fetchTimeout(`${KV_URL}/pipeline`,{
+            method:'POST',
+            headers:{Authorization:`Bearer ${KV_TOKEN}`,'Content-Type':'application/json'},
+            body:JSON.stringify(cmds)
+        });
+        if(!r.ok) throw new Error('pipeline http '+r.status);
+        const arr = await r.json();
+        if(!Array.isArray(arr) || arr.length!==ALL_KV_NAMES.length) throw new Error('pipeline unexpected shape');
+        const out={};
+        ALL_KV_NAMES.forEach((name,i)=>{ out[name] = (arr[i] && 'result' in arr[i]) ? arr[i].result : null; });
+        return out;
+    }catch(e){
+        console.warn('kv pipeline failed, fallback to individual GETs', e);
+        const out={};
+        await Promise.all(ALL_KV_NAMES.map(async name=>{
+            try{
+                const r=await fetchTimeout(`${KV_URL}/get/${name}`,{headers:{Authorization:`Bearer ${KV_TOKEN}`}});
+                const j=await r.json();
+                out[name]=j.result;
+            }catch{ out[name]=null; }
+        }));
+        return out;
+    }
 }
 
 // ── fbSave → ตอนนี้ส่งขึ้น Vercel KV ────────────────────────
@@ -901,16 +932,17 @@ window.fbSave = async function(key,val){
     }
 };
 
-// ── Initial pull: KV → localStorage (แน่ใจว่าได้ข้อมูลล่าสุด) ──
+// ── Initial pull: KV → localStorage (รวมเป็นคำขอเดียว + มี timeout) ──
 async function initialPull(){
     setSyncDot('syncing');
     try{
-        await Promise.all(DB_KEYS.map(async key=>{
-            const str=await kvGet(key);
+        const all = await kvGetAllPipelined();
+        DB_KEYS.forEach(key=>{
+            const str = all['remie_'+key];
             if(str!=null) localStorage.setItem('remie_'+key,str);
             // ถ้า KV ไม่มี key นี้เลย (null) → ปล่อยให้ใช้ DEFAULTS ตามปกติ
-        }));
-        _etag=await kvGetVersion();
+        });
+        _etag = all['remie__version'] || '0';
         setSyncDot('online');
     }catch(e){
         console.warn('initialPull error',e);
@@ -918,19 +950,22 @@ async function initialPull(){
     }
 }
 
-// ── Polling: ตรวจ version ทุก 4 วิ ──────────────────────────
+// ── Polling: ตรวจ version ทุก 4 วิ (เช็คแค่ 1 คีย์ ไม่กระทบความเร็ว boot) ──
 async function pollVersion(){
     try{
-        const v=await kvGetVersion();
+        const r=await fetchTimeout(`${KV_URL}/get/remie__version`,{headers:{Authorization:`Bearer ${KV_TOKEN}`}});
+        const j=await r.json();
+        const v=j.result||'0';
         if(v===_etag) return;              // ไม่มีอะไรเปลี่ยน
         const ownWrite=(Date.now()-_lastWrite)<3000;
         if(ownWrite){ _etag=v; return; }   // เปลี่ยนโดยตัวเอง — ไม่ต้องแจ้ง
 
-        // คนอื่นเปลี่ยน → ดึงข้อมูลใหม่ทั้งหมด
-        await Promise.all(DB_KEYS.map(async key=>{
-            const str=await kvGet(key);
+        // คนอื่นเปลี่ยน → ดึงข้อมูลใหม่ทั้งหมด (รวมคำขอเดียวเหมือนกัน)
+        const all = await kvGetAllPipelined();
+        DB_KEYS.forEach(key=>{
+            const str = all['remie_'+key];
             if(str!=null) localStorage.setItem('remie_'+key,str);
-        }));
+        });
         _etag=v;
         showUpdateBanner();
     }catch{}
