@@ -193,34 +193,15 @@ textarea.admin-field { resize:vertical; min-height:70px; }
 .gal-row-id { font-family:'Press Start 2P',cursive; font-size:0.5rem; color:var(--blue-primary); }
 .gal-row-count { font-family:'Sarabun',sans-serif; font-size:0.85rem; color:var(--text-dim); }
 
+/* Gallery edit image thumbnail */
+.gal-thumb-wrap { position:relative; display:inline-block; }
+.gal-thumb-wrap img { width:72px; height:72px; object-fit:cover; border-radius:8px; border:2px solid var(--blue-primary); display:block; transition:0.2s; }
+.gal-thumb-wrap img:hover { border-color:var(--blue-dark); transform:scale(1.05); }
+.gal-thumb-del { position:absolute; top:-7px; right:-7px; background:#e63946; color:white; border:2px solid white; border-radius:50%; width:22px; height:22px; font-size:0.6rem; line-height:18px; text-align:center; cursor:var(--cur-point) !important; padding:0; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
+.gal-thumb-del:hover { background:#c1121f; transform:scale(1.1); }
+
 /* Separator */
 .admin-sep { border:none; border-top:1.5px solid rgba(0,180,216,0.15); margin:16px 0; }
-
-/* Upload button – ชัดเจน มีกรอบ */
-.upload-btn {
-    display:inline-flex; align-items:center; gap:6px;
-    border:2px dashed var(--blue-primary);
-    background:#e8f8fd; color:var(--blue-primary);
-    border-radius:8px; padding:9px 16px;
-    font-family:'Sarabun',sans-serif; font-size:0.92rem; font-weight:600;
-    cursor:var(--cur-point) !important;
-    transition:all 0.2s; margin-bottom:6px; width:100%;
-    justify-content:center; box-shadow:0 2px 6px rgba(0,180,216,0.15);
-}
-.upload-btn:hover { background:var(--blue-primary); color:white; border-style:solid; }
-.upload-btn i { font-size:1rem; }
-
-/* Real-time status bar */
-#rt-status-bar {
-    position:fixed; bottom:52px; left:0; width:100%;
-    background:rgba(0,180,216,0.92); color:white;
-    font-family:'Press Start 2P',cursive; font-size:0.45rem;
-    text-align:center; padding:5px 10px; z-index:1999;
-    display:none; animation:slideUp 0.3s ease;
-    backdrop-filter:blur(4px);
-}
-#rt-status-bar.show { display:block; }
-@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
 
 /* Firebase sync dot */
 .sync-dot {
@@ -327,7 +308,6 @@ textarea.admin-field { resize:vertical; min-height:70px; }
 
 <!-- ══ UPDATE BANNER ════════════════════════════════════ -->
 <div id="update-banner" onclick="location.reload()">
-    <span id="sync-dot" class="sync-dot syncing"></span>
     <span>🔄 มีอัพเดตใหม่! คลิกที่นี่เพื่อรีโหลด</span>
 </div>
 
@@ -340,7 +320,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
     <div class="top-info d-flex justify-content-between align-items-center px-3 py-2">
         <div class="sys-label pixel-font">REMIE OS</div>
         <div class="d-flex align-items-center gap-3">
-            <span id="sync-dot" class="sync-dot syncing" title="Firebase sync status"></span>
+            <span id="sync-dot" class="sync-dot syncing" title="สถานะซิงค์ข้อมูล"></span>
             <div id="date" class="pixel-font" style="font-size:0.5rem;opacity:0.8;">-- ---</div>
             <div id="clock" class="pixel-font">00:00</div>
         </div>
@@ -521,12 +501,9 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                         <input class="admin-field" type="text" id="cfg-phrases" placeholder="My Name is Remie, QT🍒, Welcome to REMIE OS">
                         <label class="admin-label">Short Bio</label>
                         <textarea class="admin-field" id="cfg-bio" placeholder="Short description shown on profile window..."></textarea>
-                        <label class="admin-label">รูป Avatar (URL หรืออัพจากเครื่อง)</label>
+                        <label class="admin-label">รูป Avatar (URL)</label>
                         <input class="admin-field" type="url" id="cfg-avatar" placeholder="https://...">
-                        <div style="margin-bottom:12px;">
-                            <label class="upload-btn"><input type="file" id="cfg-avatar-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
-                        </div>
-                        <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
+                        <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;margin-top:4px;">
                             <img id="cfg-avatar-preview" src="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--blue-primary);object-fit:cover;display:none;">
                             <button class="admin-btn secondary" id="cfg-avatar-preview-btn" style="font-size:0.45rem;">PREVIEW</button>
                         </div>
@@ -548,14 +525,59 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                 <div class="admin-panel" id="panel-gallery">
                     <div class="panel-title">GALLERY SETS</div>
                     <div id="gallery-admin-list"></div>
+
+                    <!-- Edit set modal -->
+                    <div id="gal-edit-modal" style="display:none;background:#fff;border:2px solid var(--blue-primary);border-radius:12px;padding:18px;margin-bottom:16px;position:relative;">
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                            <span style="font-size:1.3rem;">🖼️</span>
+                            <span class="admin-card-title" style="margin:0;font-size:1rem;">แก้ไขชุดรูป</span>
+                        </div>
+                        <input type="hidden" id="edit-gal-idx">
+
+                        <label class="admin-label">ชื่อชุดรูป (Label)</label>
+                        <input class="admin-field" type="text" id="edit-gal-label" placeholder="e.g. Summer 2025">
+
+                        <!-- Current images in set -->
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                            <label class="admin-label" style="margin:0;font-size:0.95rem;">📋 รูปในชุดนี้</label>
+                            <span id="edit-gal-count" style="color:var(--blue-primary);font-family:'Press Start 2P',cursive;font-size:0.45rem;background:#e0f4ff;padding:3px 8px;border-radius:20px;"></span>
+                        </div>
+                        <div id="edit-gal-imglist" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;min-height:70px;background:#f0f8ff;border:1.5px dashed rgba(0,180,216,0.4);border-radius:10px;padding:10px;align-content:flex-start;">
+                            <span style="color:var(--text-dim);font-size:0.85rem;width:100%;text-align:center;padding-top:14px;" id="edit-gal-empty-msg">— ยังไม่มีรูป —</span>
+                        </div>
+
+                        <!-- Add URL section -->
+                        <div style="background:#f0f8ff;border:1.5px solid rgba(0,180,216,0.3);border-radius:10px;padding:14px;margin-bottom:14px;">
+                            <label class="admin-label" style="color:var(--blue-dark);margin-bottom:6px;">🔗 เพิ่มลิงก์รูป (URL) ทีละบรรทัด</label>
+                            <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:8px;">วาง URL รูปแต่ละบรรทัด กด Preview เพื่อดูตัวอย่างก่อนเพิ่ม</p>
+                            <textarea class="admin-field" id="edit-gal-urls" rows="4" placeholder="https://img1.jpg&#10;https://img2.jpg&#10;https://img3.jpg" style="font-size:0.82rem;font-family:monospace;background:#fff;"></textarea>
+                            <div id="edit-gal-url-preview" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;min-height:0;"></div>
+                            <div style="display:flex;gap:8px;">
+                                <button class="admin-btn secondary" id="edit-gal-preview-url-btn" style="font-size:0.42rem;padding:8px 12px;white-space:nowrap;">👁 Preview</button>
+                                <button class="admin-btn" id="edit-gal-add-url-btn" style="font-size:0.42rem;flex:1;padding:8px 12px;">✅ เพิ่มรูปเข้าชุดนี้</button>
+                            </div>
+                        </div>
+
+                        <div style="display:flex;gap:8px;margin-top:4px;">
+                            <button class="admin-btn" id="save-gal-edit-btn" style="flex:1;padding:10px;">💾 บันทึก</button>
+                            <button class="admin-btn secondary" id="cancel-gal-edit-btn" style="padding:10px 16px;">ยกเลิก</button>
+                        </div>
+                    </div>
+
                     <hr class="admin-sep">
                     <div class="admin-card">
-                        <div class="admin-card-title">Add New Set</div>
-                        <label class="admin-label">Set Label</label>
+                        <div class="admin-card-title">➕ เพิ่มชุดรูปใหม่</div>
+                        <label class="admin-label">ชื่อชุดรูป <span style="color:#e63946;">*</span></label>
                         <input class="admin-field" type="text" id="new-set-label" placeholder="e.g. Summer 2025">
-                        <label class="admin-label">Image URLs (one per line)</label>
-                        <textarea class="admin-field" id="new-set-urls" rows="5" placeholder="https://image1.jpg&#10;https://image2.jpg"></textarea>
-                        <button class="admin-btn" id="add-set-btn">+ ADD SET</button>
+                        <label class="admin-label" style="color:var(--blue-dark);">🔗 วาง URL รูป ทีละบรรทัด <span style="color:#e63946;">*</span></label>
+                        <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:8px;">วาง URL รูปแต่ละบรรทัด กด Preview เพื่อดูตัวอย่างก่อนบันทึก</p>
+                        <textarea class="admin-field" id="new-set-urls" rows="4" placeholder="https://image1.jpg&#10;https://image2.jpg&#10;https://image3.jpg" style="font-size:0.82rem;font-family:monospace;"></textarea>
+                        <!-- Preview strip -->
+                        <div id="new-set-url-preview" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;min-height:0;"></div>
+                        <div style="display:flex;gap:8px;">
+                            <button class="admin-btn secondary" id="preview-set-btn" style="font-size:0.45rem;padding:9px 14px;white-space:nowrap;">👁 Preview</button>
+                            <button class="admin-btn" id="add-set-btn" style="flex:1;padding:9px;">✅ สร้างชุดรูป</button>
+                        </div>
                     </div>
                 </div>
 
@@ -577,21 +599,17 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                         <div id="edit-sch-extra">
                             <label class="admin-label">ชื่อสถานที่</label>
                             <input class="admin-field" type="text" id="edit-sch-location" placeholder="e.g. MCC Hall The Mall Bangkapi">
-                            <label class="admin-label">รูปแผนที่ / รูปสถานที่ (URL หรืออัพจากเครื่อง)</label>
-                            <div class="upload-row">
-                                <input class="admin-field" type="url" id="edit-sch-mapimg" placeholder="https://... หรืออัพรูปด้านล่าง" style="margin-bottom:6px;">
-                                <label class="upload-btn"><input type="file" id="edit-sch-mapimg-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
-                                <img id="edit-sch-mapimg-preview" src="" style="display:none;width:100%;border-radius:8px;margin-top:6px;border:1.5px solid rgba(0,180,216,0.3);">
-                            </div>
+                            <label class="admin-label">รูปแผนที่ / รูปสถานที่ (URL)</label>
+                            <input class="admin-field" type="url" id="edit-sch-mapimg" placeholder="https://...">
+                            <img id="edit-sch-mapimg-preview" src="" style="display:none;width:100%;border-radius:8px;margin-bottom:10px;border:1.5px solid rgba(0,180,216,0.3);">
                             <label class="admin-label">บูธ</label>
                             <input class="admin-field" type="text" id="edit-sch-booth" placeholder="e.g. i41-46">
                             <label class="admin-label">Stage</label>
                             <input class="admin-field" type="text" id="edit-sch-stage" placeholder="e.g. ✅ 14:00">
                             <label class="admin-label">หมายเหตุ</label>
                             <input class="admin-field" type="text" id="edit-sch-note" placeholder="e.g. ❗ Order Drinks Only">
-                            <label class="admin-label">รูปสินค้าที่ขายในงาน (URL หรืออัพจากเครื่อง แต่ละบรรทัด)</label>
+                            <label class="admin-label">รูปสินค้าที่ขายในงาน (URL ทีละบรรทัด)</label>
                             <textarea class="admin-field" id="edit-sch-shopimgs" rows="3" placeholder="https://img1.jpg&#10;https://img2.jpg"></textarea>
-                            <label class="upload-btn" style="margin-bottom:10px;"><input type="file" id="edit-sch-shopimgs-file" accept="image/*" multiple style="display:none;">📁 เลือกรูปสินค้าจากเครื่อง (เลือกได้หลายรูป)</label>
                             <div id="edit-sch-shopimgs-preview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
                         </div>
                         <div style="display:flex;gap:8px;margin-top:4px;">
@@ -615,21 +633,17 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                         <div id="new-sch-extra">
                             <label class="admin-label">ชื่อสถานที่</label>
                             <input class="admin-field" type="text" id="new-sch-location" placeholder="e.g. MCC Hall The Mall Bangkapi">
-                            <label class="admin-label">รูปแผนที่ / รูปสถานที่ (URL หรืออัพจากเครื่อง)</label>
-                            <div class="upload-row">
-                                <input class="admin-field" type="url" id="new-sch-mapimg" placeholder="https://... หรืออัพรูปด้านล่าง" style="margin-bottom:6px;">
-                                <label class="upload-btn"><input type="file" id="new-sch-mapimg-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
-                                <img id="new-sch-mapimg-preview" src="" style="display:none;width:100%;border-radius:8px;margin-top:6px;border:1.5px solid rgba(0,180,216,0.3);">
-                            </div>
+                            <label class="admin-label">รูปแผนที่ / รูปสถานที่ (URL)</label>
+                            <input class="admin-field" type="url" id="new-sch-mapimg" placeholder="https://...">
+                            <img id="new-sch-mapimg-preview" src="" style="display:none;width:100%;border-radius:8px;margin-bottom:10px;border:1.5px solid rgba(0,180,216,0.3);">
                             <label class="admin-label">บูธ</label>
                             <input class="admin-field" type="text" id="new-sch-booth" placeholder="e.g. i41-46">
                             <label class="admin-label">Stage</label>
                             <input class="admin-field" type="text" id="new-sch-stage" placeholder="e.g. ✅ 14:00">
                             <label class="admin-label">หมายเหตุ</label>
                             <input class="admin-field" type="text" id="new-sch-note" placeholder="e.g. ❗ Order Drinks Only">
-                            <label class="admin-label">รูปสินค้าที่ขายในงาน (URL หรืออัพจากเครื่อง แต่ละบรรทัด)</label>
+                            <label class="admin-label">รูปสินค้าที่ขายในงาน (URL ทีละบรรทัด)</label>
                             <textarea class="admin-field" id="new-sch-shopimgs" rows="3" placeholder="https://img1.jpg&#10;https://img2.jpg"></textarea>
-                            <label class="upload-btn" style="margin-bottom:10px;"><input type="file" id="new-sch-shopimgs-file" accept="image/*" multiple style="display:none;">📁 เลือกรูปสินค้าจากเครื่อง (เลือกได้หลายรูป)</label>
                             <div id="new-sch-shopimgs-preview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
                         </div>
                         <button class="admin-btn mt-2" id="add-sch-btn" style="width:100%;">➕ เพิ่มกิจกรรม</button>
@@ -701,8 +715,11 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                             <input class="admin-field" type="text" id="edit-shop-name">
                             <label class="admin-label">คำอธิบาย</label>
                             <textarea class="admin-field" id="edit-shop-desc" rows="2"></textarea>
-                            <label class="admin-label">รูปภาพ URL</label>
-                            <input class="admin-field" type="url" id="edit-shop-img">
+                            <label class="admin-label">รูปภาพ (URL)</label>
+                            <input class="admin-field" type="url" id="edit-shop-img" placeholder="https://...">
+                            <div id="edit-shop-img-preview-wrap" style="margin-bottom:12px;display:none;">
+                                <img id="edit-shop-img-preview" src="" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;border:1.5px solid rgba(0,180,216,0.3);">
+                            </div>
                             <label class="admin-label">โหมดราคา</label>
                             <select class="admin-field" id="edit-shop-price-mode" style="cursor:var(--cur-point) !important;">
                                 <option value="single">ราคาเดียว</option>
@@ -740,8 +757,11 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                             <input class="admin-field" type="text" id="new-shop-name" placeholder="e.g. BIRTHDAY T-SHIRT">
                             <label class="admin-label">คำอธิบาย</label>
                             <textarea class="admin-field" id="new-shop-desc" rows="2" placeholder="รายละเอียดสินค้า..."></textarea>
-                            <label class="admin-label">รูปภาพ URL</label>
+                            <label class="admin-label">รูปภาพ (URL)</label>
                             <input class="admin-field" type="url" id="new-shop-img" placeholder="https://...">
+                            <div id="new-shop-img-preview-wrap" style="margin-bottom:12px;display:none;">
+                                <img id="new-shop-img-preview" src="" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;border:1.5px solid rgba(0,180,216,0.3);">
+                            </div>
                             <label class="admin-label">โหมดราคา</label>
                             <select class="admin-field" id="new-shop-price-mode" style="cursor:var(--cur-point) !important;">
                                 <option value="single">ราคาเดียว</option>
@@ -797,88 +817,142 @@ textarea.admin-field { resize:vertical; min-height:70px; }
 </div><!-- /admin-overlay -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Firebase Realtime DB (ESM) -->
-<script type="module">
-// ══════════════════════════════════════════════════════════════
-//  FIREBASE REALTIME DATABASE — REMIE OS
-//  🔧 แก้ไข firebaseConfig ให้ตรงกับ Firebase project ของคุณ
-// ══════════════════════════════════════════════════════════════
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, get, onValue }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<!--
+═══════════════════════════════════════════════════════════
+  REMIE OS — VERCEL KV SYNC
+  ─────────────────────────────────────────────────────────
+  วิธีตั้งค่า (ทำครั้งเดียว):
+  1. สร้าง Vercel project → Storage → KV → Create Database
+  2. ดู REST Token ใน KV Dashboard (KV_REST_API_URL + KV_REST_API_TOKEN)
+  3. แก้ค่าด้านล่าง 2 บรรทัด แล้ว deploy ขึ้น Vercel
+  ─────────────────────────────────────────────────────────
+  ⚠️  ห้าม commit token ใน public repo!
+      ให้ใช้ Vercel Environment Variables แทน:
+      - VITE_KV_URL  และ  VITE_KV_TOKEN
+      หรือใส่ตรงนี้ถ้าเป็น private repo เท่านั้น
+═══════════════════════════════════════════════════════════
+-->
+<script>
+(function(){
+// ── ⚙️ ตั้งค่าที่นี่ ─────────────────────────────────────────
+const KV_URL   = "https://assured-guinea-98984.upstash.io";  // จาก Vercel KV Dashboard
+const KV_TOKEN = "ggAAAAAAAYKoAAIgcDHil04BPI_K33U9xNlmkfP8AlFE5Wk7_JqTDglu6jJUcw";                      // จาก Vercel KV Dashboard
+// ─────────────────────────────────────────────────────────────
 
-// ── ⚙️ กรอก Firebase config ของคุณที่นี่ ──────────────────
-const firebaseConfig = {
-    apiKey:            "AIzaSyDF9Vq35P3YlpE0Ly-NbiPuHk0OcOcrmP8",
-    authDomain:        "remiie.firebaseapp.com",
-    databaseURL:       "https://remiie-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId:         "remiie",
-    storageBucket:     "remiie.firebasestorage.app",
-    messagingSenderId: "450473310310",
-    appId:             "1:450473310310:web:9a0fcef94d091c5d3ad5a7"
-};
-// ───────────────────────────────────────────────────────────
+const DB_KEYS  = ['name','phrases','bio','avatar','socials','gallery','schedules','scheduleNote','theme','osTitle','shop'];
+const POLL_MS  = 4000;   // polling ทุก 4 วินาที (เร็ว + ประหยัด quota)
+let   _lastWrite = 0;    // timestamp ที่เราเขียนเองล่าสุด
+let   _pollTimer = null;
+let   _etag      = '';   // ใช้ track version รวม
 
-const fbApp = initializeApp(firebaseConfig);
-const db    = getDatabase(fbApp);
+// ── helpers ──────────────────────────────────────────────────
+function setSyncDot(state){
+    const d=document.getElementById('sync-dot');
+    if(d) d.className='sync-dot '+state;
+}
+function showUpdateBanner(){
+    const b=document.getElementById('update-banner');
+    if(b) b.classList.add('show');
+}
+window.markKvWrite = function(){ _lastWrite = Date.now(); };
 
-const DB_KEYS = ['name','phrases','bio','avatar','socials','gallery','schedules','scheduleNote','theme','osTitle','shop','adminUser','adminPass'];
-
-// ── fbSave: เขียน Firebase + localStorage พร้อมกัน ──────────
-window.fbSave = function(key, val) {
-    window.markFbWrite();
-    set(ref(db, 'remie/' + key), val).catch(e => console.warn('fbSave error', e));
-};
-
-// ── Sync dot helper ──────────────────────────────────────────
-window.setSyncDot = function(state) {
-    const d = document.getElementById('sync-dot');
-    if (!d) return;
-    d.className = 'sync-dot ' + state;
-};
-
-// ── Update banner ────────────────────────────────────────────
-window.showUpdateBanner = function() {
-    const b = document.getElementById('update-banner');
-    if (b) b.classList.add('show');
-};
-
-// ── Real-time listeners (อื่นเปลี่ยน → แจ้งเตือน) ──────────
-let _lastFbWrite = 0;
-window.markFbWrite = function() { _lastFbWrite = Date.now(); };
-
-function startFbListeners() {
-    setSyncDot('online');
-    DB_KEYS.forEach(key => {
-        onValue(ref(db, 'remie/' + key), snap => {
-            if (!snap.exists()) return;
-            const val  = snap.val();
-            const prev = localStorage.getItem('remie_' + key);
-            const str  = JSON.stringify(val);
-            if (prev === str) return;                          // ไม่มีอะไรเปลี่ยน
-
-            const ownWrite = (Date.now() - _lastFbWrite) < 2500;
-            localStorage.setItem('remie_' + key, str);
-            if (!ownWrite) showUpdateBanner();                  // คนอื่นเปลี่ยน
-        });
+// ── KV REST wrappers ─────────────────────────────────────────
+async function kvGet(key){
+    const r=await fetch(`${KV_URL}/get/remie_${key}`,{
+        headers:{Authorization:`Bearer ${KV_TOKEN}`}
+    });
+    const j=await r.json();
+    return j.result;          // null หรือ JSON string
+}
+async function kvSet(key,val){
+    await fetch(`${KV_URL}/set/remie_${key}`,{
+        method:'POST',
+        headers:{Authorization:`Bearer ${KV_TOKEN}`,'Content-Type':'application/json'},
+        body:JSON.stringify({value:JSON.stringify(val)})
     });
 }
+// ใช้ key พิเศษเก็บ timestamp version
+async function kvGetVersion(){
+    const r=await fetch(`${KV_URL}/get/remie__version`,{headers:{Authorization:`Bearer ${KV_TOKEN}`}});
+    const j=await r.json();
+    return j.result||'0';
+}
+async function kvBumpVersion(){
+    const v=String(Date.now());
+    await fetch(`${KV_URL}/set/remie__version`,{
+        method:'POST',
+        headers:{Authorization:`Bearer ${KV_TOKEN}`,'Content-Type':'application/json'},
+        body:JSON.stringify({value:v})
+    });
+    return v;
+}
 
-// ── Initial pull: Firebase → localStorage ───────────────────
-Promise.all(
-    DB_KEYS.map(key =>
-        get(ref(db, 'remie/' + key))
-            .then(snap => { if (snap.exists()) localStorage.setItem('remie_'+key, JSON.stringify(snap.val())); })
-            .catch(() => {})
-    )
-).then(() => {
-    startFbListeners();
-    // re-render หลังดึงข้อมูลครั้งแรก
-    if (typeof renderProfile === 'function') {
-        renderProfile(); renderGallery(); renderSchedule(); renderShop();
-        applyTheme(); applyTitle();
+// ── fbSave → ตอนนี้ส่งขึ้น Vercel KV ────────────────────────
+window.fbSave = async function(key,val){
+    window.markKvWrite();
+    setSyncDot('syncing');
+    try{
+        await kvSet(key,val);
+        await kvBumpVersion();
+        setSyncDot('online');
+    }catch(e){
+        console.warn('kvSave error',e);
+        setSyncDot('offline');
     }
-}).catch(() => setSyncDot('offline'));
+};
+
+// ── Initial pull: KV → localStorage (แน่ใจว่าได้ข้อมูลล่าสุด) ──
+async function initialPull(){
+    setSyncDot('syncing');
+    try{
+        await Promise.all(DB_KEYS.map(async key=>{
+            const str=await kvGet(key);
+            if(str!=null) localStorage.setItem('remie_'+key,str);
+            // ถ้า KV ไม่มี key นี้เลย (null) → ปล่อยให้ใช้ DEFAULTS ตามปกติ
+        }));
+        _etag=await kvGetVersion();
+        setSyncDot('online');
+    }catch(e){
+        console.warn('initialPull error',e);
+        setSyncDot('offline');
+    }
+}
+
+// ── Polling: ตรวจ version ทุก 4 วิ ──────────────────────────
+async function pollVersion(){
+    try{
+        const v=await kvGetVersion();
+        if(v===_etag) return;              // ไม่มีอะไรเปลี่ยน
+        const ownWrite=(Date.now()-_lastWrite)<3000;
+        if(ownWrite){ _etag=v; return; }   // เปลี่ยนโดยตัวเอง — ไม่ต้องแจ้ง
+
+        // คนอื่นเปลี่ยน → ดึงข้อมูลใหม่ทั้งหมด
+        await Promise.all(DB_KEYS.map(async key=>{
+            const str=await kvGet(key);
+            if(str!=null) localStorage.setItem('remie_'+key,str);
+        }));
+        _etag=v;
+        showUpdateBanner();
+    }catch{}
+}
+
+// ── Boot sequence ────────────────────────────────────────────
+// expose pull function ให้ main script เรียกหลัง render setup เสร็จ
+window.__kvInitialPull = async function(){
+    await initialPull();
+    _pollTimer=setInterval(pollVersion,POLL_MS);
+};
+
+// หยุด poll เมื่อซ่อน tab (ประหยัด quota)
+document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+        clearInterval(_pollTimer);
+    } else {
+        pollVersion();
+        _pollTimer=setInterval(pollVersion,POLL_MS);
+    }
+});
+})();
 </script>
 <script>
 // ══════════════════════════════════════════════════════════════
@@ -971,7 +1045,7 @@ function load(key) {
 function save(key, val) {
     try {
         localStorage.setItem("remie_"+key, JSON.stringify(val));
-        // ซิงค์ขึ้น Firebase ด้วย (ถ้า ready)
+        // ซิงค์ขึ้น Vercel KV ด้วย (ถ้า ready)
         if (typeof window.fbSave === 'function') window.fbSave(key, val);
     } catch {}
 }
@@ -1371,65 +1445,177 @@ document.getElementById('save-social-btn').addEventListener('click',()=>{
     save('socials',updated); renderProfile(); showToast('✅ Social links saved!');
 });
 
+
 // ── Gallery panel ─────────────────────────────────────────────
+// temp store สำหรับรูปใน edit modal
+let _galEditImgs = [];
+
+function renderGalImgList(imgs, containerId){
+    const wrap=document.getElementById(containerId);
+    wrap.innerHTML='';
+    const emptyMsg=document.getElementById('edit-gal-empty-msg');
+    const countEl=document.getElementById('edit-gal-count');
+    if(emptyMsg) emptyMsg.style.display=imgs.length?'none':'block';
+    if(countEl) countEl.textContent=imgs.length?`${imgs.length} รูป`:'';
+    imgs.forEach((src,i)=>{
+        const box=document.createElement('div');
+        box.className='gal-thumb-wrap';
+        box.innerHTML=`
+            <img src="${src}" onerror="this.src='https://placehold.co/72x72/e0f4ff/00b4d8?text=err'"
+                title="${src}">
+            <button class="gal-thumb-del" data-del-img="${i}" title="ลบรูปนี้">✕</button>`;
+        wrap.appendChild(box);
+    });
+    wrap.querySelectorAll('[data-del-img]').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+            _galEditImgs.splice(parseInt(btn.dataset.delImg),1);
+            renderGalImgList(_galEditImgs,containerId);
+        });
+    });
+}
+
 function loadGalleryPanel() {
     const galleryData=cfg('gallery');
     const list=document.getElementById('gallery-admin-list');
     list.innerHTML='';
+    if(galleryData.length===0){
+        list.innerHTML=`<div style="text-align:center;padding:32px 16px;color:var(--text-dim);background:#f8fcff;border:1.5px dashed rgba(0,180,216,0.3);border-radius:12px;margin-bottom:16px;">
+            <div style="font-size:2.5rem;margin-bottom:10px;">🖼️</div>
+            <div style="font-size:0.9rem;font-weight:500;">ยังไม่มีชุดรูป</div>
+            <div style="font-size:0.78rem;color:var(--text-dim);margin-top:4px;">เพิ่มชุดรูปแรกได้เลยด้านล่าง</div>
+        </div>`;
+    }
     galleryData.forEach((set,i)=>{
-        const row=document.createElement('div');
-        row.className='gal-row';
-        row.innerHTML=`
-            <img src="${set.images[0]||''}" onerror="this.src='https://placehold.co/56x56/e0f4ff/00b4d8?text=?'">
-            <div class="gal-row-info">
-                <div class="gal-row-id">${set.id}</div>
-                <input class="admin-field" style="margin:4px 0 2px;" type="text" placeholder="Label" value="${set.label||''}" data-gal-label="${i}">
-                <div class="gal-row-count">${set.images.length} image(s)</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:4px;">
-                <button class="admin-btn" style="font-size:0.42rem;padding:5px 8px;" data-edit-set="${i}">EDIT IMGS</button>
-                <button class="admin-btn danger" style="font-size:0.42rem;padding:5px 8px;" data-remove-set="${i}">DELETE</button>
+        const card=document.createElement('div');
+        card.className='admin-card';
+        card.style.marginBottom='12px';
+        const previewImgs=set.images.slice(0,4).map(src=>
+            `<img src="${src}" onerror="this.src='https://placehold.co/64x64/e0f4ff/00b4d8?text=?'"
+                style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1.5px solid var(--blue-primary);flex-shrink:0;">`
+        ).join('');
+        const more=set.images.length>4?`<div style="width:64px;height:64px;border-radius:8px;background:linear-gradient(135deg,#e0f4ff,#b3e5fc);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1rem;color:var(--blue-dark);font-weight:700;flex-shrink:0;border:1.5px solid rgba(0,180,216,0.3);">
+            <span style="font-size:1.1rem;">+${set.images.length-4}</span>
+            <span style="font-size:0.62rem;opacity:0.7;">รูป</span>
+        </div>`:'';
+        card.innerHTML=`
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                    <div>
+                        <div style="font-family:'Press Start 2P',cursive;font-size:0.48rem;color:var(--blue-primary);margin-bottom:4px;">${set.label||set.id}</div>
+                        <div style="font-size:0.82rem;color:var(--text-dim);font-family:'Sarabun',sans-serif;">
+                            <i class="fa-regular fa-image" style="margin-right:4px;color:var(--blue-primary);opacity:0.7;"></i>${set.images.length} รูป
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:6px;flex-shrink:0;">
+                        <button class="admin-btn" style="font-size:0.4rem;padding:6px 12px;" data-edit-set="${i}">✏️ แก้ไข</button>
+                        <button class="admin-btn danger" style="font-size:0.4rem;padding:6px 10px;" data-remove-set="${i}">🗑</button>
+                    </div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;">${previewImgs}${more}</div>
             </div>`;
-        list.appendChild(row);
+        list.appendChild(card);
     });
+
     list.querySelectorAll('[data-remove-set]').forEach(btn=>{
         btn.addEventListener('click',()=>{
-            if(!confirm('Delete this gallery set?')) return;
+            if(!confirm('ลบชุดรูปนี้?')) return;
             const updated=cfg('gallery').filter((_,i)=>i!==parseInt(btn.dataset.removeSet));
-            save('gallery',updated); renderGallery(); loadGalleryPanel(); showToast('🗑 Set deleted');
-        });
-    });
-    list.querySelectorAll('[data-gal-label]').forEach(input=>{
-        input.addEventListener('change',()=>{
-            const updated=cfg('gallery');
-            updated[parseInt(input.dataset.galLabel)].label=input.value.trim();
-            save('gallery',updated); renderGallery();
+            save('gallery',updated); renderGallery(); loadGalleryPanel(); showToast('🗑 ลบแล้ว');
         });
     });
     list.querySelectorAll('[data-edit-set]').forEach(btn=>{
         btn.addEventListener('click',()=>{
             const idx=parseInt(btn.dataset.editSet);
             const set=cfg('gallery')[idx];
-            const newUrls=prompt(`Edit image URLs for "${set.label||set.id}"\n(one URL per line):`, set.images.join('\n'));
-            if(newUrls===null) return;
-            const updated=cfg('gallery');
-            updated[idx].images=newUrls.split('\n').map(s=>s.trim()).filter(Boolean);
-            save('gallery',updated); renderGallery(); loadGalleryPanel(); showToast('✅ Images updated');
+            document.getElementById('edit-gal-idx').value=idx;
+            document.getElementById('edit-gal-label').value=set.label||'';
+            document.getElementById('edit-gal-urls').value='';
+            _galEditImgs=[...set.images];
+            renderGalImgList(_galEditImgs,'edit-gal-imglist');
+            const modal=document.getElementById('gal-edit-modal');
+            modal.style.display='block';
+            modal.scrollIntoView({behavior:'smooth'});
         });
     });
 }
 
+// Preview URL button in edit modal
+document.getElementById('edit-gal-preview-url-btn').addEventListener('click',()=>{
+    const urls=document.getElementById('edit-gal-urls').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+    const previewWrap=document.getElementById('edit-gal-url-preview');
+    previewWrap.innerHTML='';
+    if(!urls.length){ showToast('⚠️ ใส่ URL ก่อน'); return; }
+    urls.forEach(url=>{
+        const wrap=document.createElement('div');
+        wrap.style.cssText='position:relative;display:inline-block;';
+        const im=document.createElement('img');
+        im.src=url;
+        im.style.cssText='width:72px;height:72px;object-fit:cover;border-radius:8px;border:2px solid var(--blue-primary);display:block;transition:0.2s;';
+        im.onerror=function(){ this.style.border='2px solid #e63946'; this.src='https://placehold.co/72x72/fee2e2/e63946?text=✕'; };
+        im.onload=function(){ this.style.border='2px solid #4ade80'; };
+        wrap.appendChild(im);
+        previewWrap.appendChild(wrap);
+    });
+    showToast(`👁 Preview ${urls.length} รูป`);
+});
+// Add URLs button in edit modal
+document.getElementById('edit-gal-add-url-btn').addEventListener('click',()=>{
+    const urls=document.getElementById('edit-gal-urls').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+    if(!urls.length){ showToast('⚠️ ใส่ URL ก่อน'); return; }
+    _galEditImgs=[..._galEditImgs,...urls];
+    renderGalImgList(_galEditImgs,'edit-gal-imglist');
+    document.getElementById('edit-gal-urls').value='';
+    document.getElementById('edit-gal-url-preview').innerHTML='';
+    showToast(`✅ เพิ่ม ${urls.length} รูปเข้าชุดแล้ว`);
+});
+// Save edit modal
+document.getElementById('save-gal-edit-btn').addEventListener('click',()=>{
+    const idx=parseInt(document.getElementById('edit-gal-idx').value);
+    const label=document.getElementById('edit-gal-label').value.trim();
+    if(!label){ showToast('⚠️ ใส่ชื่อชุดรูปก่อน'); return; }
+    const updated=cfg('gallery');
+    updated[idx].label=label;
+    updated[idx].images=[..._galEditImgs];
+    save('gallery',updated); renderGallery(); loadGalleryPanel();
+    document.getElementById('gal-edit-modal').style.display='none';
+    showToast('✅ บันทึกชุดรูปแล้ว');
+});
+document.getElementById('cancel-gal-edit-btn').addEventListener('click',()=>{
+    document.getElementById('gal-edit-modal').style.display='none';
+});
+
+document.getElementById('preview-set-btn').addEventListener('click',()=>{
+    const urls=document.getElementById('new-set-urls').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+    const previewWrap=document.getElementById('new-set-url-preview');
+    previewWrap.innerHTML='';
+    if(!urls.length){ showToast('⚠️ ใส่ URL ก่อน'); return; }
+    urls.forEach(url=>{
+        const wrap=document.createElement('div');
+        wrap.style.cssText='position:relative;display:inline-block;';
+        const im=document.createElement('img');
+        im.src=url;
+        im.style.cssText='width:72px;height:72px;object-fit:cover;border-radius:8px;border:2px solid var(--blue-primary);display:block;transition:0.2s;';
+        im.onerror=function(){ this.style.border='2px solid #e63946'; this.src='https://placehold.co/72x72/fee2e2/e63946?text=✕'; };
+        im.onload=function(){ this.style.border='2px solid #4ade80'; };
+        wrap.appendChild(im);
+        previewWrap.appendChild(wrap);
+    });
+    showToast(`👁 Preview ${urls.length} รูป`);
+});
+
 document.getElementById('add-set-btn').addEventListener('click',()=>{
     const label=document.getElementById('new-set-label').value.trim();
-    const urls=document.getElementById('new-set-urls').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
-    if(!label||urls.length===0) { showToast('⚠️ Fill in label & at least one URL'); return; }
+    const urlsRaw=document.getElementById('new-set-urls').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+    if(!label){ showToast('⚠️ ใส่ชื่อชุดรูปก่อน'); return; }
+    if(urlsRaw.length===0){ showToast('⚠️ วาง URL รูปก่อน'); return; }
     const id='set_'+Date.now();
     const updated=cfg('gallery');
-    updated.push({id,label,images:urls});
+    updated.push({id,label,images:urlsRaw});
     save('gallery',updated); renderGallery(); loadGalleryPanel();
     document.getElementById('new-set-label').value='';
     document.getElementById('new-set-urls').value='';
-    showToast('✅ Gallery set added!');
+    document.getElementById('new-set-url-preview').innerHTML='';
+    showToast('✅ เพิ่มชุดรูปแล้ว!');
 });
 
 // ── Schedule panel ────────────────────────────────────────────
@@ -1565,9 +1751,6 @@ document.getElementById('save-sch-note-btn').addEventListener('click',()=>{
     save('scheduleNote',document.getElementById('cfg-sch-note').value);
     renderSchedule(); showToast('✅ Note saved!');
 });
-
-// ── File upload → base64 helper ───────────────────────────────
-function fileToBase64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsDataURL(file); }); }
 
 // Upload handlers: new schedule map image
 document.getElementById('new-sch-mapimg-file').addEventListener('change',async function(){
@@ -1933,15 +2116,9 @@ document.getElementById('add-shop-item-btn').addEventListener('click',()=>{
 });
 
 // ══════════════════════════════════════════════════════════════
-//  BOOT / INIT
+//  BOOT / INIT — ดึงข้อมูลล่าสุดจาก Vercel KV ก่อน render เสมอ
 // ══════════════════════════════════════════════════════════════
-window.addEventListener('load', () => {
-    applyTheme();
-    applyTitle();
-    renderProfile();
-    renderGallery();
-    renderSchedule();
-    renderShop();
+window.addEventListener('load', async () => {
     resizeCanvas();
     initParticles();
     animateParticles();
@@ -1950,6 +2127,21 @@ window.addEventListener('load', () => {
     const introText=document.getElementById('intro-text');
     const introSpinner=document.getElementById('intro-spinner');
 
+    // ── ดึง KV ก่อน (ทำระหว่างที่ intro แสดงอยู่ ผู้ใช้ยังไม่เห็น) ──
+    introText.textContent='SYNCING DATA...';
+    if(typeof window.__kvInitialPull === 'function'){
+        await window.__kvInitialPull();
+    }
+
+    // ── render ด้วยข้อมูลล่าสุดจาก KV ──
+    applyTheme();
+    applyTitle();
+    renderProfile();
+    renderGallery();
+    renderSchedule();
+    renderShop();
+
+    // ── พร้อมแล้ว แสดงปุ่ม boot ──
     introSpinner.classList.add('d-none');
     introText.innerHTML='&gt; CLICK TO BOOT SYSTEM &lt;';
     introText.classList.add('blink-cursor');
