@@ -436,11 +436,10 @@ textarea.admin-field { resize:vertical; min-height:70px; }
         </div>
         <div class="win-body p-4 text-center">
             <i class="fa-solid fa-cloud text-blue fs-1 mb-3"></i>
-            <h2 class="pixel-font mb-3 text-blue" style="font-size:0.7rem;">Remie OS v2.0</h2>
+            <h2 class="pixel-font mb-3 text-blue" style="font-size:0.7rem;">Remie OS v2.0 (BETA)</h2>
             <p class="small mb-3">Fan website made with 💙 by <a href="https://flukkieboyy.vercel.app/" target="_blank" class="text-blue text-decoration-none fw-bold">@flukkieboyy</a></p>
             <hr style="border-color:rgba(0,180,216,0.3);">
             <p class="small text-dim">Status: Everything fine ✨</p>
-            <p class="small text-dim mt-2">Built with REMIE OS v2 + Admin Panel</p>
         </div>
     </div>
 </div><!-- /desktop -->
@@ -483,7 +482,7 @@ textarea.admin-field { resize:vertical; min-height:70px; }
             <input class="admin-input" type="password" id="admin-pass" placeholder="Password">
             <button class="admin-login-btn" id="admin-login-btn"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; LOGIN</button>
             <div class="admin-err" id="admin-err"></div>
-            <div style="margin-top:14px;font-size:0.7rem;color:var(--text-dim);">Default: admin / remie2025</div>
+            <div style="margin-top:14px;font-size:0.7rem;color:var(--text-dim);"></div>
         </div>
         <button class="admin-close-login" id="admin-close-login-btn">✕</button>
     </div>
@@ -523,9 +522,9 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                         <textarea class="admin-field" id="cfg-bio" placeholder="Short description shown on profile window..."></textarea>
                         <label class="admin-label">รูป Avatar (URL หรืออัพจากเครื่อง)</label>
                         <input class="admin-field" type="url" id="cfg-avatar" placeholder="https://...">
-                        <div style="margin-bottom:12px;">
+                        <!-- <div style="margin-bottom:12px;">
                             <label class="upload-btn"><input type="file" id="cfg-avatar-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
-                        </div>
+                        </div> --!>
                         <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;">
                             <img id="cfg-avatar-preview" src="" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--blue-primary);object-fit:cover;display:none;">
                             <button class="admin-btn secondary" id="cfg-avatar-preview-btn" style="font-size:0.45rem;">PREVIEW</button>
@@ -577,10 +576,10 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                         <div id="edit-sch-extra">
                             <label class="admin-label">ชื่อสถานที่</label>
                             <input class="admin-field" type="text" id="edit-sch-location" placeholder="e.g. MCC Hall The Mall Bangkapi">
-                            <label class="admin-label">รูปแผนที่ / รูปสถานที่ (URL หรืออัพจากเครื่อง)</label>
+                            <label class="admin-label">ลิ้งค์ Google Map</label>
                             <div class="upload-row">
-                                <input class="admin-field" type="url" id="edit-sch-mapimg" placeholder="https://... หรืออัพรูปด้านล่าง" style="margin-bottom:6px;">
-                                <label class="upload-btn"><input type="file" id="edit-sch-mapimg-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
+                                <input class="admin-field" type="url" id="edit-sch-mapimg" placeholder="https://... " style="margin-bottom:6px;">
+                               <!-- <label class="upload-btn"><input type="file" id="edit-sch-mapimg-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง (ยังใช้ไม่ได้)</label> --!>
                                 <img id="edit-sch-mapimg-preview" src="" style="display:none;width:100%;border-radius:8px;margin-top:6px;border:1.5px solid rgba(0,180,216,0.3);">
                             </div>
                             <label class="admin-label">บูธ</label>
@@ -589,9 +588,9 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                             <input class="admin-field" type="text" id="edit-sch-stage" placeholder="e.g. ✅ 14:00">
                             <label class="admin-label">หมายเหตุ</label>
                             <input class="admin-field" type="text" id="edit-sch-note" placeholder="e.g. ❗ Order Drinks Only">
-                            <label class="admin-label">รูปสินค้าที่ขายในงาน (URL หรืออัพจากเครื่อง แต่ละบรรทัด)</label>
+                            <label class="admin-label">รูปสินค้าที่ขายในงาน **ใช้ไม่ได้กำลังแก้ปัญหาอยู่**</label>
                             <textarea class="admin-field" id="edit-sch-shopimgs" rows="3" placeholder="https://img1.jpg&#10;https://img2.jpg"></textarea>
-                            <label class="upload-btn" style="margin-bottom:10px;"><input type="file" id="edit-sch-shopimgs-file" accept="image/*" multiple style="display:none;">📁 เลือกรูปสินค้าจากเครื่อง (เลือกได้หลายรูป)</label>
+                            <!-- <label class="upload-btn" style="margin-bottom:10px;"><input type="file" id="edit-sch-shopimgs-file" accept="image/*" multiple style="display:none;">📁 เลือกรูปสินค้าจากเครื่อง (เลือกได้หลายรูป)</label>--!>
                             <div id="edit-sch-shopimgs-preview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
                         </div>
                         <div style="display:flex;gap:8px;margin-top:4px;">
@@ -615,10 +614,10 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                         <div id="new-sch-extra">
                             <label class="admin-label">ชื่อสถานที่</label>
                             <input class="admin-field" type="text" id="new-sch-location" placeholder="e.g. MCC Hall The Mall Bangkapi">
-                            <label class="admin-label">รูปแผนที่ / รูปสถานที่ (URL หรืออัพจากเครื่อง)</label>
+                            <label class="admin-label">ลิ้งค์ Google Map</label>
                             <div class="upload-row">
-                                <input class="admin-field" type="url" id="new-sch-mapimg" placeholder="https://... หรืออัพรูปด้านล่าง" style="margin-bottom:6px;">
-                                <label class="upload-btn"><input type="file" id="new-sch-mapimg-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label>
+                                <input class="admin-field" type="url" id="new-sch-mapimg" placeholder="https://... " style="margin-bottom:6px;">
+                                <!-- <label class="upload-btn"><input type="file" id="new-sch-mapimg-file" accept="image/*" style="display:none;">📁 เลือกรูปจากเครื่อง</label> --!>
                                 <img id="new-sch-mapimg-preview" src="" style="display:none;width:100%;border-radius:8px;margin-top:6px;border:1.5px solid rgba(0,180,216,0.3);">
                             </div>
                             <label class="admin-label">บูธ</label>
@@ -627,9 +626,9 @@ textarea.admin-field { resize:vertical; min-height:70px; }
                             <input class="admin-field" type="text" id="new-sch-stage" placeholder="e.g. ✅ 14:00">
                             <label class="admin-label">หมายเหตุ</label>
                             <input class="admin-field" type="text" id="new-sch-note" placeholder="e.g. ❗ Order Drinks Only">
-                            <label class="admin-label">รูปสินค้าที่ขายในงาน (URL หรืออัพจากเครื่อง แต่ละบรรทัด)</label>
+                            <label class="admin-label">รูปสินค้าที่ขายในงาน **ใช้ไม่ได้กำลังแก้ปัญหาอยู่**</label>
                             <textarea class="admin-field" id="new-sch-shopimgs" rows="3" placeholder="https://img1.jpg&#10;https://img2.jpg"></textarea>
-                            <label class="upload-btn" style="margin-bottom:10px;"><input type="file" id="new-sch-shopimgs-file" accept="image/*" multiple style="display:none;">📁 เลือกรูปสินค้าจากเครื่อง (เลือกได้หลายรูป)</label>
+                            <!-- <label class="upload-btn" style="margin-bottom:10px;"><input type="file" id="new-sch-shopimgs-file" accept="image/*" multiple style="display:none;">📁 เลือกรูปสินค้าจากเครื่อง (เลือกได้หลายรูป)</label> --!>
                             <div id="new-sch-shopimgs-preview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
                         </div>
                         <button class="admin-btn mt-2" id="add-sch-btn" style="width:100%;">➕ เพิ่มกิจกรรม</button>
@@ -929,7 +928,7 @@ const DEFAULTS = {
     theme: { primary:"#00b4d8", dark:"#0077b6", bg:"#f0f8ff" },
     osTitle: "REMIE OS",
     adminUser: "admin",
-    adminPass: "remie2025",
+    adminPass: "remiiesocute",
     shop: {
         title: "REMIE's BIRTHDAY SHOP",
         sub: "Pre-order 5 – 14 June 2026",
@@ -1566,47 +1565,6 @@ document.getElementById('save-sch-note-btn').addEventListener('click',()=>{
     renderSchedule(); showToast('✅ Note saved!');
 });
 
-// ── File upload → base64 helper ───────────────────────────────
-function fileToBase64(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsDataURL(file); }); }
-
-// Upload handlers: new schedule map image
-document.getElementById('new-sch-mapimg-file').addEventListener('change',async function(){
-    if(!this.files[0]) return;
-    const b64=await fileToBase64(this.files[0]);
-    document.getElementById('new-sch-mapimg').value=b64;
-    const prev=document.getElementById('new-sch-mapimg-preview');
-    prev.src=b64; prev.style.display='block';
-    showToast('📷 โหลดรูปแล้ว');
-});
-// Upload handlers: edit schedule map image
-document.getElementById('edit-sch-mapimg-file').addEventListener('change',async function(){
-    if(!this.files[0]) return;
-    const b64=await fileToBase64(this.files[0]);
-    document.getElementById('edit-sch-mapimg').value=b64;
-    const prev=document.getElementById('edit-sch-mapimg-preview');
-    prev.src=b64; prev.style.display='block';
-    showToast('📷 โหลดรูปแล้ว');
-});
-// Upload handlers: new schedule shop images (multiple)
-document.getElementById('new-sch-shopimgs-file').addEventListener('change',async function(){
-    if(!this.files.length) return;
-    const b64s=await Promise.all([...this.files].map(fileToBase64));
-    const cur=document.getElementById('new-sch-shopimgs').value.trim();
-    document.getElementById('new-sch-shopimgs').value=(cur?cur+'\n':'')+b64s.join('\n');
-    const wrap=document.getElementById('new-sch-shopimgs-preview');
-    b64s.forEach(u=>{ const im=document.createElement('img'); im.src=u; im.style.cssText='width:56px;height:56px;object-fit:cover;border-radius:6px;border:2px solid var(--blue-primary);'; wrap.appendChild(im); });
-    showToast(`📷 โหลด ${b64s.length} รูปแล้ว`);
-});
-// Upload handlers: edit schedule shop images (multiple)
-document.getElementById('edit-sch-shopimgs-file').addEventListener('change',async function(){
-    if(!this.files.length) return;
-    const b64s=await Promise.all([...this.files].map(fileToBase64));
-    const cur=document.getElementById('edit-sch-shopimgs').value.trim();
-    document.getElementById('edit-sch-shopimgs').value=(cur?cur+'\n':'')+b64s.join('\n');
-    const wrap=document.getElementById('edit-sch-shopimgs-preview');
-    b64s.forEach(u=>{ const im=document.createElement('img'); im.src=u; im.style.cssText='width:56px;height:56px;object-fit:cover;border-radius:6px;border:2px solid var(--blue-primary);'; wrap.appendChild(im); });
-    showToast(`📷 โหลด ${b64s.length} รูปแล้ว`);
-});
 
 // ── Appearance panel ──────────────────────────────────────────
 function loadAppearancePanel() {
@@ -1736,7 +1694,7 @@ function renderShop() {
     });
 
     if (items.length === 0) {
-        html += `<div class="text-center py-4 text-dim" style="font-size:0.8rem;">ยังไม่มีสินค้า<br><small>เพิ่มได้ในหลังบ้าน (Admin Panel → Shop)</small></div>`;
+        html += `<div class="text-center py-4 text-dim" style="font-size:0.8rem;">ยังไม่มีสินค้า<br></div>`;
     }
 
     container.innerHTML = html;
