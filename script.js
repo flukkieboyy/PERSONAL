@@ -673,27 +673,26 @@ if (qtCherryBtn) {
         }
     });
 
-    // ฟังก์ชันสุ่มตัวอักษรและสัญลักษณ์หลอนๆ
+// ฟังก์ชันสุ่ม URL แบบเร่งความเร็วขั้นสุด และไม่มีคำว่า system_override
         function startURLGlitch() {
-            // รายชื่อตัวอักษรและไอคอนที่จะเอามาสลับมั่วๆ
-            const targetChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789☠👁🩸⛓❌⌖👻💀";
+            // รวมตัวอักษร ตัวเลข และสัญลักษณ์หลอนๆ
+            const targetChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789☠👁🩸⛓❌⌖👻💀⚡🔥";
             
             setInterval(() => {
                 let randomString = "";
-                // กำหนดความยาวของรหัสสุ่ม (ตรงนี้ตั้งไว้ 16 ตัวอักษร)
-                for (let i = 0; i < 16; i++) {
+                // กำหนดความยาวของรหัส (สุ่มความยาวระหว่าง 12 ถึง 20 ตัวอักษร เพื่อให้ URL ขยับเข้า-ออก ดูสมจริงขึ้น)
+                const randomLength = Math.floor(Math.random() * 9) + 12; 
+                
+                for (let i = 0; i < randomLength; i++) {
                     randomString += targetChars.charAt(Math.floor(Math.random() * targetChars.length));
                 }
                 
-                // รูปแบบที่ 1 (แนะนำ): เปลี่ยนหลังเครื่องหมาย ? จะอารมณ์เหมือนระบบกำลัง Decrypt ข้อมูล (ก๊อปไปวางแล้วไม่พัง)
-                window.history.replaceState(null, "", "/" + randomString);
+                // แสดงผลหลังเครื่องหมาย ? ทันที เช่น เว็บ.com/?☠👁🩸A1b2
+                window.history.replaceState(null, "", "?" + randomString);
                 
-                // รูปแบบที่ 2: ถ้าอยากได้แบบสแลช / ตรงๆ ให้สลับมาใช้บรรทัดล่างนี้แทน (แต่รีเฟรชแล้วจะ 404 นะครับ)
-                // window.history.replaceState(null, "", "/" + randomString);
-                
-            }, 150); // 150 คือความเร็วในการเปลี่ยนหน่วยเป็นมิลลิวินาที (ยิ่งน้อยยิ่งสลับไวและรัว)
+            }, 40); // ปรับความเร็วเป็น 40 มิลลิวินาที (วิ่งไวขึ้นกว่าเดิม 3 เท่า! สับจังหวะรัวๆ สะใจแน่นอน)
         }
         
-        // สั่งให้ระบบทำงานทันทีที่เปิดหน้าเว็บขึ้นมา
+        // สั่งให้ระบบทำงานทันทีที่เปิดหน้าเว็บ
         window.addEventListener('DOMContentLoaded', startURLGlitch);
 }
