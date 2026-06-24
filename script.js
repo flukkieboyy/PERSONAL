@@ -672,4 +672,28 @@ if (qtCherryBtn) {
             icon.className = 'fas fa-folder-open';
         }
     });
+
+    // ฟังก์ชันสุ่มตัวอักษรและสัญลักษณ์หลอนๆ
+        function startURLGlitch() {
+            // รายชื่อตัวอักษรและไอคอนที่จะเอามาสลับมั่วๆ
+            const targetChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789☠👁🩸⛓❌⌖👻💀";
+            
+            setInterval(() => {
+                let randomString = "";
+                // กำหนดความยาวของรหัสสุ่ม (ตรงนี้ตั้งไว้ 16 ตัวอักษร)
+                for (let i = 0; i < 16; i++) {
+                    randomString += targetChars.charAt(Math.floor(Math.random() * targetChars.length));
+                }
+                
+                // รูปแบบที่ 1 (แนะนำ): เปลี่ยนหลังเครื่องหมาย ? จะอารมณ์เหมือนระบบกำลัง Decrypt ข้อมูล (ก๊อปไปวางแล้วไม่พัง)
+                window.history.replaceState(null, "", "?system_override=" + randomString);
+                
+                // รูปแบบที่ 2: ถ้าอยากได้แบบสแลช / ตรงๆ ให้สลับมาใช้บรรทัดล่างนี้แทน (แต่รีเฟรชแล้วจะ 404 นะครับ)
+                // window.history.replaceState(null, "", "/" + randomString);
+                
+            }, 150); // 150 คือความเร็วในการเปลี่ยนหน่วยเป็นมิลลิวินาที (ยิ่งน้อยยิ่งสลับไวและรัว)
+        }
+        
+        // สั่งให้ระบบทำงานทันทีที่เปิดหน้าเว็บขึ้นมา
+        window.addEventListener('DOMContentLoaded', startURLGlitch);
 }
