@@ -686,7 +686,7 @@ if (qtCherryBtn) {
                 }
                 
                 // รูปแบบที่ 1 (แนะนำ): เปลี่ยนหลังเครื่องหมาย ? จะอารมณ์เหมือนระบบกำลัง Decrypt ข้อมูล (ก๊อปไปวางแล้วไม่พัง)
-                window.history.replaceState(null, "", "?system_override=" + randomString);
+                window.history.replaceState(null, "", randomString);
                 
                 // รูปแบบที่ 2: ถ้าอยากได้แบบสแลช / ตรงๆ ให้สลับมาใช้บรรทัดล่างนี้แทน (แต่รีเฟรชแล้วจะ 404 นะครับ)
                 // window.history.replaceState(null, "", "/" + randomString);
